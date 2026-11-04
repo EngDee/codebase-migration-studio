@@ -172,7 +172,7 @@ function Index() {
     if (e.key !== "Tab") return;
     const f = focusables(modalRef.current);
     if (!f.length) return;
-    const first = f[0], last = f[f.length - 1];
+    const first = f[0]!, last = f[f.length - 1]!;
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   };
@@ -507,7 +507,7 @@ function Stats() {
     const el = ref.current;
     if (!el) return;
     const obs = new IntersectionObserver(([e]) => {
-      if (!e.isIntersecting) return;
+      if (!e?.isIntersecting) return;
       obs.disconnect();
       setVisible(true);
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return setProgress(1);
