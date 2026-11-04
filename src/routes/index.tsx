@@ -18,8 +18,8 @@ const jsonLd = {
   address: { "@type": "PostalAddress", addressLocality: "Nairobi", addressCountry: "KE" },
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+254-700-000-000",
-    email: "info@ccak.or.ke",
+    telephone: "+254-703-424-972",
+    email: "coffeechampionsassociation@gmail.com",
     contactType: "customer service",
   },
   sameAs: [],
@@ -427,7 +427,7 @@ function Index() {
             <nav aria-label="Organization"><h2>Organization</h2><ul><li><a href="#about">Our story</a></li><li><a href="#">Leadership</a></li><li><a href="#">Governance</a></li><li><a href="#">Constitution</a></li></ul></nav>
             <nav aria-label="Get involved"><h2>Get involved</h2><ul><li><a href="#membership">Membership</a></li><li><a href="#">Partner with us</a></li><li><a href="#">Careers</a></li><li><a href="#">Volunteer</a></li></ul></nav>
             <nav aria-label="Resources"><h2>Resources</h2><ul><li><a href="#">Coffee library</a></li><li><a href="#news">News</a></li><li><a href="#">Events</a></li><li><a href="#academy">Training</a></li></ul></nav>
-            <div><h2>Contact</h2><ul><li>Nairobi, Kenya</li><li><a href="tel:+254700000000">+254 700 000 000</a></li><li><a href="mailto:info@ccak.or.ke">info@ccak.or.ke</a></li></ul></div>
+            <div><h2>Contact</h2><ul><li>Nairobi, Kenya</li><li><a href="tel:+254703424972">+254 703 424 972</a></li><li><a href="mailto:coffeechampionsassociation@gmail.com">coffeechampionsassociation@gmail.com</a></li></ul></div>
           </div>
           <div className="footer-bottom">
             <span>© 2026 Coffee Champions Association of Kenya. All rights reserved.</span>
