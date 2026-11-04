@@ -425,8 +425,18 @@ function Index() {
               <div className="logo"><span className="logo-mark" aria-hidden="true"><span /></span><span className="logo-text">CCAK</span></div>
               <p>Coffee Champions Association of Kenya. Uniting the sector from farm gate to global market.</p>
               <div className="social-row">
-                <a href="https://www.facebook.com/Coffee-Champions-Association-Of-Kenya" target="_blank" rel="noopener noreferrer" aria-label="CCAK on Facebook">f</a><a href="https://x.com/CCAK_ke" target="_blank" rel="noopener noreferrer" aria-label="CCAK on X">x</a>
-                <a href="https://www.instagram.com/ccak_ke" target="_blank" rel="noopener noreferrer" aria-label="CCAK on Instagram">i</a><a href="https://www.tiktok.com/@CCAK_ke" target="_blank" rel="noopener noreferrer" aria-label="CCAK on TikTok">tk</a>
+                <a href="https://www.facebook.com/Coffee-Champions-Association-Of-Kenya" target="_blank" rel="noopener noreferrer" aria-label="CCAK on Facebook">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M13.5 21.9v-8.4h2.8l.4-3.3h-3.2V8.2c0-.9.3-1.6 1.7-1.6h1.6V3.6c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.6H7.5v3.3h2.9v8.4a10 10 0 0 0 3.1 0z"/></svg>
+                </a>
+                <a href="https://x.com/CCAK_ke" target="_blank" rel="noopener noreferrer" aria-label="CCAK on X">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M17.9 3h3.1l-6.8 7.8L22.2 21h-6.3l-4.9-6.4L5.4 21H2.3l7.3-8.3L2 3h6.4l4.4 5.9L17.9 3zm-1.1 16.1h1.7L7.5 4.8H5.7l11.1 14.3z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/ccak_ke" target="_blank" rel="noopener noreferrer" aria-label="CCAK on Instagram">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"/></svg>
+                </a>
+                <a href="https://www.tiktok.com/@CCAK_ke" target="_blank" rel="noopener noreferrer" aria-label="CCAK on TikTok">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M16.6 3c.4 2.1 1.7 3.4 3.9 3.6v3c-1.5 0-2.8-.5-3.9-1.3v6.3c0 3.6-2.4 6-5.7 6-3 0-5.3-2.2-5.3-5.2 0-3 2.4-5.3 5.6-5.2v3.1c-1.4-.2-2.5.6-2.5 2 0 1.3 1 2.2 2.3 2.2 1.5 0 2.5-1.1 2.5-2.9V3h3.1z"/></svg>
+                </a>
               </div>
             </div>
             <nav aria-label="Organization"><h2>Organization</h2><ul><li><a href="#about">Our story</a></li><li><a href="#">Leadership</a></li><li><a href="#">Governance</a></li><li><a href="#">Constitution</a></li></ul></nav>
