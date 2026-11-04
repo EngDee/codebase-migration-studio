@@ -118,7 +118,7 @@ header{
 }
 header.scrolled{background:rgba(248,245,240,0.97);box-shadow:0 2px 18px rgba(51,34,25,0.08);padding:12px 0;backdrop-filter:blur(6px);}
 nav{display:flex;align-items:center;justify-content:space-between;position:relative;}
-.logo{display:flex;align-items:center;gap:10px;}
+.logo{display:flex;align-items:center;gap:12px;margin-right:24px;}
 .logo-mark{
   width:54px;height:54px;border-radius:50%;
   background:conic-gradient(var(--forest) 0deg 120deg, var(--gold) 120deg 240deg, var(--clay) 240deg 360deg);
