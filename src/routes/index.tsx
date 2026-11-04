@@ -1,24 +1,636 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const TITLE = "CCAK — Coffee Champions Association of Kenya";
+const DESC =
+  "Empowering farmers, elevating Kenyan coffee. Membership, training, county chapters and marketplace, all in one national coffee platform.";
+const OG_IMAGE = "https://www.ccak.or.ke/assets/og-image.jpg";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "NGO",
+  name: "Coffee Champions Association of Kenya",
+  alternateName: "CCAK",
+  url: "https://www.ccak.or.ke/",
+  logo: "https://www.ccak.or.ke/assets/logo.png",
+  description:
+    "CCAK unites farmers, cooperatives, processors, exporters, researchers and government to build a coffee sector where every cherry picked builds a farmer's prosperity.",
+  address: { "@type": "PostalAddress", addressLocality: "Nairobi", addressCountry: "KE" },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+254-700-000-000",
+    email: "info@ccak.or.ke",
+    contactType: "customer service",
+  },
+  sameAs: [],
+};
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      {
+        name: "description",
+        content:
+          "The Coffee Champions Association of Kenya (CCAK) unites farmers, cooperatives, processors, exporters and government to build a coffee sector where every cherry picked builds a farmer's prosperity.",
+      },
+      { name: "theme-color", content: "#4E342E" },
+      { property: "og:type", content: "website" },
+      { property: "og:site_name", content: TITLE },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESC },
+      { property: "og:url", content: "https://www.ccak.or.ke/" },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:locale", content: "en_KE" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: TITLE },
+      { name: "twitter:description", content: DESC },
+      { name: "twitter:image", content: OG_IMAGE },
+    ],
+    links: [
+      { rel: "canonical", href: "https://www.ccak.or.ke/" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap",
+      },
+    ],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
+const NAV = [
+  ["#programs", "Programs"],
+  ["#counties", "Counties"],
+  ["#academy", "Academy"],
+  ["#market", "Marketplace"],
+  ["#membership", "Membership"],
+  ["#news", "News"],
+  ["#contact", "Contact"],
+] as const;
+
+const STATS = [
+  [4820, "Members", 62],
+  [27, "Counties", 56],
+  [18, "Active projects", 70],
+  [96000, "Farmers reached", 48],
+  [312, "Coffee enterprises", 65],
+  [140, "Funding mobilized (KES M)", 40],
+] as const;
+
+const PROGRAMS = [
+  ["CW", "Coffee on Wheels", "Mobile processing and extension units bringing quality control directly to remote growing zones."],
+  ["VA", "Value Addition Centre", "Shared roasting and packaging facilities that let cooperatives capture more of the export price."],
+  ["FE", "Farmer Financial Empowerment", "Savings groups, input credit and insurance products built around the harvest calendar."],
+  ["DP", "Coffee Digital Platform", "The member registry, traceability and market-data backbone underlying every CCAK program."],
+  ["YC", "Youth Entrepreneurship Academy", "Training the next generation of agripreneurs in roasting, branding and export logistics."],
+  ["WC", "Women in Coffee Enterprise", "Enterprise grants and mentorship for women-led cooperatives and processing businesses."],
+  ["CS", "Climate Smart Coffee", "Shade-tree agroforestry, water-efficient washing stations and drought-resistant varietals."],
+  ["EP", "Export Promotion", "Cupping labs, buyer matchmaking and certification support to open new international markets."],
+] as const;
+
+const COUNTIES = [
+  { name: "Nyeri", members: 812, projects: 4, desc: "The heartland of Kenyan AA coffee, with the highest concentration of active washing stations." },
+  { name: "Kirinyaga", members: 640, projects: 3, desc: "Home to the new Value Addition Centre and a fast-growing peaberry export line." },
+  { name: "Murang'a", members: 398, projects: 2, desc: "Strong cooperative governance training uptake and youth entrepreneurship cohorts." },
+  { name: "Kiambu", members: 355, projects: 2, desc: "Proximity to Nairobi makes this chapter the hub for buyer visits and cupping events." },
+  { name: "Embu", members: 301, projects: 2, desc: "Leading climate-smart agroforestry pilot sites with shade-tree intercropping." },
+  { name: "Meru", members: 410, projects: 3, desc: "High-altitude lots driving specialty-grade demand from international roasters." },
+  { name: "Bungoma", members: 190, projects: 1, desc: "Emerging chapter focused on smallholder financial literacy and savings groups." },
+  { name: "Kisii", members: 175, projects: 1, desc: "New chapter piloting mobile Coffee on Wheels processing routes." },
+  { name: "Nandi", members: 230, projects: 2, desc: "Strong women-led enterprise groups active in wet-mill cooperatives." },
+  { name: "Kericho", members: 260, projects: 2, desc: "Youth academy graduates opening the county's first specialty roastery." },
+  { name: "Baringo", members: 120, projects: 1, desc: "Newly onboarded chapter with a focus on drought-resistant varietal trials." },
+  { name: "Taita Taveta", members: 98, projects: 1, desc: "Coastal-adjacent chapter exploring export logistics through Mombasa." },
+  { name: "Machakos", members: 140, projects: 1, desc: "Growing interest in value addition for the local urban specialty market." },
+  { name: "Nairobi", members: 520, projects: 3, desc: "National secretariat, training academy studio and marketplace fulfilment hub." },
+  { name: "Trans Nzoia", members: 150, projects: 1, desc: "Mixed farming county piloting intercropping with maize for smallholder resilience." },
+];
+const TOTAL_MEMBERS = COUNTIES.reduce((s, c) => s + c.members, 0);
+
+const COURSES = [
+  ["Coffee production & agronomy", "Soil health, pruning cycles and cherry selection.", 80, 12],
+  ["Quality assurance & cupping", "Grading, defect detection and cup scoring.", 55, 9],
+  ["Cooperative governance", "Leadership, transparency and member relations.", 40, 8],
+  ["Export readiness", "Documentation, logistics and buyer relations.", 20, 10],
+] as const;
+
+const PRODUCTS = [
+  ["Nyeri AA", "Nyeri AA whole bean, 250g", "KES 950"],
+  ["Kirinyaga PB", "Kirinyaga peaberry, ground, 250g", "KES 1,050"],
+  ["Merchandise", "CCAK founding-member tote", "KES 650"],
+  ["Academy", "Export readiness course access", "KES 2,500"],
+] as const;
+
+const MODAL_COPY = {
+  join: { title: "Join CCAK", sub: "Founding membership is open to farmers, cooperatives and coffee enterprises." },
+  partner: { title: "Become a partner", sub: "Tell us about your organization and how you would like to work with CCAK." },
+  donate: { title: "Support CCAK", sub: "Your contribution funds training, value addition and farmer grants." },
+};
+type ModalKind = keyof typeof MODAL_COPY;
+
+const CHERRY_COLORS = ["#2E7D32", "#C9A227", "#8B4513"];
+
 function Index() {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [modal, setModal] = useState<ModalKind | null>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onResize = () => window.innerWidth > 680 && setMenuOpen(false);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
+
+  const open = (kind: ModalKind) => (e: { currentTarget: HTMLElement }) => {
+    openerRef.current = e.currentTarget;
+    setMenuOpen(false);
+    setModal(kind);
+  };
+  const close = () => {
+    setModal(null);
+    openerRef.current?.focus();
+  };
+
+  useEffect(() => {
+    document.body.style.overflow = modal ? "hidden" : "";
+    if (modal) focusables(modalRef.current)[0]?.focus();
+  }, [modal]);
+
+  const onModalKey = (e: KeyboardEvent) => {
+    if (e.key === "Escape") return close();
+    if (e.key !== "Tab") return;
+    const f = focusables(modalRef.current);
+    if (!f.length) return;
+    const first = f[0]!, last = f[f.length - 1]!;
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  };
+
+  const onApply = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    if ((form.elements.namedItem("company_website") as HTMLInputElement).value) return;
+    form.reset();
+    close();
+    window.alert("Application received. Demo form only — no data is sent or stored.");
+  };
+
+  const copy = MODAL_COPY[modal ?? "join"];
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <>
+      <a className="skip-link" href="#main">Skip to main content</a>
+
+      <header id="siteHeader" className={scrolled ? "scrolled" : ""}>
+        <div className="wrap">
+          <nav aria-label="Primary">
+            <a className="logo" href="#top">
+              <span className="logo-mark" aria-hidden="true"><span /></span>
+              <span className="logo-text">CCAK<small>Coffee Champions Assoc. Kenya</small></span>
+            </a>
+            <div className="nav-links">
+              {NAV.map(([h, l]) => <a key={h} href={h}>{l}</a>)}
+            </div>
+            <div className="nav-cta">
+              <button className="btn btn-ghost btn-compact" onClick={open("join")}>Member login</button>
+              <button className="btn btn-forest btn-compact" onClick={open("join")}>Join CCAK</button>
+            </div>
+            <button
+              className="nav-toggle"
+              aria-expanded={menuOpen}
+              aria-controls="mobileMenu"
+              aria-label="Open menu"
+              onClick={() => setMenuOpen((o) => !o)}
+            >
+              {menuOpen ? "\u2715" : "\u2630"}
+            </button>
+          </nav>
+          <div className={`mobile-menu${menuOpen ? " open" : ""}`} id="mobileMenu">
+            {NAV.map(([h, l]) => <a key={h} href={h} onClick={() => setMenuOpen(false)}>{l}</a>)}
+            <div className="mobile-cta">
+              <button className="btn btn-ghost" onClick={open("join")}>Member login</button>
+              <button className="btn btn-forest" onClick={open("join")}>Join CCAK</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main id="main">
+        <section className="hero" id="top">
+          <CherryField />
+          <div className="wrap">
+            <p className="hero-eyebrow">Coffee Revolution 2035 · National Coffee Platform</p>
+            <h1>Empowering farmers.<br />Elevating <em>Kenyan coffee</em>.<br />Transforming the future.</h1>
+            <p className="lead">CCAK unites farmers, cooperatives, processors, exporters, researchers and government to build a coffee sector where every cherry picked builds a farmer's prosperity.</p>
+            <div className="hero-actions">
+              <button className="btn btn-gold" onClick={open("join")}>Join CCAK</button>
+              <button className="btn btn-outline" onClick={open("partner")}>Become a partner</button>
+              <button className="btn btn-outline" onClick={open("donate")}>Donate</button>
+              <a className="btn btn-outline" href="#programs">Explore projects</a>
+            </div>
+            <p className="hero-scroll"><span className="hero-scroll-line" aria-hidden="true" />Scroll to explore impact</p>
+          </div>
+        </section>
+
+        <Stats />
+
+        <section className="mission" id="about" aria-labelledby="mission-heading">
+          <h2 id="mission-heading" className="visually-hidden">Our mission and vision</h2>
+          <div className="wrap mission-grid">
+            <div className="mission-card">
+              <span className="mission-tag">Our mission</span>
+              <h3>Unite, empower, finance, industrialize.</h3>
+              <p>We unite, empower, finance, industrialize and globally position Kenya's coffee sector through innovation, value addition, research, strategic partnerships and sustainable enterprise — from the smallholder farm gate to the export market.</p>
+            </div>
+            <div className="mission-card">
+              <span className="mission-tag">Our vision</span>
+              <h3>Kenya's coffee, the world's most respected brand.</h3>
+              <p>We work toward a future where Kenyan coffee is recognized as the world's most respected agricultural brand, and where every coffee farmer — regardless of county, gender or age — prospers from their harvest.</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="programs" id="programs" aria-labelledby="programs-heading">
+          <div className="wrap">
+            <div className="section-head">
+              <div>
+                <p className="eyebrow">Flagship programs</p>
+                <h2 id="programs-heading">Eight initiatives moving the sector forward</h2>
+              </div>
+              <p className="section-note">Every program pairs a field-level intervention with digital tools — tracked from budget to farmer impact.</p>
+            </div>
+            <ul className="program-grid">
+              {PROGRAMS.map(([ic, t, d]) => (
+                <li key={t} className="program-card">
+                  <span className="program-icon" aria-hidden="true">{ic}</span>
+                  <h3>{t}</h3><p>{d}</p><span className="go">View program →</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <Counties />
+
+        <section className="academy" id="academy" aria-labelledby="academy-heading">
+          <div className="wrap">
+            <div className="section-head">
+              <div>
+                <p className="eyebrow">Training academy</p>
+                <h2 id="academy-heading">Certified learning, from seedling to sale</h2>
+              </div>
+              <p className="section-note">Video lessons, assignments and quizzes lead to a verifiable CCAK certificate.</p>
+            </div>
+            <ul className="course-grid">
+              {COURSES.map(([t, d, p, n]) => (
+                <li key={t} className="course-card">
+                  <h3>{t}</h3><p>{d}</p>
+                  <div className="course-track">
+                    <i style={{ ["--progress" as string]: `${p}%` }} role="img" aria-label={`${p}% complete`} />
+                  </div>
+                  <div className="course-meta">{n} lessons · Certificate</div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section className="market" id="market" aria-labelledby="market-heading">
+          <div className="wrap">
+            <div className="section-head">
+              <div>
+                <p className="eyebrow">Marketplace</p>
+                <h2 id="market-heading">Shop the harvest, fund the mission</h2>
+              </div>
+              <p className="section-note">Every purchase channels margin back to member cooperatives.</p>
+            </div>
+            <ul className="market-grid">
+              {PRODUCTS.map(([tag, t, price]) => (
+                <li key={t} className="product-card">
+                  <div className="product-media" aria-hidden="true"><span>{tag}</span></div>
+                  <div className="product-body"><h3>{t}</h3><p className="price">{price}</p><AddToCart /></div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section className="membership" id="membership" aria-labelledby="membership-heading">
+          <div className="wrap mem-layout">
+            <figure className="card-3d" aria-label="Sample CCAK digital membership card for Grace Wanjiru, Nyeri chapter">
+              <div className="card-top">
+                <div className="card-org">CCAK<small>Digital membership card</small></div>
+                <div className="qr" aria-hidden="true" />
+              </div>
+              <div className="card-name">Grace Wanjiru</div>
+              <div className="card-code">CCAK–C012–0347</div>
+              <div className="card-bottom"><span>Nyeri chapter</span><span>Active since 2024</span></div>
+            </figure>
+            <div>
+              <p className="eyebrow">Membership portal</p>
+              <h2 id="membership-heading" className="mem-heading">One login for every member service</h2>
+              <p className="mem-copy">A secure dashboard for training records, renewals, certificates and county chapter directories — verified in the field with a scan of the QR code.</p>
+              <div className="mem-features">
+                {[
+                  ["Unique member ID", "Format CCAK–C0##–#### tied to county and join order."],
+                  ["Renewals & payments", "M-Pesa, card and bank history in one statement."],
+                  ["Certificates", "Download every academy completion on demand."],
+                  ["QR verification", "Field officers confirm status instantly at events."],
+                ].map(([t, d]) => (
+                  <div key={t} className="mem-feat"><span className="dot" aria-hidden="true" /><div><h3>{t}</h3><p>{d}</p></div></div>
+                ))}
+              </div>
+              <button className="btn btn-forest mem-cta" onClick={open("join")}>Create your account</button>
+            </div>
+          </div>
+        </section>
+
+        <section className="news" id="news" aria-labelledby="news-heading">
+          <div className="wrap">
+            <div className="section-head">
+              <div><p className="eyebrow">Newsroom</p><h2 id="news-heading">Reports, releases and field stories</h2></div>
+              <a className="btn btn-ghost" href="#">All news →</a>
+            </div>
+            <div className="news-grid">
+              {[
+                ["Report", "2026 State of Kenyan Coffee: county-by-county yield and price data", "2026-07-24", "24 July 2026", true],
+                ["Announcement", "Value Addition Centre breaks ground in Kirinyaga", "2026-07-11", "11 July 2026", false],
+                ["Event", "Registration opens for the National Coffee Summit", "2026-07-02", "2 July 2026", false],
+              ].map(([tag, t, dt, d, f]) => (
+                <article key={t as string} className={`news-card${f ? " feature" : ""}`}>
+                  <div className="news-media" aria-hidden="true" />
+                  <div className="news-body">
+                    <span className="news-tag">{tag}</span><h3>{t}</h3>
+                    <p className="news-date"><time dateTime={dt as string}>{d}</time></p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="partners" aria-labelledby="partners-heading">
+          <h2 id="partners-heading" className="visually-hidden">Our partners</h2>
+          <div className="wrap partner-row">
+            <span>AGRICULTURE &amp; FOOD AUTHORITY</span><span>ICO</span><span>KENYA COFFEE EXPORTERS ASSOC.</span>
+            <span>COUNTY GOVERNMENTS</span><span>DEVELOPMENT PARTNERS NETWORK</span>
+          </div>
+        </section>
+
+        <section className="testimonials" aria-labelledby="testimonials-heading">
+          <div className="wrap">
+            <p className="eyebrow">Member voices</p>
+            <h2 id="testimonials-heading">What the network is saying</h2>
+            <div className="test-grid">
+              {[
+                ["Since joining our Nyeri chapter, our cooperative doubled the price we get for parchment through direct buyer contact.", "JM", "James Mwangi", "Cooperative chair, Nyeri"],
+                ["The Women in Coffee grant let us buy our own pulping machine instead of sharing one three villages away.", "SN", "Susan Nyambura", "Enterprise lead, Kirinyaga"],
+                ["The academy certificate opened the door to my first export contract as a 24-year-old roaster.", "DK", "David Kiptoo", "Youth entrepreneur, Kericho"],
+              ].map(([q, i, n, r]) => (
+                <blockquote key={n} className="test-card">
+                  <p>“{q}”</p>
+                  <footer className="test-who">
+                    <span className="test-avatar" aria-hidden="true">{i}</span>
+                    <cite><span className="test-who-name">{n}</span><small>{r}</small></cite>
+                  </footer>
+                </blockquote>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <Newsletter />
+      </main>
+
+      <footer id="contact">
+        <div className="wrap">
+          <div className="footer-grid">
+            <div className="footer-brand">
+              <div className="logo"><span className="logo-mark" aria-hidden="true"><span /></span><span className="logo-text">CCAK</span></div>
+              <p>Coffee Champions Association of Kenya. Uniting the sector from farm gate to global market.</p>
+              <div className="social-row">
+                <a href="#" aria-label="CCAK on Facebook">f</a><a href="#" aria-label="CCAK on X">x</a>
+                <a href="#" aria-label="CCAK on Instagram">i</a><a href="#" aria-label="CCAK on LinkedIn">in</a>
+              </div>
+            </div>
+            <nav aria-label="Organization"><h2>Organization</h2><ul><li><a href="#about">Our story</a></li><li><a href="#">Leadership</a></li><li><a href="#">Governance</a></li><li><a href="#">Constitution</a></li></ul></nav>
+            <nav aria-label="Get involved"><h2>Get involved</h2><ul><li><a href="#membership">Membership</a></li><li><a href="#">Partner with us</a></li><li><a href="#">Careers</a></li><li><a href="#">Volunteer</a></li></ul></nav>
+            <nav aria-label="Resources"><h2>Resources</h2><ul><li><a href="#">Coffee library</a></li><li><a href="#news">News</a></li><li><a href="#">Events</a></li><li><a href="#academy">Training</a></li></ul></nav>
+            <div><h2>Contact</h2><ul><li>Nairobi, Kenya</li><li><a href="tel:+254700000000">+254 700 000 000</a></li><li><a href="mailto:info@ccak.or.ke">info@ccak.or.ke</a></li></ul></div>
+          </div>
+          <div className="footer-bottom">
+            <span>© 2026 Coffee Champions Association of Kenya. All rights reserved.</span>
+            <span>Coffee Revolution 2035</span>
+          </div>
+        </div>
+      </footer>
+
+      <div
+        className={`modal-backdrop${modal ? " open" : ""}`}
+        aria-hidden={!modal}
+        onClick={(e) => e.target === e.currentTarget && close()}
+        onKeyDown={onModalKey}
+      >
+        <div className="modal" ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalSub">
+          <button className="modal-close" aria-label="Close dialog" onClick={close}>×</button>
+          <h3 id="modalTitle">{copy.title}</h3>
+          <p className="sub" id="modalSub">{copy.sub}</p>
+          <form onSubmit={onApply}>
+            <label htmlFor="appName">Full name</label>
+            <input id="appName" name="full_name" type="text" autoComplete="name" required />
+            <label htmlFor="appCounty">County</label>
+            <select id="appCounty" name="county">
+              {["Nyeri", "Kirinyaga", "Murang'a", "Kiambu", "Embu", "Meru", "Bungoma", "Kisii"].map((c) => <option key={c}>{c}</option>)}
+            </select>
+            <label htmlFor="appEmail">Email</label>
+            <input id="appEmail" name="email" type="email" autoComplete="email" required />
+            <label htmlFor="appPhone">Phone (M-Pesa)</label>
+            <input id="appPhone" name="phone" type="tel" placeholder="07xx xxx xxx" autoComplete="tel" required />
+            <label htmlFor="appCompany" className="hp-field" aria-hidden="true">Leave this field empty</label>
+            <input id="appCompany" name="company_website" type="text" className="hp-field" tabIndex={-1} autoComplete="off" />
+            <button className="btn btn-forest" type="submit">Submit application</button>
+          </form>
+          <p className="modal-note">This is a front-end demo form. No data is sent or stored.</p>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function focusables(root: HTMLElement | null): HTMLElement[] {
+  if (!root) return [];
+  return Array.from(
+    root.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input:not([disabled]):not([tabindex="-1"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    ),
+  );
+}
+
+function CherryField() {
+  const [cherries, setCherries] = useState<React.CSSProperties[]>([]);
+  useEffect(() => {
+    setCherries(
+      Array.from({ length: 26 }, () => {
+        const size = 6 + Math.random() * 10;
+        return {
+          width: size, height: size,
+          left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%`,
+          background: CHERRY_COLORS[Math.floor(Math.random() * 3)],
+          opacity: 0.15 + Math.random() * 0.25,
+        };
+      }),
+    );
+  }, []);
+  return (
+    <div className="hero-cherries" aria-hidden="true">
+      {cherries.map((s, i) => <div key={i} className="cherry" style={s} />)}
     </div>
+  );
+}
+
+function Stats() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [progress, setProgress] = useState(0);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (!e?.isIntersecting) return;
+      obs.disconnect();
+      setVisible(true);
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return setProgress(1);
+      const start = performance.now();
+      const tick = (now: number) => {
+        const p = Math.min((now - start) / 1400, 1);
+        setProgress(1 - Math.pow(1 - p, 3));
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }, { threshold: 0.4 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return (
+    <section className="stats" aria-labelledby="stats-heading">
+      <h2 id="stats-heading" className="visually-hidden">CCAK impact statistics</h2>
+      <div className="wrap">
+        <div className="stats-grid" ref={ref}>
+          {STATS.map(([n, l, f]) => (
+            <div key={l} className="stat">
+              <div className="stat-num">{Math.round(n * progress).toLocaleString()}</div>
+              <div className="stat-label">{l}</div>
+              <div className="ripen-track"><div className="ripen-fill" style={{ width: visible ? `${f}%` : "0%" }} /></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Counties() {
+  const [active, setActive] = useState<number | null>(null);
+  const c = active === null ? null : COUNTIES[active];
+  return (
+    <section className="counties" id="counties" aria-labelledby="counties-heading">
+      <div className="wrap county-layout">
+        <div>
+          <p className="eyebrow">County chapters</p>
+          <h2 id="counties-heading" className="county-heading">A schematic view of CCAK's county network</h2>
+          <ul className="hex-grid" aria-label="Select a county chapter to view its details">
+            {COUNTIES.map((co, i) => (
+              <li key={co.name}>
+                <button
+                  type="button"
+                  className={`hex${active === i ? " active" : ""}`}
+                  aria-pressed={active === i}
+                  aria-label={`${co.name} chapter, ${co.members} members`}
+                  onClick={() => setActive(i)}
+                >
+                  <span className="hex-count" aria-hidden="true">{co.members}</span>
+                  <span className="hex-name" aria-hidden="true">{co.name}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="county-info" aria-live="polite">
+          {c ? (
+            <>
+              <h4>{c.name} chapter</h4>
+              <p>{c.desc}</p>
+              <div className="county-meta">
+                <div><span>{c.members}</span><small>Members</small></div>
+                <div><span>{c.projects}</span><small>Active projects</small></div>
+                <div><span>{((c.members / TOTAL_MEMBERS) * 100).toFixed(0)}%</span><small>Of network</small></div>
+              </div>
+            </>
+          ) : (
+            <>
+              <h3>Select a county</h3>
+              <p>Click any hexagon to view that chapter's leadership, membership and active projects.</p>
+              <div className="county-meta">
+                <div><span>27</span><small>Chapters live</small></div>
+                <div><span>4,820</span><small>Members</small></div>
+                <div><span>18</span><small>Projects running</small></div>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function AddToCart() {
+  const [added, setAdded] = useState(false);
+  return (
+    <button
+      className={`btn btn-ghost add-cart${added ? " btn-forest" : ""}`}
+      type="button"
+      aria-live="polite"
+      onClick={() => { setAdded(true); setTimeout(() => setAdded(false), 1200); }}
+    >
+      {added ? "Added" : "Add to cart"}
+    </button>
+  );
+}
+
+function Newsletter() {
+  const [status, setStatus] = useState("");
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    if ((form.elements.namedItem("company_website") as HTMLInputElement).value) return;
+    form.reset();
+    setStatus("Subscribed. Thank you.");
+  };
+  return (
+    <section className="cta-band" aria-labelledby="newsletter-heading">
+      <div className="wrap">
+        <h2 id="newsletter-heading">Stay close to the harvest</h2>
+        <p>Monthly briefings on prices, grants and county chapter news — straight to your inbox.</p>
+        <form className="newsletter-form" onSubmit={onSubmit}>
+          <label htmlFor="newsletterEmail" className="visually-hidden">Email address</label>
+          <input id="newsletterEmail" name="email" type="email" placeholder="you@email.com" autoComplete="email" required />
+          <label htmlFor="newsletterCompany" className="hp-field" aria-hidden="true">Leave this field empty</label>
+          <input id="newsletterCompany" name="company_website" type="text" className="hp-field" tabIndex={-1} autoComplete="off" />
+          <button className="btn btn-gold" type="submit">Subscribe</button>
+        </form>
+        <p className="newsletter-status" role="status">{status}</p>
+      </div>
+    </section>
   );
 }
