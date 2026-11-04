@@ -22,7 +22,12 @@ const jsonLd = {
     email: "coffeechampionsassociation@gmail.com",
     contactType: "customer service",
   },
-  sameAs: [],
+  sameAs: [
+    "https://x.com/CCAK_ke",
+    "https://www.tiktok.com/@CCAK_ke",
+    "https://www.facebook.com/Coffee-Champions-Association-Of-Kenya",
+    "https://www.instagram.com/ccak_ke",
+  ],
 };
 
 export const Route = createFileRoute("/")({
@@ -420,8 +425,8 @@ function Index() {
               <div className="logo"><span className="logo-mark" aria-hidden="true"><span /></span><span className="logo-text">CCAK</span></div>
               <p>Coffee Champions Association of Kenya. Uniting the sector from farm gate to global market.</p>
               <div className="social-row">
-                <a href="#" aria-label="CCAK on Facebook">f</a><a href="#" aria-label="CCAK on X">x</a>
-                <a href="#" aria-label="CCAK on Instagram">i</a><a href="#" aria-label="CCAK on LinkedIn">in</a>
+                <a href="https://www.facebook.com/Coffee-Champions-Association-Of-Kenya" target="_blank" rel="noopener noreferrer" aria-label="CCAK on Facebook">f</a><a href="https://x.com/CCAK_ke" target="_blank" rel="noopener noreferrer" aria-label="CCAK on X">x</a>
+                <a href="https://www.instagram.com/ccak_ke" target="_blank" rel="noopener noreferrer" aria-label="CCAK on Instagram">i</a><a href="https://www.tiktok.com/@CCAK_ke" target="_blank" rel="noopener noreferrer" aria-label="CCAK on TikTok">tk</a>
               </div>
             </div>
             <nav aria-label="Organization"><h2>Organization</h2><ul><li><a href="#about">Our story</a></li><li><a href="#">Leadership</a></li><li><a href="#">Governance</a></li><li><a href="#">Constitution</a></li></ul></nav>
