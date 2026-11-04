@@ -28,7 +28,7 @@ const jsonLd = {
   sameAs: [
     "https://x.com/CCAK_ke",
     "https://www.tiktok.com/@CCAK_ke",
-    "https://www.facebook.com/Coffee-Champions-Association-Of-Kenya",
+    "https://www.facebook.com/profile.php?id=61590921686608",
     "https://www.instagram.com/ccak_ke",
   ],
 };
@@ -428,7 +428,7 @@ function Index() {
               <div className="logo"><img className="logo-mark" src={ccakLogo.url} alt="CCAK logo" /><span className="logo-text"><strong>Coffee Champions</strong><small>Association of Kenya</small></span></div>
               <p>Coffee Champions Association of Kenya. Uniting the sector from farm gate to global market.</p>
               <div className="social-row">
-                <a href="https://www.facebook.com/Coffee-Champions-Association-Of-Kenya" target="_blank" rel="noopener noreferrer" aria-label="CCAK on Facebook">
+                <a href="https://www.facebook.com/profile.php?id=61590921686608" target="_blank" rel="noopener noreferrer" aria-label="CCAK on Facebook">
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M13.5 21.9v-8.4h2.8l.4-3.3h-3.2V8.2c0-.9.3-1.6 1.7-1.6h1.6V3.6c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4.1v2.6H7.5v3.3h2.9v8.4a10 10 0 0 0 3.1 0z"/></svg>
                 </a>
                 <a href="https://x.com/CCAK_ke" target="_blank" rel="noopener noreferrer" aria-label="CCAK on X">
