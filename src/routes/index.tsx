@@ -205,7 +205,7 @@ function Index() {
           <nav aria-label="Primary">
             <a className="logo" href="#top">
               <img className="logo-mark" src={ccakLogo.url} alt="CCAK logo" />
-              <span className="logo-text">CCAK<small>Coffee Champions Assoc. Kenya</small></span>
+              <span className="logo-text"><strong>Coffee Champions</strong><small>Association of Kenya</small></span>
             </a>
             <div className="nav-links">
               {NAV.map(([h, l]) => <a key={h} href={h}>{l}</a>)}
@@ -425,7 +425,7 @@ function Index() {
         <div className="wrap">
           <div className="footer-grid">
             <div className="footer-brand">
-              <div className="logo"><img className="logo-mark" src={ccakLogo.url} alt="CCAK logo" /><span className="logo-text">CCAK</span></div>
+              <div className="logo"><img className="logo-mark" src={ccakLogo.url} alt="CCAK logo" /><span className="logo-text"><strong>Coffee Champions</strong><small>Association of Kenya</small></span></div>
               <p>Coffee Champions Association of Kenya. Uniting the sector from farm gate to global market.</p>
               <div className="social-row">
                 <a href="https://www.facebook.com/Coffee-Champions-Association-Of-Kenya" target="_blank" rel="noopener noreferrer" aria-label="CCAK on Facebook">

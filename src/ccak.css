@@ -120,16 +120,18 @@ header.scrolled{background:rgba(248,245,240,0.97);box-shadow:0 2px 18px rgba(51,
 nav{display:flex;align-items:center;justify-content:space-between;position:relative;}
 .logo{display:flex;align-items:center;gap:10px;}
 .logo-mark{
-  width:38px;height:38px;border-radius:50%;
+  width:54px;height:54px;border-radius:50%;
   background:conic-gradient(var(--forest) 0deg 120deg, var(--gold) 120deg 240deg, var(--clay) 240deg 360deg);
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  box-shadow:0 2px 10px rgba(51,34,25,0.25);
 }
 .logo-mark span{width:20px;height:20px;border-radius:50%;background:var(--cream);}
-.logo-text{font-family:'Montserrat',sans-serif;font-weight:800;font-size:17px;color:var(--coffee-deep);line-height:1.1;}
+.logo-text{font-family:'Montserrat',sans-serif;font-weight:800;font-size:20px;color:var(--coffee-deep);line-height:1.05;letter-spacing:-0.01em;}
+.logo-text strong{display:block;}
 header.scrolled .logo-text{color:var(--coffee-deep);}
 header:not(.scrolled) .logo-text{color:var(--cream);}
 header:not(.scrolled) .logo-text small{color:rgba(248,245,240,0.85);}
-.logo-text small{display:block;font-family:'Inter',sans-serif;font-weight:500;font-size:10px;letter-spacing:0.06em;color:var(--forest);text-transform:uppercase;}
+.logo-text small{display:block;font-family:'Inter',sans-serif;font-weight:600;font-size:11px;letter-spacing:0.08em;color:var(--forest);text-transform:uppercase;margin-top:2px;}
 .nav-links{display:flex;gap:30px;align-items:center;}
 .nav-links a{font-size:14px;font-weight:500;color:var(--white);}
 header.scrolled .nav-links a{color:var(--coffee-deep);}
