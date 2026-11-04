@@ -1,0 +1,9 @@
+[
+ {"capability":"code","source":"static index.html + js/main.js","outcome":"migrate to TanStack route","status":"verified-pending","next_action":"port"},
+ {"capability":"styles","source":"css/styles.css","outcome":"migrate verbatim","status":"pending","next_action":"port"},
+ {"capability":"seo","source":"meta, JSON-LD, robots.txt, sitemap.xml","outcome":"migrate","status":"pending","next_action":"port"},
+ {"capability":"schema/records/auth","source":"none (front-end demo forms only)","outcome":"absent","status":"accepted","next_action":"none"},
+ {"capability":"forms","source":"join/partner/donate modal, newsletter (demo, no network)","outcome":"preserve demo behavior","status":"pending","next_action":"port"},
+ {"capability":"secrets/providers/webhooks/schedules","source":"none","outcome":"absent","status":"accepted","next_action":"none"},
+ {"capability":"assets","source":"og-image.jpg, logo.png referenced but not in archive","outcome":"external URLs kept","status":"accepted","next_action":"user may supply"}
+]
