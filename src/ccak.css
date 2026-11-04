@@ -127,6 +127,8 @@ nav{display:flex;align-items:center;justify-content:space-between;position:relat
 .logo-mark span{width:20px;height:20px;border-radius:50%;background:var(--cream);}
 .logo-text{font-family:'Montserrat',sans-serif;font-weight:800;font-size:17px;color:var(--coffee-deep);line-height:1.1;}
 header.scrolled .logo-text{color:var(--coffee-deep);}
+header:not(.scrolled) .logo-text{color:var(--cream);}
+header:not(.scrolled) .logo-text small{color:rgba(248,245,240,0.85);}
 .logo-text small{display:block;font-family:'Inter',sans-serif;font-weight:500;font-size:10px;letter-spacing:0.06em;color:var(--forest);text-transform:uppercase;}
 .nav-links{display:flex;gap:30px;align-items:center;}
 .nav-links a{font-size:14px;font-weight:500;color:var(--white);}

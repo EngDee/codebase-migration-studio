@@ -5,5 +5,5 @@
  {"capability":"schema/records/auth","source":"none (front-end demo forms only)","outcome":"absent","status":"accepted","next_action":"none"},
  {"capability":"forms","source":"join/partner/donate modal, newsletter (demo, no network)","outcome":"preserve demo behavior","status":"verified","next_action":"none"},
  {"capability":"secrets/providers/webhooks/schedules","source":"none","outcome":"absent","status":"accepted","next_action":"none"},
- {"capability":"assets","source":"og-image.jpg, logo.png referenced but not in archive","outcome":"external URLs kept","status":"accepted","next_action":"user may supply"}
+ {"capability":"assets","source":"og-image.jpg, logo.png referenced but not in archive","outcome":"official CCAK logo supplied by user; used in header/footer/favicon/og","status":"verified","next_action":"none"}
 ]
