@@ -1,10 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
+import ccakLogo from "@/assets/ccak-logo.png.asset.json";
 
 const TITLE = "CCAK — Coffee Champions Association of Kenya";
 const DESC =
   "Empowering farmers, elevating Kenyan coffee. Membership, training, county chapters and marketplace, all in one national coffee platform.";
-const OG_IMAGE = "https://www.ccak.or.ke/assets/og-image.jpg";
+const LOGO_URL =
+  "https://codebase-migration-studio.lovable.app/__l5e/assets-v1/d605d211-e1e9-4aa2-9211-11a1ce4433fa/ccak-logo.png";
+const OG_IMAGE = LOGO_URL;
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -12,7 +15,7 @@ const jsonLd = {
   name: "Coffee Champions Association of Kenya",
   alternateName: "CCAK",
   url: "https://www.ccak.or.ke/",
-  logo: "https://www.ccak.or.ke/assets/logo.png",
+  logo: LOGO_URL,
   description:
     "CCAK unites farmers, cooperatives, processors, exporters, researchers and government to build a coffee sector where every cherry picked builds a farmer's prosperity.",
   address: { "@type": "PostalAddress", addressLocality: "Nairobi", addressCountry: "KE" },
@@ -201,7 +204,7 @@ function Index() {
         <div className="wrap">
           <nav aria-label="Primary">
             <a className="logo" href="#top">
-              <span className="logo-mark" aria-hidden="true"><span /></span>
+              <img className="logo-mark" src={ccakLogo.url} alt="CCAK logo" />
               <span className="logo-text">CCAK<small>Coffee Champions Assoc. Kenya</small></span>
             </a>
             <div className="nav-links">
@@ -422,7 +425,7 @@ function Index() {
         <div className="wrap">
           <div className="footer-grid">
             <div className="footer-brand">
-              <div className="logo"><span className="logo-mark" aria-hidden="true"><span /></span><span className="logo-text">CCAK</span></div>
+              <div className="logo"><img className="logo-mark" src={ccakLogo.url} alt="CCAK logo" /><span className="logo-text">CCAK</span></div>
               <p>Coffee Champions Association of Kenya. Uniting the sector from farm gate to global market.</p>
               <div className="social-row">
                 <a href="https://www.facebook.com/Coffee-Champions-Association-Of-Kenya" target="_blank" rel="noopener noreferrer" aria-label="CCAK on Facebook">
