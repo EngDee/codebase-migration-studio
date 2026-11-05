@@ -404,3 +404,84 @@ footer li a:hover{color:var(--gold-soft);}
   .program-grid,.course-grid,.market-grid{grid-template-columns:1fr 1fr;}
   section{padding:64px 0;}
 }
+
+/* -------------------------------------------------------------------------
+   Member portal (sign-in, membership, admin)
+   ------------------------------------------------------------------------- */
+.portal{min-height:100vh;background:var(--cream);color:var(--charcoal);}
+.portal-top{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px clamp(16px,4vw,48px);background:var(--white);border-bottom:3px solid transparent;border-image:var(--ring-green) 1;box-shadow:0 2px 14px rgba(51,34,29,.06);}
+.portal-top .logo{min-width:0;margin-right:0;}
+.portal-top .logo-mark{flex-shrink:0;}
+.portal-nav{display:flex;align-items:center;gap:18px;flex-shrink:0;}
+.portal-nav a{font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;color:var(--coffee);text-decoration:none;}
+.portal-nav a:hover,.portal-nav a.active{color:var(--forest);}
+.btn-compact{padding:8px 16px;font-size:13.5px;}
+.portal-main{max-width:960px;margin:0 auto;padding:clamp(24px,5vw,48px) clamp(16px,4vw,32px) 64px;}
+.portal-main>h1{font-size:clamp(26px,4vw,36px);margin-bottom:24px;}
+.portal-main>h1::after{content:"";display:block;width:64px;height:4px;margin-top:10px;border-radius:2px;background:var(--gold);}
+
+.portal-form{display:flex;flex-direction:column;gap:6px;}
+.portal-form.wide{background:var(--white);border-radius:18px;padding:clamp(20px,4vw,36px);box-shadow:0 10px 30px -14px rgba(51,34,29,.25);}
+.portal-form h2{font-size:20px;margin-bottom:12px;}
+.portal-form label{font-weight:600;font-size:13.5px;color:var(--coffee);margin-top:10px;}
+.portal-form input,.portal-form select{width:100%;font:inherit;font-size:16px;padding:12px 14px;border:1.5px solid rgba(78,52,46,.22);border-radius:10px;background:var(--white);color:var(--charcoal);}
+.portal-form input:focus,.portal-form select:focus{outline:none;border-color:var(--gold);box-shadow:var(--focus-ring);}
+.portal-form input[type=file]{padding:10px;background:var(--cream);}
+.portal-form .btn{margin-top:18px;justify-content:center;width:100%;}
+.portal-form .btn:disabled{opacity:.6;cursor:wait;transform:none;}
+@media(min-width:720px){.portal-form.wide .btn{width:auto;align-self:flex-start;}}
+.portal-msg{margin-top:14px;padding:12px 14px;border-radius:10px;font-size:14px;background:#fdecea;color:#8a1c1c;}
+.portal-msg.ok{background:#e8f5e9;color:var(--forest-deep);}
+
+/* Auth */
+.auth-page{display:grid;place-items:center;padding:24px 16px;background:radial-gradient(ellipse at top,var(--coffee) 0%,var(--coffee-deep) 70%);}
+.auth-card{width:100%;max-width:440px;background:var(--white);border-radius:22px;padding:clamp(24px,5vw,40px);box-shadow:0 24px 60px -20px rgba(0,0,0,.5);text-align:center;border-top:5px solid var(--gold);}
+.auth-card .portal-form{text-align:left;}
+.auth-logo{width:96px;height:96px;border-radius:50%;margin:0 auto 14px;display:block;box-shadow:0 6px 18px rgba(51,34,29,.2);}
+.auth-card h1{font-size:clamp(24px,5vw,30px);}
+.auth-card .sub{color:var(--coffee);margin:6px 0 20px;font-size:15px;}
+.auth-google{width:100%;justify-content:center;}
+.auth-or{display:flex;align-items:center;gap:12px;margin:18px 0 4px;color:var(--coffee);font-size:13px;}
+.auth-or::before,.auth-or::after{content:"";flex:1;height:1px;background:rgba(78,52,46,.2);}
+.auth-switch{margin-top:20px;font-size:14px;color:var(--charcoal);}
+.auth-switch button{background:none;border:0;font:inherit;font-weight:700;color:var(--forest);cursor:pointer;text-decoration:underline;padding:4px 2px;}
+
+/* Member card */
+.member-card{display:flex;align-items:center;gap:18px;margin-bottom:24px;padding:20px;border-radius:18px;color:var(--cream);background:linear-gradient(135deg,var(--forest-deep),var(--coffee-deep));box-shadow:0 14px 34px -16px rgba(31,87,35,.6);}
+.member-card strong{font-family:'Montserrat',sans-serif;font-size:20px;color:var(--white);display:block;}
+.member-card>div:last-child{min-width:0;display:flex;flex-direction:column;gap:4px;font-size:14px;}
+.member-photo{flex-shrink:0;width:72px;height:72px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:var(--gold);color:var(--coffee-deep);font-family:'Montserrat',sans-serif;font-weight:800;font-size:28px;border:3px solid var(--gold-soft);}
+.member-photo img{width:100%;height:100%;object-fit:cover;}
+.status{display:inline-block;width:fit-content;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;text-transform:capitalize;background:#fff4d6;color:#7a5a00;}
+.status-approved{background:#e8f5e9;color:var(--forest-deep);}
+.status-rejected{background:#fdecea;color:#8a1c1c;}
+
+/* Admin */
+.admin-tabs,.admin-filter{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px;}
+.admin-tabs button,.admin-filter button{flex-shrink:0;font:inherit;font-weight:600;font-size:14px;padding:9px 16px;border-radius:999px;border:1.5px solid rgba(78,52,46,.25);background:var(--white);color:var(--coffee);cursor:pointer;text-transform:capitalize;}
+.admin-tabs button.on{background:var(--coffee-deep);border-color:var(--coffee-deep);color:var(--cream);}
+.admin-filter button{font-size:13px;padding:6px 14px;}
+.admin-filter button.on{background:var(--gold);border-color:var(--gold);color:var(--coffee-deep);}
+.admin-table{display:flex;flex-direction:column;gap:10px;}
+.admin-row{background:var(--white);border-radius:14px;padding:16px 18px;margin-bottom:10px;box-shadow:0 4px 14px -8px rgba(51,34,29,.2);font-size:14px;overflow-wrap:anywhere;}
+.admin-row p{margin:8px 0;}
+.admin-row small{color:var(--coffee);}
+.member-row{display:flex;align-items:center;gap:16px;}
+.member-row .member-photo{width:56px;height:56px;font-size:22px;}
+.member-row .grow{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.row-actions{display:flex;gap:8px;flex-shrink:0;}
+
+@media(max-width:640px){
+  .portal-top{padding:10px 14px;gap:10px;}
+  .portal-top .logo-mark{width:40px;height:40px;}
+  .portal-top .logo-text{font-size:15px;}
+  .portal-top .logo-text small{display:none;}
+  .portal-nav{gap:10px;}
+  .portal-nav a{font-size:13px;}
+  .member-card{flex-direction:column;text-align:center;}
+  .member-card>div:last-child{align-items:center;}
+  .member-row{flex-wrap:wrap;}
+  .row-actions{width:100%;}
+  .row-actions .btn{flex:1;justify-content:center;}
+}
+@media(max-width:400px){.portal-top .logo-text{display:none;}}
