@@ -6,7 +6,7 @@ import { lovable } from "@/integrations/lovable/index";
 import ccakLogo from "@/assets/ccak-logo.png.asset.json";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (s: Record<string, unknown>) => ({ mode: s.mode === "signup" ? ("signup" as const) : undefined }),
+  validateSearch: (s: Record<string, unknown>): { mode?: "signup" } => (s["mode"] === "signup" ? { mode: "signup" } : {}),
   head: () => ({
     meta: [
       { title: "Member sign in — CCAK" },
