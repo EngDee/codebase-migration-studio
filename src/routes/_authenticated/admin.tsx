@@ -1,14 +1,17 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 import { PortalShell } from "@/components/PortalShell";
-import { getMyRoles, MEMBER_TYPES, photoUrl } from "@/lib/members";
+import { getMyRoles, hasStaffRole, MEMBER_TYPES, photoUrl } from "@/lib/members";
+import { getAdministration, reviewApplication } from "@/lib/membership.functions";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   beforeLoad: async ({ context }) => {
     const roles = await getMyRoles(context.user.id);
-    if (!roles.includes("admin")) throw redirect({ to: "/membership" });
+    if (!hasStaffRole(roles)) throw redirect({ to: "/membership" });
   },
   head: () => ({
     meta: [
@@ -32,20 +35,30 @@ function Admin() {
   const [inquiries, setInquiries] = useState<Tables<"inquiries">[]>([]);
   const [subs, setSubs] = useState<Tables<"newsletter_subscribers">[]>([]);
   const [filter, setFilter] = useState<"pending" | "approved" | "rejected" | "all">("pending");
+  const [applications, setApplications] = useState<Tables<"membership_applications">[]>([]);
+  const [message, setMessage] = useState("");
+  const fetchAdmin = useServerFn(getAdministration);
+  const review = useServerFn(reviewApplication);
 
   const load = async () => {
-    const [m, i, s] = await Promise.all([
-      supabase.from("profiles").select("*").order("submitted_at", { ascending: false, nullsFirst: false }),
-      supabase.from("inquiries").select("*").order("created_at", { ascending: false }),
-      supabase.from("newsletter_subscribers").select("*").order("created_at", { ascending: false }),
-    ]);
-    setMembers(m.data ?? []); setInquiries(i.data ?? []); setSubs(s.data ?? []);
+    try {
+      const data = await fetchAdmin();
+      setMembers(data.members); setApplications(data.applications); setInquiries(data.inquiries); setSubs(data.subscribers);
+    } catch { setMessage("Could not load administration records. Please refresh and try again."); }
   };
   useEffect(() => { load(); }, []);
 
   const setStatus = async (id: string, status: "approved" | "rejected" | "pending") => {
-    await supabase.from("profiles").update({ status }).eq("id", id);
-    load();
+    const application = applications.find((a) => a.applicant_user_id === id && a.application_status === "pending");
+    if (!application || status === "pending") { setMessage("No pending application is available to review."); return; }
+    const notes = status === "rejected" ? window.prompt("Reason for rejection") : "";
+    if (notes === null) return;
+    if (status === "rejected" && !notes?.trim()) { setMessage("A rejection reason is required."); return; }
+    try {
+      await review({ data: { application_id: application.id, decision: status, notes: notes ?? "" } });
+      setMessage("The application decision has been saved.");
+      await load();
+    } catch { setMessage("The decision was not saved. Check your permissions and refresh before trying again."); }
   };
 
   const shown = members.filter((m) => m.submitted_at && (filter === "all" || m.status === filter));
@@ -53,6 +66,7 @@ function Admin() {
   return (
     <PortalShell isAdmin>
       <h1>Admin</h1>
+      {message && <p role="status">{message}</p>}
       <div className="admin-tabs">
         <button className={tab === "members" ? "on" : ""} onClick={() => setTab("members")}>Members ({members.filter((m) => m.submitted_at && m.status === "pending").length} pending)</button>
         <button className={tab === "inquiries" ? "on" : ""} onClick={() => setTab("inquiries")}>Partner & donate ({inquiries.length})</button>
@@ -107,8 +121,8 @@ function MemberRow({ m, onStatus }: { m: Tables<"profiles">; onStatus: (id: stri
         {(m.business_name || m.farm_size) && <div>{m.business_name} {m.farm_size && `(${m.farm_size})`}</div>}
       </div>
       <div className="row-actions">
-        {m.status !== "approved" && <button className="btn btn-forest btn-compact" onClick={() => onStatus(m.id, "approved")}>Approve</button>}
-        {m.status !== "rejected" && <button className="btn btn-ghost btn-compact" onClick={() => onStatus(m.id, "rejected")}>Reject</button>}
+        {m.status === "pending" && <Button className="btn btn-forest btn-compact" onClick={() => onStatus(m.id, "approved")}>Approve</Button>}
+        {m.status === "pending" && <Button className="btn btn-ghost btn-compact" onClick={() => onStatus(m.id, "rejected")}>Reject</Button>}
       </div>
     </div>
   );
