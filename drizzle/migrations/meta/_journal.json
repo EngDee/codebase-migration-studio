@@ -22,6 +22,13 @@
       "when": 1793860866477,
       "tag": "0002_ccak_admin_email",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793943775465,
+      "tag": "0003_membership_role_expansion",
+      "breakpoints": true
     }
   ]
 }
