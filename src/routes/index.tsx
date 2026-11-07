@@ -1,4 +1,8 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { Button } from "@/components/ui/button";
+import { savePublicForm } from "@/lib/public-forms.functions";
+import { newsletterSchema, publicInquirySchema } from "@/lib/public-form-schemas";
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import ccakLogo from "@/assets/ccak-logo.png.asset.json";
 
@@ -133,7 +137,6 @@ const PRODUCTS = [
 ] as const;
 
 const MODAL_COPY = {
-  join: { title: "Join CCAK", sub: "Founding membership is open to farmers, cooperatives and coffee enterprises." },
   partner: { title: "Become a partner", sub: "Tell us about your organization and how you would like to work with CCAK." },
   donate: { title: "Support CCAK", sub: "Your contribution funds training, value addition and farmer grants." },
 };
@@ -145,6 +148,9 @@ function Index() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [modal, setModal] = useState<ModalKind | null>(null);
+  const [formStatus, setFormStatus] = useState("");
+  const [busy, setBusy] = useState(false);
+  const saveForm = useServerFn(savePublicForm);
   const openerRef = useRef<HTMLElement | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -163,6 +169,7 @@ function Index() {
   const open = (kind: ModalKind) => (e: { currentTarget: HTMLElement }) => {
     openerRef.current = e.currentTarget;
     setMenuOpen(false);
+    setFormStatus("");
     setModal(kind);
   };
   const close = () => {
@@ -180,21 +187,28 @@ function Index() {
     if (e.key !== "Tab") return;
     const f = focusables(modalRef.current);
     if (!f.length) return;
-    const first = f[0]!, last = f[f.length - 1]!;
+    const first = f[0], last = f[f.length - 1];
+    if (!first || !last) return;
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   };
 
-  const onApply = (e: FormEvent<HTMLFormElement>) => {
+  const onApply = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (busy || !modal) return;
     const form = e.currentTarget;
-    if ((form.elements.namedItem("company_website") as HTMLInputElement).value) return;
-    form.reset();
-    close();
-    window.alert("Application received. Demo form only — no data is sent or stored.");
+    const parsed = publicInquirySchema.safeParse({ ...Object.fromEntries(new FormData(form)), kind: modal });
+    if (!parsed.success) return setFormStatus(parsed.error.issues[0]?.message ?? "Check your details.");
+    setBusy(true); setFormStatus("");
+    try {
+      const result = await saveForm({ data: parsed.data });
+      form.reset(); setFormStatus(result.message);
+    } catch {
+      setFormStatus("We could not save your inquiry. Please try again.");
+    } finally { setBusy(false); }
   };
 
-  const copy = MODAL_COPY[modal ?? "join"];
+  const copy = MODAL_COPY[modal ?? "partner"];
 
   return (
     <>
@@ -211,8 +225,8 @@ function Index() {
               {NAV.map(([h, l]) => <a key={h} href={h}>{l}</a>)}
             </div>
             <div className="nav-cta">
-              <button className="btn btn-ghost btn-compact" onClick={open("join")}>Member login</button>
-              <button className="btn btn-forest btn-compact" onClick={open("join")}>Join CCAK</button>
+              <Button asChild variant="ghost" className="btn btn-ghost btn-compact"><Link to="/auth">Member login</Link></Button>
+              <Button asChild className="btn btn-forest btn-compact"><Link to="/auth" search={{ mode: "signup" }}>Join CCAK</Link></Button>
             </div>
             <button
               className="nav-toggle"
@@ -227,8 +241,8 @@ function Index() {
           <div className={`mobile-menu${menuOpen ? " open" : ""}`} id="mobileMenu">
             {NAV.map(([h, l]) => <a key={h} href={h} onClick={() => setMenuOpen(false)}>{l}</a>)}
             <div className="mobile-cta">
-              <button className="btn btn-ghost" onClick={open("join")}>Member login</button>
-              <button className="btn btn-forest" onClick={open("join")}>Join CCAK</button>
+              <Button asChild variant="ghost" className="btn btn-ghost"><Link to="/auth">Member login</Link></Button>
+              <Button asChild className="btn btn-forest"><Link to="/auth" search={{ mode: "signup" }}>Join CCAK</Link></Button>
             </div>
           </div>
         </div>
@@ -242,9 +256,9 @@ function Index() {
             <h1>Empowering farmers.<br />Elevating <em>Kenyan coffee</em>.<br />Transforming the future.</h1>
             <p className="lead">CCAK unites farmers, cooperatives, processors, exporters, researchers and government to build a coffee sector where every cherry picked builds a farmer's prosperity.</p>
             <div className="hero-actions">
-              <button className="btn btn-gold" onClick={open("join")}>Join CCAK</button>
-              <button className="btn btn-outline" onClick={open("partner")}>Become a partner</button>
-              <button className="btn btn-outline" onClick={open("donate")}>Donate</button>
+              <Button asChild className="btn btn-gold"><Link to="/auth" search={{ mode: "signup" }}>Join CCAK</Link></Button>
+              <Button variant="outline" className="btn btn-outline" onClick={open("partner")}>Become a partner</Button>
+              <Button variant="outline" className="btn btn-outline" onClick={open("donate")}>Donate</Button>
               <a className="btn btn-outline" href="#programs">Explore projects</a>
             </div>
             <p className="hero-scroll"><span className="hero-scroll-line" aria-hidden="true" />Scroll to explore impact</p>
@@ -359,7 +373,7 @@ function Index() {
                   <div key={t} className="mem-feat"><span className="dot" aria-hidden="true" /><div><h3>{t}</h3><p>{d}</p></div></div>
                 ))}
               </div>
-              <button className="btn btn-forest mem-cta" onClick={open("join")}>Create your account</button>
+              <Button asChild className="btn btn-forest mem-cta"><Link to="/auth" search={{ mode: "signup" }}>Create your account</Link></Button>
             </div>
           </div>
         </section>
@@ -443,7 +457,7 @@ function Index() {
               </div>
             </div>
             <nav aria-label="Organization"><h2>Organization</h2><ul><li><a href="#about">Our story</a></li><li><a href="#">Leadership</a></li><li><a href="#">Governance</a></li><li><a href="#">Constitution</a></li></ul></nav>
-            <nav aria-label="Get involved"><h2>Get involved</h2><ul><li><a href="#membership">Membership</a></li><li><a href="#">Partner with us</a></li><li><a href="#">Careers</a></li><li><a href="#">Volunteer</a></li></ul></nav>
+            <nav aria-label="Get involved"><h2>Get involved</h2><ul><li><Link to="/auth" search={{ mode: "signup" }}>Membership</Link></li><li><Button variant="link" onClick={open("partner")}>Partner with us</Button></li><li><a href="#">Careers</a></li><li><a href="#">Volunteer</a></li></ul></nav>
             <nav aria-label="Resources"><h2>Resources</h2><ul><li><a href="#">Coffee library</a></li><li><a href="#news">News</a></li><li><a href="#">Events</a></li><li><a href="#academy">Training</a></li></ul></nav>
             <div><h2>Contact</h2><ul><li>Nairobi, Kenya</li><li><a href="tel:+254703424972">+254 703 424 972</a></li><li><a href="mailto:coffeechampionsassociation@gmail.com">coffeechampionsassociation@gmail.com</a></li></ul></div>
           </div>
@@ -461,25 +475,27 @@ function Index() {
         onKeyDown={onModalKey}
       >
         <div className="modal" ref={modalRef} role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalSub">
-          <button className="modal-close" aria-label="Close dialog" onClick={close}>×</button>
+          <Button variant="ghost" size="icon" className="modal-close" aria-label="Close dialog" onClick={close} disabled={busy}>×</Button>
           <h3 id="modalTitle">{copy.title}</h3>
           <p className="sub" id="modalSub">{copy.sub}</p>
           <form onSubmit={onApply}>
             <label htmlFor="appName">Full name</label>
-            <input id="appName" name="full_name" type="text" autoComplete="name" required />
+            <input id="appName" name="full_name" type="text" autoComplete="name" maxLength={120} required />
             <label htmlFor="appCounty">County</label>
             <select id="appCounty" name="county">
               {["Nyeri", "Kirinyaga", "Murang'a", "Kiambu", "Embu", "Meru", "Bungoma", "Kisii"].map((c) => <option key={c}>{c}</option>)}
             </select>
             <label htmlFor="appEmail">Email</label>
-            <input id="appEmail" name="email" type="email" autoComplete="email" required />
-            <label htmlFor="appPhone">Phone (M-Pesa)</label>
-            <input id="appPhone" name="phone" type="tel" placeholder="07xx xxx xxx" autoComplete="tel" required />
+            <input id="appEmail" name="email" type="email" autoComplete="email" maxLength={255} required />
+            <label htmlFor="appPhone">Phone</label>
+            <input id="appPhone" name="phone" type="tel" placeholder="07xx xxx xxx" autoComplete="tel" maxLength={20} required />
+            <label htmlFor="appMessage">Message</label>
+            <textarea id="appMessage" name="message" maxLength={1000} rows={3} />
             <label htmlFor="appCompany" className="hp-field" aria-hidden="true">Leave this field empty</label>
             <input id="appCompany" name="company_website" type="text" className="hp-field" tabIndex={-1} autoComplete="off" />
-            <button className="btn btn-forest" type="submit">Submit application</button>
+            <Button className="btn btn-forest" type="submit" disabled={busy}>{busy ? "Saving…" : "Send inquiry"}</Button>
           </form>
-          <p className="modal-note">This is a front-end demo form. No data is sent or stored.</p>
+          <p className="modal-note" role="status">{formStatus}</p>
         </div>
       </div>
     </>
@@ -628,12 +644,20 @@ function AddToCart() {
 
 function Newsletter() {
   const [status, setStatus] = useState("");
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const [busy, setBusy] = useState(false);
+  const saveForm = useServerFn(savePublicForm);
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (busy) return;
     const form = e.currentTarget;
-    if ((form.elements.namedItem("company_website") as HTMLInputElement).value) return;
-    form.reset();
-    setStatus("Subscribed. Thank you.");
+    const parsed = newsletterSchema.safeParse(Object.fromEntries(new FormData(form)));
+    if (!parsed.success) return setStatus(parsed.error.issues[0]?.message ?? "Check your email.");
+    setBusy(true); setStatus("");
+    try {
+      const result = await saveForm({ data: { kind: "newsletter", ...parsed.data } });
+      form.reset(); setStatus(result.message);
+    } catch { setStatus("We could not save your subscription. Please try again."); }
+    finally { setBusy(false); }
   };
   return (
     <section className="cta-band" aria-labelledby="newsletter-heading">
@@ -642,10 +666,10 @@ function Newsletter() {
         <p>Monthly briefings on prices, grants and county chapter news — straight to your inbox.</p>
         <form className="newsletter-form" onSubmit={onSubmit}>
           <label htmlFor="newsletterEmail" className="visually-hidden">Email address</label>
-          <input id="newsletterEmail" name="email" type="email" placeholder="you@email.com" autoComplete="email" required />
+          <input id="newsletterEmail" name="email" type="email" placeholder="you@email.com" autoComplete="email" maxLength={255} required />
           <label htmlFor="newsletterCompany" className="hp-field" aria-hidden="true">Leave this field empty</label>
           <input id="newsletterCompany" name="company_website" type="text" className="hp-field" tabIndex={-1} autoComplete="off" />
-          <button className="btn btn-gold" type="submit">Subscribe</button>
+          <Button className="btn btn-gold" type="submit" disabled={busy}>{busy ? "Saving…" : "Subscribe"}</Button>
         </form>
         <p className="newsletter-status" role="status">{status}</p>
       </div>
