@@ -16,3 +16,4 @@
 
 ## Public form submissions
 - Keep anonymous newsletter and inquiry inserts limited to form-input columns with validating RLS predicates; database defaults own administrative fields so public callers cannot forge status, identifiers or timestamps.
+- Homepage forms share browser-safe validation schemas and submit through public server functions using the publishable client with insert-only RLS; acknowledge success only after the database confirms the write.
