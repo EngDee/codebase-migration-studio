@@ -1,5 +1,9 @@
 # CCAK backend activation
 
+## Real website forms
+- [ ] Replace demo Join/Login actions and save Partner, Donate and Newsletter submissions through validated server functions.
+- [ ] Verify public form persistence, errors and mobile layout; document email-delivery limitations.
+
 ## Dependency security updates
 - [x] Refresh vulnerable direct and transitive dependencies to the requested fixed versions without adding transitive overrides.
 - [x] Verify locked versions, dependency scan, validation tests and preview build.
