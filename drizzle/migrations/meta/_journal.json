@@ -50,6 +50,13 @@
       "when": 1794028964788,
       "tag": "0006_membership_profile_scope_hardening",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794029506662,
+      "tag": "0007_validate_public_inquiry_and_newsletter_submissions",
+      "breakpoints": true
     }
   ]
 }
