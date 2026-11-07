@@ -18,7 +18,7 @@ export const registrationSchema = z.object({
 });
 
 export const applicationSchema = registrationSchema.extend({
-  terms_accepted: z.literal(true, { errorMap: () => ({ message: "Accept the membership terms" }) }),
+  terms_accepted: z.literal(true, { error: "Accept the membership terms" }),
   photo_path: z.string().max(300).nullable().optional(),
   supporting_documents: z.array(z.string().max(300)).max(5).default([]),
 });
