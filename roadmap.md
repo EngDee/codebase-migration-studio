@@ -1,8 +1,8 @@
 # CCAK backend activation
 
 ## Dependency security updates
-- [ ] Refresh vulnerable direct and transitive dependencies to the requested fixed versions without adding transitive overrides.
-- [ ] Verify locked versions, dependency scan, validation tests and preview build.
+- [x] Refresh vulnerable direct and transitive dependencies to the requested fixed versions without adding transitive overrides.
+- [x] Verify locked versions, dependency scan, validation tests and preview build.
 
 - [x] Extend the existing schema for applications, county-scoped roles, and audit trails without deleting records.
 - [x] Implement validated, transactional submission, review, role assignment, and minimum-data verification.
