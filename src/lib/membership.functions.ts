@@ -65,7 +65,7 @@ export const assignMembershipRole = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ target_user: z.string().uuid(), new_role: z.enum(["super_admin", "national_admin", "county_admin", "member"]), assigned_county: z.string().optional() }).parse(input))
   .handler(async ({ data, context }) => {
-    const { error } = await context.supabase.rpc("assign_membership_role", data);
+    const { error } = await context.supabase.rpc("assign_membership_role", { target_user: data.target_user, new_role: data.new_role, ...(data.assigned_county ? { assigned_county: data.assigned_county } : {}) });
     if (error) throw new Error("Role assignment was not saved.");
     return { saved: true };
   });
