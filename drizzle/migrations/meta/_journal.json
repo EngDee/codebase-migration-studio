@@ -36,6 +36,20 @@
       "when": 1793943827137,
       "tag": "0004_secure_membership_backend",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794028873853,
+      "tag": "0005_membership_resubmission_and_admin_confirmation",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794028964788,
+      "tag": "0006_membership_profile_scope_hardening",
+      "breakpoints": true
     }
   ]
 }
