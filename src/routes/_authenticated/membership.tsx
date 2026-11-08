@@ -114,6 +114,18 @@ function Membership() {
         <input id="rName" name="full_name" defaultValue={p?.full_name ?? ""} required maxLength={120} />
         <label htmlFor="rPhone">Phone (M-Pesa)</label>
         <input id="rPhone" name="phone" type="tel" defaultValue={p?.phone ?? ""} placeholder="07xx xxx xxx" required />
+        <label htmlFor="rNationalId">National ID</label>
+        <input id="rNationalId" name="national_id" inputMode="numeric" pattern="[0-9]{6,10}" minLength={6} maxLength={10} defaultValue={p?.national_id ?? ""} readOnly={Boolean(p?.national_id && application)} required />
+        <label htmlFor="rGender">Gender</label>
+        <select id="rGender" name="gender" defaultValue={p?.gender ?? ""} required>
+          <option value="" disabled>Choose gender</option>
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+          <option value="other">Other</option>
+          <option value="prefer_not_to_say">Prefer not to say</option>
+        </select>
+        <label htmlFor="rDateOfBirth">Date of birth</label>
+        <input id="rDateOfBirth" name="date_of_birth" type="date" min="1900-01-01" defaultValue={p?.date_of_birth ?? ""} readOnly={Boolean(p?.national_id && application)} required />
         <label htmlFor="rCounty">County</label>
         <select id="rCounty" name="county" defaultValue={p?.county ?? ""} required>
           <option value="" disabled>Choose county</option>

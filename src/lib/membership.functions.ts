@@ -19,8 +19,9 @@ export const submitApplication = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => applicationSchema.parse(input))
   .handler(async ({ data, context }) => {
-    const { data: application, error } = await context.supabase.rpc("submit_membership_application", { payload: data });
-    if (error || !application) throw new Error("Application was not saved. Check your details and whether an application is already pending.");
+    const { data: application, error } = await context.supabase.rpc("submit_membership_registration", { payload: data });
+    if (error?.code === "23505") throw new Error("Registration was not saved. This National ID is already registered or an application is already active.");
+    if (error || !application) throw new Error("Application was not saved. Check your identity details and whether an application is already pending.");
     return application;
   });
 

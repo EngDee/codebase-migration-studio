@@ -1,0 +1,1 @@
+ALTER TYPE public.member_type ADD VALUE IF NOT EXISTS 'ccak_member';
