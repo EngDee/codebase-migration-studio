@@ -1,6 +1,6 @@
-# Codebase Migration Studio
+# Codebase Migration Studio (CCAK)
 
-/skill:migrate-external-project Source: code archive. Migrate the attached project into Lovable.
+National membership and association platform for the **Coffee Champions Association of Kenya**.
 
 This project was built with [Lovable](https://lovable.dev).
 
@@ -21,6 +21,19 @@ Prefer working locally? You need Node.js and npm — [install with nvm](https://
 ```sh
 git clone <this-repository-url>
 cd <repository-name>
+cp .env.example .env   # then fill in values from Lovable Cloud / Supabase
 npm i
 npm run dev
 ```
+
+## Security
+
+See [SECURITY.md](./SECURITY.md) for environment handling, authorization model, rate limiting, headers, and production checklist.
+
+**Important**: Never commit a real `.env` file. The service-role key must remain server-only.
+
+## Key docs
+
+- `AGENTS.md` – membership backend constraints
+- `roadmap.md` – current activation stages
+- `backend-stage-report.md` / `real-forms-stage-report.md` – implementation status

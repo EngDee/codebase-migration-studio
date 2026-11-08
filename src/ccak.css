@@ -489,3 +489,218 @@ footer li a:hover{color:var(--gold-soft);}
   .row-actions .btn{flex:1;justify-content:center;}
 }
 @media(max-width:400px){.portal-top .logo-text{display:none;}}
+
+/* ─── CCAK Digital Membership ID ─────────────────────────────────────────── */
+.ccak-id-suite {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 420px;
+  margin: 0 auto;
+}
+@media (min-width: 900px) {
+  .ccak-id-suite {
+    grid-template-columns: 1fr 1fr;
+    max-width: 880px;
+  }
+}
+.ccak-id-card {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #0f3d2e 0%, #1a5c40 45%, #0d3326 100%);
+  color: #f4f7f5;
+  box-shadow: 0 12px 40px rgba(15, 61, 46, 0.35);
+  min-height: 260px;
+  padding: 1.25rem 1.35rem 1rem;
+  isolation: isolate;
+}
+.ccak-id-back {
+  background: linear-gradient(160deg, #f7f3ea 0%, #efe6d4 100%);
+  color: #1a2e24;
+  border: 1px solid #d9cbb0;
+}
+.ccak-id-watermark {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.08), transparent 45%),
+    radial-gradient(circle at 20% 90%, rgba(255, 255, 255, 0.05), transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+.ccak-id-watermark.subtle {
+  background-image: radial-gradient(circle at 70% 30%, rgba(15, 61, 46, 0.06), transparent 50%);
+}
+.ccak-id-header,
+.ccak-id-body,
+.ccak-id-footer,
+.ccak-id-back-title,
+.ccak-id-motto,
+.ccak-id-objectives,
+.ccak-id-authority {
+  position: relative;
+  z-index: 1;
+}
+.ccak-id-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.ccak-id-brand {
+  display: flex;
+  gap: 0.65rem;
+  align-items: center;
+}
+.ccak-id-logo-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #c4a35a, #8b6914);
+  color: #0f3d2e;
+  font-weight: 800;
+  font-size: 0.7rem;
+  display: grid;
+  place-items: center;
+  letter-spacing: 0.02em;
+}
+.ccak-id-org {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  opacity: 0.95;
+}
+.ccak-id-doc-type {
+  margin: 0.1rem 0 0;
+  font-size: 0.65rem;
+  opacity: 0.75;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.ccak-id-badge {
+  margin: 0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(196, 163, 90, 0.25);
+  color: #f5e6c0;
+  border: 1px solid rgba(196, 163, 90, 0.45);
+}
+.ccak-id-body {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+.ccak-id-photo {
+  width: 88px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid rgba(245, 230, 192, 0.5);
+  background: #0a281c;
+}
+.ccak-id-photo.placeholder {
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #c4a35a;
+}
+.ccak-id-fields {
+  display: grid;
+  gap: 0.45rem;
+}
+.ccak-id-field {
+  display: grid;
+  gap: 0.05rem;
+}
+.ccak-id-label {
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+.ccak-id-value {
+  font-size: 0.88rem;
+  line-height: 1.25;
+}
+.ccak-id-value.strong {
+  font-weight: 700;
+  font-size: 1rem;
+}
+.ccak-id-value.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: 0.02em;
+}
+.ccak-id-footer {
+  margin-top: 1rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 0.6rem;
+  opacity: 0.7;
+}
+.ccak-id-back-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  color: #0f3d2e;
+}
+.ccak-id-motto {
+  margin: 0 0 0.85rem;
+  font-size: 0.82rem;
+  font-style: italic;
+  color: #3d4f44;
+  line-height: 1.4;
+}
+.ccak-id-objectives {
+  margin: 0 0 1.1rem;
+  padding-left: 1.1rem;
+  font-size: 0.75rem;
+  line-height: 1.45;
+  color: #2a3b32;
+}
+.ccak-id-objectives li + li {
+  margin-top: 0.35rem;
+}
+.ccak-id-authority {
+  border-top: 1px dashed #cbb896;
+  padding-top: 0.85rem;
+}
+.ccak-id-signature-block {
+  margin-bottom: 0.65rem;
+}
+.ccak-id-signature-img {
+  max-height: 36px;
+  max-width: 140px;
+  object-fit: contain;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+.ccak-id-signature-placeholder {
+  margin: 0 0 0.15rem;
+  font-family: "Georgia", serif;
+  color: #5a6b60;
+  letter-spacing: 0.1em;
+}
+.ccak-id-president-name {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #0f3d2e;
+}
+.ccak-id-president-role {
+  margin: 0.1rem 0 0;
+  font-size: 0.65rem;
+  color: #5a6b60;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.ccak-id-legal {
+  margin: 0;
+  font-size: 0.58rem;
+  line-height: 1.4;
+  color: #6b7a70;
+}
