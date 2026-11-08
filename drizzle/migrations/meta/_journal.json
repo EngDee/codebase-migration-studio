@@ -64,6 +64,13 @@
       "when": 1794122546109,
       "tag": "0008_add_ccak_member_type",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794122578775,
+      "tag": "0009_membership_identity_fields_and_county_numbers",
+      "breakpoints": true
     }
   ]
 }

@@ -90,11 +90,14 @@ export type Database = {
           application_status: Database["public"]["Enums"]["member_status"]
           business_name: string | null
           county: string
+          date_of_birth: string | null
           email: string
           farm_size: string | null
           full_name: string
+          gender: string | null
           id: string
           member_type: Database["public"]["Enums"]["member_type"]
+          national_id: string | null
           phone: string
           photo_path: string | null
           review_notes: string | null
@@ -111,11 +114,14 @@ export type Database = {
           application_status?: Database["public"]["Enums"]["member_status"]
           business_name?: string | null
           county: string
+          date_of_birth?: string | null
           email: string
           farm_size?: string | null
           full_name: string
+          gender?: string | null
           id?: string
           member_type: Database["public"]["Enums"]["member_type"]
+          national_id?: string | null
           phone: string
           photo_path?: string | null
           review_notes?: string | null
@@ -132,11 +138,14 @@ export type Database = {
           application_status?: Database["public"]["Enums"]["member_status"]
           business_name?: string | null
           county?: string
+          date_of_birth?: string | null
           email?: string
           farm_size?: string | null
           full_name?: string
+          gender?: string | null
           id?: string
           member_type?: Database["public"]["Enums"]["member_type"]
+          national_id?: string | null
           phone?: string
           photo_path?: string | null
           review_notes?: string | null
@@ -161,6 +170,47 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      membership_county_codes: {
+        Row: {
+          code: string
+          county: string
+        }
+        Insert: {
+          code: string
+          county: string
+        }
+        Update: {
+          code?: string
+          county?: string
+        }
+        Relationships: []
+      }
+      membership_number_counters: {
+        Row: {
+          county: string
+          last_number: number
+          registration_year: number
+        }
+        Insert: {
+          county: string
+          last_number?: number
+          registration_year: number
+        }
+        Update: {
+          county?: string
+          last_number?: number
+          registration_year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "membership_number_counters_county_fkey"
+            columns: ["county"]
+            isOneToOne: false
+            referencedRelation: "membership_county_codes"
+            referencedColumns: ["county"]
           },
         ]
       }
@@ -190,13 +240,16 @@ export type Database = {
           business_name: string | null
           county: string | null
           created_at: string
+          date_of_birth: string | null
           email: string | null
           farm_size: string | null
           full_name: string | null
+          gender: string | null
           id: string
           member_no: string | null
           member_number: string | null
           member_type: Database["public"]["Enums"]["member_type"] | null
+          national_id: string | null
           phone: string | null
           photo_path: string | null
           reviewed_at: string | null
@@ -210,13 +263,16 @@ export type Database = {
           business_name?: string | null
           county?: string | null
           created_at?: string
+          date_of_birth?: string | null
           email?: string | null
           farm_size?: string | null
           full_name?: string | null
+          gender?: string | null
           id: string
           member_no?: string | null
           member_number?: string | null
           member_type?: Database["public"]["Enums"]["member_type"] | null
+          national_id?: string | null
           phone?: string | null
           photo_path?: string | null
           reviewed_at?: string | null
@@ -230,13 +286,16 @@ export type Database = {
           business_name?: string | null
           county?: string | null
           created_at?: string
+          date_of_birth?: string | null
           email?: string | null
           farm_size?: string | null
           full_name?: string | null
+          gender?: string | null
           id?: string
           member_no?: string | null
           member_number?: string | null
           member_type?: Database["public"]["Enums"]["member_type"] | null
+          national_id?: string | null
           phone?: string | null
           photo_path?: string | null
           reviewed_at?: string | null
@@ -286,6 +345,15 @@ export type Database = {
         Returns: undefined
       }
       can_review_county: { Args: { target_county: string }; Returns: boolean }
+      ccak_county_code: { Args: { county_name: string }; Returns: string }
+      format_ccak_member_number: {
+        Args: {
+          county_code: string
+          registration_number: number
+          registration_year: number
+        }
+        Returns: string
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -308,11 +376,14 @@ export type Database = {
           application_status: Database["public"]["Enums"]["member_status"]
           business_name: string | null
           county: string
+          date_of_birth: string | null
           email: string
           farm_size: string | null
           full_name: string
+          gender: string | null
           id: string
           member_type: Database["public"]["Enums"]["member_type"]
+          national_id: string | null
           phone: string
           photo_path: string | null
           review_notes: string | null
@@ -338,11 +409,47 @@ export type Database = {
           application_status: Database["public"]["Enums"]["member_status"]
           business_name: string | null
           county: string
+          date_of_birth: string | null
           email: string
           farm_size: string | null
           full_name: string
+          gender: string | null
           id: string
           member_type: Database["public"]["Enums"]["member_type"]
+          national_id: string | null
+          phone: string
+          photo_path: string | null
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          sub_county: string | null
+          submission_date: string
+          supporting_documents: string[]
+          terms_accepted_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "membership_applications"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      submit_membership_registration: {
+        Args: { payload: Json }
+        Returns: {
+          applicant_user_id: string
+          application_number: string
+          application_status: Database["public"]["Enums"]["member_status"]
+          business_name: string | null
+          county: string
+          date_of_birth: string | null
+          email: string
+          farm_size: string | null
+          full_name: string
+          gender: string | null
+          id: string
+          member_type: Database["public"]["Enums"]["member_type"]
+          national_id: string | null
           phone: string
           photo_path: string | null
           review_notes: string | null
