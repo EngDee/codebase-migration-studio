@@ -704,3 +704,6 @@ footer li a:hover{color:var(--gold-soft);}
   line-height: 1.4;
   color: #6b7a70;
 }
+
+.digital-id-section { margin: 1.5rem 0 2rem; }
+.digital-id-section .section-note { margin-bottom: 1rem; max-width: 40rem; line-height: 1.45; }

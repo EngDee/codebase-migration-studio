@@ -117,6 +117,7 @@ export const initiateContributionPayment = createServerFn({ method: "POST" })
 export const getMyContributionStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
+    const amount = contributionAmountKes();
     const { data, error } = await context.supabase
       .from("member_contributions")
       .select("id, amount_kes, status, mpesa_receipt, paid_at, created_at")
@@ -124,9 +125,9 @@ export const getMyContributionStatus = createServerFn({ method: "POST" })
       .order("created_at", { ascending: false })
       .limit(10);
     if (error) {
-      return { payments: [] as Array<Record<string, unknown>>, digitalCardUnlocked: false };
+      return { payments: [] as Array<Record<string, unknown>>, digitalCardUnlocked: false, amountKes: amount };
     }
     const payments = data ?? [];
     const digitalCardUnlocked = payments.some((p) => p.status === "paid");
-    return { payments, digitalCardUnlocked };
+    return { payments, digitalCardUnlocked, amountKes: amount };
   });
