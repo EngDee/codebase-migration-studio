@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const COUNTIES = ["Baringo", "Bomet", "Bungoma", "Busia", "Elgeyo-Marakwet", "Embu", "Garissa", "Homa Bay", "Isiolo", "Kajiado", "Kakamega", "Kericho", "Kiambu", "Kilifi", "Kirinyaga", "Kisii", "Kisumu", "Kitui", "Kwale", "Laikipia", "Lamu", "Machakos", "Makueni", "Mandera", "Marsabit", "Meru", "Migori", "Mombasa", "Murang'a", "Nairobi", "Nakuru", "Nandi", "Narok", "Nyamira", "Nyandarua", "Nyeri", "Samburu", "Siaya", "Taita-Taveta", "Tana River", "Tharaka-Nithi", "Trans Nzoia", "Turkana", "Uasin Gishu", "Vihiga", "Wajir", "West Pokot"];
 export const MEMBER_TYPES = [
+  ["ccak_member", "CCAK Member"],
   ["farmer", "Farmer"], ["cooperative", "Cooperative"], ["barista", "Barista"], ["roaster", "Roaster"],
   ["trader", "Trader / exporter"], ["enterprise", "Coffee enterprise"], ["other", "Other"],
 ] as const;
@@ -12,7 +13,14 @@ export const registrationSchema = z.object({
   phone: z.string().trim().regex(/^\+?[0-9 ]{9,15}$/, "Enter a valid phone number"),
   county: z.string().refine((v) => COUNTIES.includes(v), "Choose a Kenyan county"),
   sub_county: z.string().trim().max(80).optional().default(""),
-  member_type: z.enum(["farmer", "cooperative", "barista", "roaster", "trader", "enterprise", "other"]),
+  member_type: z.enum(["ccak_member", "farmer", "cooperative", "barista", "roaster", "trader", "enterprise", "other"]),
+  national_id: z.string().trim().regex(/^[0-9]{6,10}$/, "Enter a valid National ID (6 to 10 digits)"),
+  gender: z.enum(["female", "male", "other", "prefer_not_to_say"], { error: "Choose a gender option" }),
+  date_of_birth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Enter your date of birth").refine((value) => {
+    const date = new Date(`${value}T00:00:00Z`);
+    const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Nairobi", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+    return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value && value >= "1900-01-01" && value < today;
+  }, "Enter a valid date of birth in the past"),
   business_name: z.string().trim().max(150).optional().default(""),
   farm_size: z.string().trim().max(60).optional().default(""),
 });
