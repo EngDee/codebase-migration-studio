@@ -1,5 +1,9 @@
 # CCAK backend activation
 
+## Membership identity registration
+- [ ] Add CCAK Member, gender, National ID and date of birth with secure persistent identity storage.
+- [ ] Add county/year membership numbering and verify rules, permissions and registration display.
+
 ## Real website forms
 - [x] Replace demo Join/Login actions and save Partner, Donate and Newsletter submissions through validated server functions.
 - [x] Verify public form persistence, validation and mobile layout; document email-delivery limitations.
