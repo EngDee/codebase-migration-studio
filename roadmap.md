@@ -1,12 +1,12 @@
 # CCAK backend activation
 
 ## Combined GitHub compatibility
-- [ ] Repair synced payment and digital-card compatibility and safely apply pending payment storage.
-- [ ] Verify existing registration, public forms, payment restrictions and website rendering; record external-service blockers.
+- [x] Repair synced payment and digital-card compatibility and safely apply pending payment storage.
+- [x] Verify existing registration fields, public-form navigation, payment restrictions and website rendering; record external-service blockers in compatibility-stage-report.md.
 
 ## Membership identity registration
-- [ ] Add CCAK Member, gender, National ID and date of birth with secure persistent identity storage.
-- [ ] Add county/year membership numbering and verify rules, permissions and registration display.
+- [x] Add CCAK Member, gender, National ID and date of birth with secure persistent identity storage.
+- [ ] Complete county/year approval verification and National ID primary-key replacement: blocked by missing verified identity data and no authorised test approval without demonstration records.
 
 ## Real website forms
 - [x] Replace demo Join/Login actions and save Partner, Donate and Newsletter submissions through validated server functions.
@@ -21,6 +21,12 @@
 - [x] Secure private supporting documents and preserve existing photo access.
 - [x] Connect existing member submission and admin review to the secure workflow without redesigning pages.
 - [x] Run read-access, permission-denial, validation and compatibility checks; store the stage report.
-- [ ] Verify successful submission, duplicate prevention, approval, rejection, and card eligibility end-to-end: blocked by the no-demonstration-records requirement and absence of an existing authorised admin account.
+- [ ] Verify successful submission, duplicate prevention, approval, rejection, and card eligibility end-to-end: blocked by the no-demonstration-records requirement and no authorised approved member/payment to exercise.
+
+## External activation blockers
+- [ ] Activate and test live M-Pesa: requires Daraja credentials and confirmation of the contribution amount.
+- [ ] Activate real phone/National ID ownership verification: requires a contracted KYC provider, not standard Daraja.
+- [ ] Complete the card authorisation details: requires the president’s full name and signature image.
+- [ ] Activate membership email notifications: requires a verified sending domain and email setup.
 
 Later stages outside the completed form activation: full registration wizard, card downloads/QR display, announcements and report-export interfaces.
