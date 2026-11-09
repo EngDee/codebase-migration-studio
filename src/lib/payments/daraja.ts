@@ -4,6 +4,16 @@
  * Sandbox shortcode 174379 is used when DARAJA_ENV=sandbox.
  */
 
+import { z } from "zod";
+import { normaliseMpesaPhone } from "./rules";
+export { normaliseMpesaPhone } from "./rules";
+
+export function requireDarajaConfiguration() {
+  for (const name of ["DARAJA_CONSUMER_KEY", "DARAJA_CONSUMER_SECRET", "DARAJA_SHORTCODE", "DARAJA_PASSKEY"]) {
+    if (!process.env[name]) throw new Error("M-Pesa payments are not activated yet. Please contact CCAK.");
+  }
+}
+
 const SANDBOX_BASE = "https://sandbox.safaricom.co.ke";
 const PROD_BASE = "https://api.safaricom.co.ke";
 
