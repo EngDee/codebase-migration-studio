@@ -521,14 +521,18 @@ footer li a:hover{color:var(--gold-soft);}
 }
 .ccak-id-watermark {
   position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.08), transparent 45%),
-    radial-gradient(circle at 20% 90%, rgba(255, 255, 255, 0.05), transparent 40%);
+  width: 210px;
+  height: 210px;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  object-fit: contain;
+  opacity: 0.08;
   pointer-events: none;
   z-index: 0;
 }
 .ccak-id-watermark.subtle {
-  background-image: radial-gradient(circle at 70% 30%, rgba(15, 61, 46, 0.06), transparent 50%);
+  opacity: 0.04;
 }
 .ccak-id-header,
 .ccak-id-body,
@@ -555,14 +559,9 @@ footer li a:hover{color:var(--gold-soft);}
 .ccak-id-logo-mark {
   width: 42px;
   height: 42px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #c4a35a, #8b6914);
-  color: #0f3d2e;
-  font-weight: 800;
-  font-size: 0.7rem;
-  display: grid;
-  place-items: center;
-  letter-spacing: 0.02em;
+  border-radius: 50%;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 .ccak-id-org {
   margin: 0;
@@ -613,6 +612,8 @@ footer li a:hover{color:var(--gold-soft);}
 .ccak-id-fields {
   display: grid;
   gap: 0.45rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .ccak-id-field {
   display: grid;
