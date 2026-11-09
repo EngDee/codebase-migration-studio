@@ -1,5 +1,9 @@
 # CCAK backend activation
 
+## Combined GitHub compatibility
+- [ ] Repair synced payment and digital-card compatibility and safely apply pending payment storage.
+- [ ] Verify existing registration, public forms, payment restrictions and website rendering; record external-service blockers.
+
 ## Membership identity registration
 - [ ] Add CCAK Member, gender, National ID and date of birth with secure persistent identity storage.
 - [ ] Add county/year membership numbering and verify rules, permissions and registration display.
