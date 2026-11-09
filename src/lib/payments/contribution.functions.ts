@@ -1,7 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { initiateStkPush, normaliseMpesaPhone } from "./daraja";
+import { initiateStkPush, normaliseMpesaPhone, requireDarajaConfiguration } from "./daraja";
+import { cardEligible } from "./rules";
 import { verifyMemberIdentity } from "@/lib/identity/verify";
 
 /** Default annual contribution in KES – override with MEMBER_CONTRIBUTION_KES. */
@@ -24,6 +25,7 @@ export const initiateContributionPayment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => initiateSchema.parse(input))
   .handler(async ({ data, context }) => {
+    requireDarajaConfiguration();
     const { data: profile, error: profileError } = await context.supabase
       .from("profiles")
       .select("id, full_name, phone, national_id, county, member_no, status")
@@ -42,7 +44,7 @@ export const initiateContributionPayment = createServerFn({ method: "POST" })
       {
         nationalId: data.national_id,
         phone: data.phone,
-        fullName: profile.full_name ?? undefined,
+        ...(profile.full_name ? { fullName: profile.full_name } : {}),
       },
       { national_id: profile.national_id, phone: profile.phone },
     );
@@ -56,11 +58,14 @@ export const initiateContributionPayment = createServerFn({ method: "POST" })
       process.env["PUBLIC_APP_URL"] ||
       process.env["VITE_APP_URL"] ||
       "https://codebase-migration-studio.lovable.app";
-    const callbackUrl = `${origin.replace(/\/+$/, "")}/api/mpesa/callback`;
+    const callbackUrl = `${origin.replace(/\/+$/, "")}/api/public/mpesa/callback`;
+
+    // Only the server can write payment rows, after checking member eligibility.
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     // Record a pending payment row (uses service role only via RPC or RLS-safe insert)
     const reference = `CCAK-${profile.member_no}`.slice(0, 12);
-    const { data: payment, error: payError } = await context.supabase
+    const { data: payment, error: payError } = await supabaseAdmin
       .from("member_contributions")
       .insert({
         member_user_id: context.userId,
@@ -91,13 +96,14 @@ export const initiateContributionPayment = createServerFn({ method: "POST" })
         callbackUrl,
       });
 
-      await context.supabase
+      const { error: attachError } = await supabaseAdmin
         .from("member_contributions")
         .update({
           checkout_request_id: stk.checkoutRequestId,
           merchant_request_id: stk.merchantRequestId,
         })
         .eq("id", payment.id);
+      if (attachError) throw new Error("Payment tracking could not be saved. Contact CCAK before trying again.");
 
       return {
         paymentId: payment.id,
@@ -106,7 +112,7 @@ export const initiateContributionPayment = createServerFn({ method: "POST" })
         amount,
       };
     } catch (err) {
-      await context.supabase
+      await supabaseAdmin
         .from("member_contributions")
         .update({ status: "failed", result_desc: err instanceof Error ? err.message : "STK failed" })
         .eq("id", payment.id);
@@ -125,9 +131,11 @@ export const getMyContributionStatus = createServerFn({ method: "POST" })
       .order("created_at", { ascending: false })
       .limit(10);
     if (error) {
-      return { payments: [] as Array<Record<string, unknown>>, digitalCardUnlocked: false, amountKes: amount };
+      throw new Error("Could not load your contribution status. Please try again.");
     }
     const payments = data ?? [];
-    const digitalCardUnlocked = payments.some((p) => p.status === "paid");
-    return { payments, digitalCardUnlocked, amountKes: amount };
+    const { data: profile, error: profileError } = await context.supabase.from("profiles").select("status,member_no").eq("id", context.userId).single();
+    if (profileError || !profile) throw new Error("Could not confirm card eligibility.");
+    const digitalCardUnlocked = cardEligible(profile.status, profile.member_no, payments.some((p) => p.status === "paid"));
+    return { payments, digitalCardUnlocked, amountKes: amount, presidentName: process.env["CCAK_PRESIDENT_NAME"] ?? "CCAK National President" };
   });

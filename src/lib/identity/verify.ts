@@ -168,8 +168,9 @@ export async function verifyMemberIdentity(
 ): Promise<IdentityMatchResult> {
   if (process.env["IDENTITY_KYC_URL"] && process.env["IDENTITY_KYC_API_KEY"]) {
     const external = await verifyWithExternalKyc(input);
-    if (external.matched) return external;
-    // Soft-fallback: still require local consistency if external fails
+    if (!external.matched) return external;
+    const local = await verifyPhoneMatchesNationalIdLocal(input, storedProfile);
+    return local.matched ? external : local;
   }
   return verifyPhoneMatchesNationalIdLocal(input, storedProfile);
 }
