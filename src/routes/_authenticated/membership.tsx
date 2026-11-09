@@ -43,6 +43,7 @@ function Membership() {
   const [payPhone, setPayPhone] = useState("");
   const [payNationalId, setPayNationalId] = useState("");
   const [contributionKes, setContributionKes] = useState(500);
+  const [presidentName, setPresidentName] = useState("CCAK National President");
 
   const fetchMembership = useServerFn(getMembership);
   const submit = useServerFn(submitApplication);
@@ -65,6 +66,7 @@ function Membership() {
     try {
       const contrib = await fetchContributions();
       setDigitalCardUnlocked(Boolean(contrib.digitalCardUnlocked));
+      setPresidentName(contrib.presidentName);
       if (typeof contrib.amountKes === "number") setContributionKes(contrib.amountKes);
     } catch {
       // Table may not exist yet before migration
@@ -165,9 +167,6 @@ function Membership() {
 
   const p = profile;
   const approved = p?.status === "approved" && Boolean(p.member_no);
-  const presidentName =
-    (typeof process !== "undefined" && process.env?.["CCAK_PRESIDENT_NAME"]) ||
-    "CCAK National President";
 
   return (
     <PortalShell isAdmin={isAdmin}>
@@ -218,14 +217,14 @@ function Membership() {
                 nationalId={p?.national_id || "—"}
                 county={p?.county || "—"}
                 photoUrl={photo}
-                memberSince={
+                {...(p?.reviewed_at ? { memberSince:
                   p?.reviewed_at
                     ? new Date(p.reviewed_at).toLocaleDateString("en-KE", {
                         year: "numeric",
                         month: "short",
                       })
-                    : undefined
-                }
+                    : ""
+                } : {})}
                 presidentName={presidentName}
               />
             </>

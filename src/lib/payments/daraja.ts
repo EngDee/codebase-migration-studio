@@ -4,6 +4,16 @@
  * Sandbox shortcode 174379 is used when DARAJA_ENV=sandbox.
  */
 
+import { z } from "zod";
+import { normaliseMpesaPhone } from "./rules";
+export { normaliseMpesaPhone } from "./rules";
+
+export function requireDarajaConfiguration() {
+  for (const name of ["DARAJA_CONSUMER_KEY", "DARAJA_CONSUMER_SECRET", "DARAJA_SHORTCODE", "DARAJA_PASSKEY"]) {
+    if (!process.env[name]) throw new Error("M-Pesa payments are not activated yet. Please contact CCAK.");
+  }
+}
+
 const SANDBOX_BASE = "https://sandbox.safaricom.co.ke";
 const PROD_BASE = "https://api.safaricom.co.ke";
 
@@ -56,21 +66,6 @@ function stkPassword(shortcode: string, passkey: string, ts: string): string {
   return Buffer.from(`${shortcode}${passkey}${ts}`).toString("base64");
 }
 
-/** Normalise Kenyan phone to 2547XXXXXXXX / 2541XXXXXXXX. */
-export function normaliseMpesaPhone(input: string): string {
-  const digits = input.replace(/\D/g, "");
-  if (digits.startsWith("254") && (digits.length === 12 || digits.length === 13)) {
-    return digits.slice(0, 12);
-  }
-  if (digits.startsWith("0") && digits.length === 10) {
-    return `254${digits.slice(1)}`;
-  }
-  if (digits.length === 9 && (digits.startsWith("7") || digits.startsWith("1"))) {
-    return `254${digits}`;
-  }
-  throw new Error("Enter a valid Kenyan M-Pesa number (e.g. 07XX XXX XXX).");
-}
-
 export type StkPushInput = {
   amount: number;
   phone: string;
@@ -118,12 +113,11 @@ export async function initiateStkPush(input: StkPushInput): Promise<StkPushResul
     body: JSON.stringify(body),
   });
 
-  const data = (await res.json()) as Record<string, string>;
-  if (!res.ok || data.ResponseCode !== "0") {
-    throw new Error(
-      data.errorMessage || data.ResponseDescription || `STK Push failed (${res.status})`,
-    );
-  }
+  if (!res.ok) throw new Error("M-Pesa could not start the payment. Please try again.");
+  const data = z.object({
+    ResponseCode: z.literal("0"), MerchantRequestID: z.string().min(1),
+    CheckoutRequestID: z.string().min(1), ResponseDescription: z.string(), CustomerMessage: z.string(),
+  }).parse(await res.json());
 
   return {
     merchantRequestId: data.MerchantRequestID,
@@ -141,22 +135,16 @@ export function parseStkCallback(body: unknown): {
   merchantRequestId: string;
   resultCode: number;
   resultDesc: string;
-  mpesaReceiptNumber?: string;
-  amount?: number;
-  phone?: string;
-  transactionDate?: string;
+  mpesaReceiptNumber?: string | undefined;
+  amount?: number | undefined;
+  phone?: string | undefined;
+  transactionDate?: string | undefined;
 } {
-  const root = body as {
-    Body?: {
-      stkCallback?: {
-        MerchantRequestID?: string;
-        CheckoutRequestID?: string;
-        ResultCode?: number;
-        ResultDesc?: string;
-        CallbackMetadata?: { Item?: Array<{ Name: string; Value?: string | number }> };
-      };
-    };
-  };
+  const root = z.object({ Body: z.object({ stkCallback: z.object({
+    MerchantRequestID: z.string().min(1).max(100), CheckoutRequestID: z.string().min(1).max(100),
+    ResultCode: z.number().int(), ResultDesc: z.string().max(1000),
+    CallbackMetadata: z.object({ Item: z.array(z.object({ Name: z.string().max(100), Value: z.union([z.string().max(100), z.number()]).optional() })).max(20) }).optional(),
+  }) }) }).parse(body);
   const cb = root?.Body?.stkCallback;
   if (!cb) throw new Error("Invalid STK callback payload");
 
@@ -174,4 +162,19 @@ export function parseStkCallback(body: unknown): {
     phone: get("PhoneNumber") != null ? String(get("PhoneNumber")) : undefined,
     transactionDate: get("TransactionDate") != null ? String(get("TransactionDate")) : undefined,
   };
+}
+
+/** Independently confirm the outcome with Safaricom; callbacks alone are untrusted. */
+export async function queryStkResult(checkoutRequestId: string): Promise<number> {
+  const shortcode = requireEnv("DARAJA_SHORTCODE");
+  const ts = timestamp();
+  const token = await getDarajaAccessToken();
+  const res = await fetch(`${baseUrl()}/mpesa/stkpushquery/v1/query`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ BusinessShortCode: shortcode, Password: stkPassword(shortcode, requireEnv("DARAJA_PASSKEY"), ts), Timestamp: ts, CheckoutRequestID: checkoutRequestId }),
+    signal: AbortSignal.timeout(15000),
+  });
+  if (!res.ok) throw new Error("Payment confirmation is temporarily unavailable.");
+  return z.object({ ResultCode: z.coerce.number().int() }).parse(await res.json()).ResultCode;
 }

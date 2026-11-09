@@ -71,6 +71,13 @@
       "when": 1794122578775,
       "tag": "0009_membership_identity_fields_and_county_numbers",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794201957912,
+      "tag": "0010_activate_secure_member_contributions",
+      "breakpoints": true
     }
   ]
 }

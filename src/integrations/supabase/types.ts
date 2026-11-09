@@ -83,6 +83,65 @@ export type Database = {
         }
         Relationships: []
       }
+      member_contributions: {
+        Row: {
+          account_reference: string | null
+          amount_kes: number
+          checkout_request_id: string | null
+          created_at: string
+          id: string
+          member_user_id: string
+          merchant_request_id: string | null
+          mpesa_receipt: string | null
+          national_id: string
+          paid_at: string | null
+          phone: string
+          result_desc: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          account_reference?: string | null
+          amount_kes: number
+          checkout_request_id?: string | null
+          created_at?: string
+          id?: string
+          member_user_id: string
+          merchant_request_id?: string | null
+          mpesa_receipt?: string | null
+          national_id: string
+          paid_at?: string | null
+          phone: string
+          result_desc?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          account_reference?: string | null
+          amount_kes?: number
+          checkout_request_id?: string | null
+          created_at?: string
+          id?: string
+          member_user_id?: string
+          merchant_request_id?: string | null
+          mpesa_receipt?: string | null
+          national_id?: string
+          paid_at?: string | null
+          phone?: string
+          result_desc?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "member_contributions_member_user_id_fkey"
+            columns: ["member_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       membership_applications: {
         Row: {
           applicant_user_id: string

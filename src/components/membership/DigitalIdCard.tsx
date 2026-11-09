@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import ccakLogo from "@/assets/ccak-logo.png.asset.json";
 
 export type DigitalIdCardProps = {
   fullName: string;
@@ -41,20 +41,14 @@ export function DigitalIdCard({
   objectives = DEFAULT_OBJECTIVES,
   className = "",
 }: DigitalIdCardProps) {
-  const cardStyle: CSSProperties = {
-    fontFamily: "'Inter', system-ui, sans-serif",
-  };
-
   return (
-    <div className={`ccak-id-suite ${className}`} style={cardStyle}>
+    <div className={`ccak-id-suite ${className}`}>
       {/* FRONT */}
       <article className="ccak-id-card ccak-id-front" aria-label="CCAK membership card front">
-        <div className="ccak-id-watermark" aria-hidden="true" />
+        <img src={ccakLogo.url} alt="" className="ccak-id-watermark" aria-hidden="true" />
         <header className="ccak-id-header">
           <div className="ccak-id-brand">
-            <div className="ccak-id-logo-mark" aria-hidden="true">
-              CCAK
-            </div>
+            <img src={ccakLogo.url} alt="CCAK logo" className="ccak-id-logo-mark" />
             <div>
               <p className="ccak-id-org">Coffee Champions Association of Kenya</p>
               <p className="ccak-id-doc-type">Official Digital Membership Card</p>
@@ -88,13 +82,13 @@ export function DigitalIdCard({
         </div>
 
         <footer className="ccak-id-footer">
-          <p>Verified digital credential · Scan QR in the membership portal for field checks</p>
+          <p>CCAK membership · {membershipCode}</p>
         </footer>
       </article>
 
       {/* BACK */}
       <article className="ccak-id-card ccak-id-back" aria-label="CCAK membership card back">
-        <div className="ccak-id-watermark subtle" aria-hidden="true" />
+        <img src={ccakLogo.url} alt="" className="ccak-id-watermark subtle" aria-hidden="true" />
         <h3 className="ccak-id-back-title">Our commitment</h3>
         <p className="ccak-id-motto">“{motto}”</p>
         <ul className="ccak-id-objectives">
