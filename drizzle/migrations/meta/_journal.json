@@ -99,6 +99,13 @@
       "when": 1794292172640,
       "tag": "0013_secure_harvest_shop_orders",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1794292953672,
+      "tag": "0014_customer_order_fulfilment_and_materials",
+      "breakpoints": true
     }
   ]
 }
