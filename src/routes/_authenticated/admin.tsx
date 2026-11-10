@@ -9,6 +9,7 @@ import { getAdministration, reviewApplication } from "@/lib/membership.functions
 import { Button } from "@/components/ui/button";
 import { DarajaSandboxCheck } from "@/components/DarajaSandboxCheck";
 import { canRunSandboxCheck } from "@/lib/payments/sandbox-check";
+import { ShopDeliveryQuotes } from "@/components/ShopDeliveryQuotes";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   beforeLoad: async ({ context }) => {
@@ -29,7 +30,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
   component: Admin,
 });
 
-type Tab = "members" | "inquiries" | "newsletter" | "payments";
+type Tab = "members" | "inquiries" | "newsletter" | "payments" | "shipping";
 
 function Admin() {
   const [tab, setTab] = useState<Tab>("members");
@@ -76,9 +77,11 @@ function Admin() {
         <button className={tab === "inquiries" ? "on" : ""} onClick={() => setTab("inquiries")}>Partner & donate ({inquiries.length})</button>
         <button className={tab === "newsletter" ? "on" : ""} onClick={() => setTab("newsletter")}>Newsletter ({subs.length})</button>
         {canTestPayments && <Button variant="ghost" className={tab === "payments" ? "on" : ""} onClick={() => setTab("payments")}>Payment checks</Button>}
+        {canTestPayments && <Button variant="ghost" className={tab === "shipping" ? "on" : ""} onClick={() => setTab("shipping")}>Delivery quotes</Button>}
       </div>
 
       {tab === "payments" && canTestPayments && <DarajaSandboxCheck />}
+      {tab === "shipping" && canTestPayments && <ShopDeliveryQuotes />}
 
       {tab === "members" && (
         <>

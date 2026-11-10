@@ -6,6 +6,8 @@ import { getCoffeeNews, type NewsItem } from "@/lib/news.functions";
 import { newsletterSchema, publicInquirySchema } from "@/lib/public-form-schemas";
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import ccakLogo from "@/assets/ccak-logo.png.asset.json";
+import { PRODUCTS, kes, type CartItem } from "@/lib/shop/catalog";
+import { CartLink, useShopCart } from "@/components/ShopCart";
 
 const TITLE = "CCAK — Coffee Champions Association of Kenya";
 const DESC =
@@ -130,12 +132,6 @@ const COURSES = [
   ["Export readiness", "Documentation, logistics and buyer relations.", 20, 10],
 ] as const;
 
-const PRODUCTS = [
-  ["Nyeri AA", "Nyeri AA whole bean, 250g", "KES 950"],
-  ["Kirinyaga PB", "Kirinyaga peaberry, ground, 250g", "KES 1,050"],
-  ["Merchandise", "CCAK founding-member tote", "KES 650"],
-  ["Academy", "Export readiness course access", "KES 2,500"],
-] as const;
 
 const MODAL_COPY = {
   partner: { title: "Become a partner", sub: "Tell us about your organization and how you would like to work with CCAK." },
@@ -336,13 +332,13 @@ function Index() {
                 <p className="eyebrow">Marketplace</p>
                 <h2 id="market-heading">Shop the harvest, fund the mission</h2>
               </div>
-              <p className="section-note">Every purchase channels margin back to member cooperatives.</p>
+              <div><p className="section-note">Every purchase channels margin back to member cooperatives.</p><CartLink /></div>
             </div>
             <ul className="market-grid">
-              {PRODUCTS.map(([tag, t, price]) => (
-                <li key={t} className="product-card">
-                  <div className="product-media" aria-hidden="true"><span>{tag}</span></div>
-                  <div className="product-body"><h3>{t}</h3><p className="price">{price}</p><AddToCart /></div>
+              {PRODUCTS.map((product) => (
+                <li key={product.id} className="product-card">
+                  <div className="product-media" aria-hidden="true"><span>{product.tag}</span></div>
+                  <div className="product-body"><h3>{product.name}</h3><p className="price">{kes(product.price)}</p><AddToCart id={product.id} /></div>
                 </li>
               ))}
             </ul>
@@ -615,17 +611,18 @@ function Counties() {
   );
 }
 
-function AddToCart() {
+function AddToCart({ id }: { id: CartItem["id"] }) {
   const [added, setAdded] = useState(false);
+  const cart = useShopCart();
   return (
-    <button
+    <Button variant="ghost"
       className={`btn btn-ghost add-cart${added ? " btn-forest" : ""}`}
       type="button"
       aria-live="polite"
-      onClick={() => { setAdded(true); setTimeout(() => setAdded(false), 1200); }}
+      onClick={() => { cart.add(id); setAdded(true); setTimeout(() => setAdded(false), 1200); }}
     >
       {added ? "Added" : "Add to cart"}
-    </button>
+    </Button>
   );
 }
 
