@@ -22,6 +22,7 @@ export function PortalShell({ children, isAdmin }: { children: ReactNode; isAdmi
         </Link>
         <nav className="portal-nav">
           <Link to="/membership">My membership</Link>
+          <Link to="/orders">My orders</Link>
           {isAdmin && <Link to="/admin">Admin</Link>}
           <button className="btn btn-ghost btn-compact" onClick={signOut}>Sign out</button>
         </nav>
