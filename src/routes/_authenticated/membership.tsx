@@ -12,6 +12,7 @@ import {
   initiateContributionPayment,
 } from "@/lib/payments/contribution.functions";
 import { Button } from "@/components/ui/button";
+import { getConstitutionLink } from "@/lib/documents.functions";
 
 export const Route = createFileRoute("/_authenticated/membership")({
   head: () => ({
@@ -43,7 +44,18 @@ function Membership() {
   const [payPhone, setPayPhone] = useState("");
   const [payNationalId, setPayNationalId] = useState("");
   const [contributionKes, setContributionKes] = useState(500);
-  const [presidentName, setPresidentName] = useState("CCAK National President");
+  const [presidentName, setPresidentName] = useState("David Muigai Miringu");
+  const openConstitution = useServerFn(getConstitutionLink);
+  const [docMsg, setDocMsg] = useState<string | null>(null);
+  const onConstitution = async () => {
+    setDocMsg(null);
+    try {
+      const { url } = await openConstitution();
+      window.open(url, "_blank", "noopener,noreferrer");
+    } catch (e) {
+      setDocMsg(e instanceof Error ? e.message : "Could not open the constitution.");
+    }
+  };
 
   const fetchMembership = useServerFn(getMembership);
   const submit = useServerFn(submitApplication);
@@ -199,6 +211,15 @@ function Membership() {
             </div>
           </div>
         </div>
+      )}
+
+      {approved && p?.member_no && (
+        <section className="portal-section" aria-labelledby="docs-heading">
+          <h2 id="docs-heading">Official association documents</h2>
+          <p className="section-note">Available only to verified, approved CCAK members.</p>
+          <Button type="button" onClick={onConstitution}>Open CCAK Constitution 2026 (PDF)</Button>
+          {docMsg && <p role="alert">{docMsg}</p>}
+        </section>
       )}
 
       {/* Digital card + contribution */}

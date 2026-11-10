@@ -1,4 +1,5 @@
 import ccakLogo from "@/assets/ccak-logo.png.asset.json";
+import presidentSignature from "@/assets/president-signature.png.asset.json";
 
 export type DigitalIdCardProps = {
   fullName: string;
