@@ -22,6 +22,7 @@
 - Homepage forms share browser-safe validation schemas and submit through public server functions using the publishable client with insert-only RLS; acknowledge success only after the database confirms the write.
 
 ## Contributions
+- Shop orders use server-priced immutable item snapshots and separate test-only payment records; physical-goods totals require an audited, national-admin-confirmed Fargo quote before STK requests, preventing invented delivery fees or membership entitlement changes.
 - Sandbox diagnostics are national-admin-only and use only a fixed sandbox OAuth GET with redirects blocked; never issue STK requests or write payment records, so checks cannot charge members.
 - Keep contribution writes server-only after authenticated membership checks; members receive read-only access so payment status cannot be forged.
 - Use a public TanStack callback route and independently query Daraja before updating a matched payment; callbacks alone do not establish payment authenticity.

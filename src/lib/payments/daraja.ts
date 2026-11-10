@@ -39,11 +39,10 @@ export async function getDarajaAccessToken(): Promise<string> {
   const auth = Buffer.from(`${key}:${secret}`).toString("base64");
   const res = await fetch(
     `${baseUrl()}/oauth/v1/generate?grant_type=client_credentials`,
-    { headers: { Authorization: `Basic ${auth}` } },
+    { headers: { Authorization: `Basic ${auth}` }, redirect: "error", signal: AbortSignal.timeout(15000) },
   );
   if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Daraja OAuth failed (${res.status}): ${text}`);
+    throw new Error("Safaricom authentication failed. Check the payment credentials.");
   }
   const data = (await res.json()) as { access_token: string; expires_in: string };
   tokenCache = {
@@ -111,6 +110,8 @@ export async function initiateStkPush(input: StkPushInput): Promise<StkPushResul
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
+    redirect: "error",
+    signal: AbortSignal.timeout(15000),
   });
 
   if (!res.ok) throw new Error("M-Pesa could not start the payment. Please try again.");
@@ -174,6 +175,7 @@ export async function queryStkResult(checkoutRequestId: string): Promise<number>
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     body: JSON.stringify({ BusinessShortCode: shortcode, Password: stkPassword(shortcode, requireEnv("DARAJA_PASSKEY"), ts), Timestamp: ts, CheckoutRequestID: checkoutRequestId }),
     signal: AbortSignal.timeout(15000),
+    redirect: "error",
   });
   if (!res.ok) throw new Error("Payment confirmation is temporarily unavailable.");
   return z.object({ ResultCode: z.coerce.number().int() }).parse(await res.json()).ResultCode;

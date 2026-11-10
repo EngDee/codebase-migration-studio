@@ -12,11 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedMembershipRouteImport } from './routes/_authenticated/membership'
 import { Route as ApiMpesaCallbackRouteImport } from './routes/api/mpesa/callback'
 import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa/callback'
+import { Route as ApiPublicShopMpesaCallbackRouteImport } from './routes/api/public/shop/mpesa/callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -30,6 +32,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -57,74 +64,94 @@ const ApiPublicMpesaCallbackRoute = ApiPublicMpesaCallbackRouteImport.update({
   path: '/api/public/mpesa/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicShopMpesaCallbackRoute =
+  ApiPublicShopMpesaCallbackRouteImport.update({
+    id: '/api/public/shop/mpesa/callback',
+    path: '/api/public/shop/mpesa/callback',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/checkout': typeof CheckoutRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/membership': typeof AuthenticatedMembershipRoute
   '/api/mpesa/callback': typeof ApiMpesaCallbackRoute
   '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
+  '/api/public/shop/mpesa/callback': typeof ApiPublicShopMpesaCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/checkout': typeof CheckoutRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/membership': typeof AuthenticatedMembershipRoute
   '/api/mpesa/callback': typeof ApiMpesaCallbackRoute
   '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
+  '/api/public/shop/mpesa/callback': typeof ApiPublicShopMpesaCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/checkout': typeof CheckoutRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/membership': typeof AuthenticatedMembershipRoute
   '/api/mpesa/callback': typeof ApiMpesaCallbackRoute
   '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
+  '/api/public/shop/mpesa/callback': typeof ApiPublicShopMpesaCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
+    | '/checkout'
     | '/reset-password'
     | '/admin'
     | '/membership'
     | '/api/mpesa/callback'
     | '/api/public/mpesa/callback'
+    | '/api/public/shop/mpesa/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/checkout'
     | '/reset-password'
     | '/admin'
     | '/membership'
     | '/api/mpesa/callback'
     | '/api/public/mpesa/callback'
+    | '/api/public/shop/mpesa/callback'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/checkout'
     | '/reset-password'
     | '/_authenticated/admin'
     | '/_authenticated/membership'
     | '/api/mpesa/callback'
     | '/api/public/mpesa/callback'
+    | '/api/public/shop/mpesa/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  CheckoutRoute: typeof CheckoutRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ApiMpesaCallbackRoute: typeof ApiMpesaCallbackRoute
   ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
+  ApiPublicShopMpesaCallbackRoute: typeof ApiPublicShopMpesaCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -148,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -185,6 +219,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicMpesaCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/shop/mpesa/callback': {
+      id: '/api/public/shop/mpesa/callback'
+      path: '/api/public/shop/mpesa/callback'
+      fullPath: '/api/public/shop/mpesa/callback'
+      preLoaderRoute: typeof ApiPublicShopMpesaCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -205,9 +246,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  CheckoutRoute: CheckoutRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ApiMpesaCallbackRoute: ApiMpesaCallbackRoute,
   ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
+  ApiPublicShopMpesaCallbackRoute: ApiPublicShopMpesaCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -366,6 +366,74 @@ export type Database = {
         }
         Relationships: []
       }
+      shop_orders: {
+        Row: {
+          amount_kes: number | null
+          checkout_request_id: string | null
+          created_at: string
+          id: string
+          items: Json
+          merchant_request_id: string | null
+          mpesa_receipt: string | null
+          paid_at: string | null
+          payment_environment: string
+          phone: string | null
+          request_key: string
+          shipping_address: Json | null
+          shipping_kes: number | null
+          shipping_quote_reference: string | null
+          status: string
+          subtotal_kes: number
+          user_id: string
+        }
+        Insert: {
+          amount_kes?: number | null
+          checkout_request_id?: string | null
+          created_at?: string
+          id?: string
+          items: Json
+          merchant_request_id?: string | null
+          mpesa_receipt?: string | null
+          paid_at?: string | null
+          payment_environment?: string
+          phone?: string | null
+          request_key: string
+          shipping_address?: Json | null
+          shipping_kes?: number | null
+          shipping_quote_reference?: string | null
+          status?: string
+          subtotal_kes: number
+          user_id: string
+        }
+        Update: {
+          amount_kes?: number | null
+          checkout_request_id?: string | null
+          created_at?: string
+          id?: string
+          items?: Json
+          merchant_request_id?: string | null
+          mpesa_receipt?: string | null
+          paid_at?: string | null
+          payment_environment?: string
+          phone?: string | null
+          request_key?: string
+          shipping_address?: Json | null
+          shipping_kes?: number | null
+          shipping_quote_reference?: string | null
+          status?: string
+          subtotal_kes?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shop_orders_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           county: string | null
@@ -427,6 +495,10 @@ export type Database = {
       is_national_admin: { Args: never; Returns: boolean }
       is_super_admin: { Args: never; Returns: boolean }
       membership_statistics: { Args: never; Returns: Json }
+      quote_shop_delivery: {
+        Args: { fee_kes: number; order_id: string; quote_reference: string }
+        Returns: undefined
+      }
       review_membership_application: {
         Args: {
           application_id: string

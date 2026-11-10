@@ -1,9 +1,11 @@
 # CCAK backend activation
 
 ## Harvest marketplace checkout
-- [ ] Activate cart quantities, checkout totals, shipping address and a thank-you result using the existing Daraja account.
-- [ ] Confirm existing product prices, delivery charges and test-versus-live payment intent before accepting money.
-- [ ] Persist secure orders and independently verify payment outcomes without affecting membership contributions.
+- [x] Activate persistent cart quantities, checkout subtotals, international shipping address, saved-order thank-you note and separate Daraja test payment flow.
+- [x] Confirm product prices and test-only intent; use audited administrator-entered Fargo quotes before calculating physical-goods totals, never invented delivery fees.
+- [x] Add private server-written shop order storage and independent callback verification without affecting membership contributions; all 33 regression tests pass, mobile checkout has no overflow and malformed callbacks return 400.
+- [ ] Verify saved-order, administrator quote and successful Daraja payment end-to-end: blocked by no authorised real order/test transaction under the no-demonstration-records constraint and no available national-admin session.
+- [ ] Automate Fargo shipping rates: requires Fargo's approved rate/API details and any contracted access; no verified public rate feed was found.
 
 ## Personal super-admin access
 - [x] Reserve super-admin access for muigaid.gathia@gmail.com only after confirmed email ownership, preserving the association administrator.
