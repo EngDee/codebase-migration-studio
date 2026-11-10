@@ -1,5 +1,9 @@
 # CCAK backend activation
 
+## Guest checkout
+- [ ] Allow account-free checkout with private guest order status, receipts, payment requests and purchased downloads.
+- [ ] Preserve server pricing, Fargo quote approval and test-only payments; test guest access without creating demo orders.
+
 ## Customer orders and digital materials
 - [x] Add private customer order history/details, payment and delivery status, and branded printable receipts with the president's signature.
 - [x] Add administrator-uploaded PDF study materials with paid, non-sandbox purchase download access and audited delivery tracking.

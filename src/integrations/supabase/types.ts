@@ -44,6 +44,81 @@ export type Database = {
         }
         Relationships: []
       }
+      guest_shop_orders: {
+        Row: {
+          amount_kes: number | null
+          checkout_request_id: string | null
+          created_at: string
+          customer_email: string
+          customer_name: string
+          delivery_status: string
+          delivery_updated_at: string | null
+          guest_session_hash: string
+          id: string
+          items: Json
+          merchant_request_id: string | null
+          mpesa_receipt: string | null
+          paid_at: string | null
+          payment_environment: string
+          phone: string | null
+          request_key: string
+          shipping_address: Json | null
+          shipping_kes: number | null
+          shipping_quote_reference: string | null
+          status: string
+          subtotal_kes: number
+          tracking_reference: string | null
+        }
+        Insert: {
+          amount_kes?: number | null
+          checkout_request_id?: string | null
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          delivery_status?: string
+          delivery_updated_at?: string | null
+          guest_session_hash: string
+          id?: string
+          items: Json
+          merchant_request_id?: string | null
+          mpesa_receipt?: string | null
+          paid_at?: string | null
+          payment_environment?: string
+          phone?: string | null
+          request_key: string
+          shipping_address?: Json | null
+          shipping_kes?: number | null
+          shipping_quote_reference?: string | null
+          status?: string
+          subtotal_kes: number
+          tracking_reference?: string | null
+        }
+        Update: {
+          amount_kes?: number | null
+          checkout_request_id?: string | null
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          delivery_status?: string
+          delivery_updated_at?: string | null
+          guest_session_hash?: string
+          id?: string
+          items?: Json
+          merchant_request_id?: string | null
+          mpesa_receipt?: string | null
+          paid_at?: string | null
+          payment_environment?: string
+          phone?: string | null
+          request_key?: string
+          shipping_address?: Json | null
+          shipping_kes?: number | null
+          shipping_quote_reference?: string | null
+          status?: string
+          subtotal_kes?: number
+          tracking_reference?: string | null
+        }
+        Relationships: []
+      }
       inquiries: {
         Row: {
           county: string | null
@@ -538,6 +613,10 @@ export type Database = {
           material_product: string
           material_title: string
         }
+        Returns: undefined
+      }
+      quote_guest_shop_delivery: {
+        Args: { fee_kes: number; order_id: string; quote_reference: string }
         Returns: undefined
       }
       quote_shop_delivery: {
