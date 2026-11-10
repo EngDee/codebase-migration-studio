@@ -226,7 +226,7 @@ function Index() {
               {NAV.map(([h, l]) => <a key={h} href={h}>{l}</a>)}
             </div>
             <div className="nav-cta">
-              <Button asChild variant="ghost" className="btn btn-ghost btn-compact"><Link to="/auth">Member login</Link></Button>
+              <Link to="/auth" className="btn btn-outline btn-compact">Member login</Link>
               <Button asChild className="btn btn-forest btn-compact"><Link to="/auth" search={{ mode: "signup" }}>Join CCAK</Link></Button>
             </div>
             <button
