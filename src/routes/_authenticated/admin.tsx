@@ -7,6 +7,8 @@ import { PortalShell } from "@/components/PortalShell";
 import { getMyRoles, hasStaffRole, MEMBER_TYPES, photoUrl } from "@/lib/members";
 import { getAdministration, reviewApplication } from "@/lib/membership.functions";
 import { Button } from "@/components/ui/button";
+import { DarajaSandboxCheck } from "@/components/DarajaSandboxCheck";
+import { canRunSandboxCheck } from "@/lib/payments/sandbox-check";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   beforeLoad: async ({ context }) => {
@@ -27,7 +29,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
   component: Admin,
 });
 
-type Tab = "members" | "inquiries" | "newsletter";
+type Tab = "members" | "inquiries" | "newsletter" | "payments";
 
 function Admin() {
   const [tab, setTab] = useState<Tab>("members");
@@ -37,12 +39,14 @@ function Admin() {
   const [filter, setFilter] = useState<"pending" | "approved" | "rejected" | "all">("pending");
   const [applications, setApplications] = useState<Tables<"membership_applications">[]>([]);
   const [message, setMessage] = useState("");
+  const [canTestPayments, setCanTestPayments] = useState(false);
   const fetchAdmin = useServerFn(getAdministration);
   const review = useServerFn(reviewApplication);
 
   const load = async () => {
     try {
-      const data = await fetchAdmin();
+      const [data, roles] = await Promise.all([fetchAdmin(), supabase.auth.getUser().then(async ({ data }) => data.user ? getMyRoles(data.user.id) : [])]);
+      setCanTestPayments(canRunSandboxCheck(roles));
       setMembers(data.members); setApplications(data.applications); setInquiries(data.inquiries); setSubs(data.subscribers);
     } catch { setMessage("Could not load administration records. Please refresh and try again."); }
   };
@@ -71,7 +75,10 @@ function Admin() {
         <button className={tab === "members" ? "on" : ""} onClick={() => setTab("members")}>Members ({members.filter((m) => m.submitted_at && m.status === "pending").length} pending)</button>
         <button className={tab === "inquiries" ? "on" : ""} onClick={() => setTab("inquiries")}>Partner & donate ({inquiries.length})</button>
         <button className={tab === "newsletter" ? "on" : ""} onClick={() => setTab("newsletter")}>Newsletter ({subs.length})</button>
+        {canTestPayments && <Button variant="ghost" className={tab === "payments" ? "on" : ""} onClick={() => setTab("payments")}>Payment checks</Button>}
       </div>
+
+      {tab === "payments" && canTestPayments && <DarajaSandboxCheck />}
 
       {tab === "members" && (
         <>
