@@ -1,5 +1,9 @@
 # CCAK backend activation
 
+## Personal super-admin access
+- [ ] Reserve super-admin access for muigaid.gathia@gmail.com only after confirmed email ownership, preserving the association administrator.
+- [ ] Verify the email-matching and confirmation rules; account registration remains the owner's action.
+
 ## Daraja sandbox check
 - [x] Add an authenticated national-admin sandbox configuration check with clear results and no payment requests or member-record writes.
 - [x] Test sandbox isolation, missing credentials, provider failures, token redaction and national-admin permissions; all 26 regression tests pass and preview build is OK.
