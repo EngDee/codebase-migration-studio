@@ -420,6 +420,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_confirmed_bootstrap_admin: {
+        Args: { account_email: string; confirmed_at: string }
+        Returns: boolean
+      }
       is_national_admin: { Args: never; Returns: boolean }
       is_super_admin: { Args: never; Returns: boolean }
       membership_statistics: { Args: never; Returns: Json }

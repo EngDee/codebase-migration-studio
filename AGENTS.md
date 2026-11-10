@@ -10,6 +10,7 @@
 <!-- LOVABLE:END -->
 
 ## Membership backend
+- Bootstrap administrator grants use a restricted database email-and-confirmation predicate in both signup and confirmation triggers; never use editable metadata or client checks, so unverified registrations cannot gain control.
 - Keep membership applications as immutable submission snapshots; use authenticated database RPCs for atomic submission and review so profile status and audit history cannot diverge.
 - Preserve the legacy admin role as full-control compatibility while supporting national and county-scoped roles; assign privileged roles only through verified database permissions.
 - Keep server-function wrappers in src/lib and enforce authorization again in database functions and RLS; never rely on page visibility for security.

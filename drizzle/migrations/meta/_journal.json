@@ -85,6 +85,13 @@
       "when": 1794289678101,
       "tag": "0011_approved_members_read_documents",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1794291000543,
+      "tag": "0012_verified_personal_super_admin_bootstrap",
+      "breakpoints": true
     }
   ]
 }
