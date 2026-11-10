@@ -1,5 +1,11 @@
 # CCAK backend activation
 
+## Customer orders and digital materials
+- [x] Add private customer order history/details, payment and delivery status, and branded printable receipts with the president's signature.
+- [x] Add administrator-uploaded PDF study materials with paid, non-sandbox purchase download access and audited delivery tracking.
+- [x] Run all 38 regression tests, verify schema and storage policies, and check signed-in order history and mobile layout without creating demonstration records.
+- [ ] Verify actual receipt printing, material upload/download and delivery updates end-to-end: blocked by zero real orders/materials, sandbox-only payments and unavailable national-admin session. Upload the actual course PDFs and authorise live payments before paid downloads can operate.
+
 ## Harvest marketplace checkout
 - [x] Activate persistent cart quantities, checkout subtotals, international shipping address, saved-order thank-you note and separate Daraja test payment flow.
 - [x] Confirm product prices and test-only intent; use audited administrator-entered Fargo quotes before calculating physical-goods totals, never invented delivery fees.

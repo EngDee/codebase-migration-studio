@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState, type FormEvent } from "react";
 import { Minus, Plus, Trash2, ShoppingBag, RefreshCw } from "lucide-react";
@@ -18,6 +18,7 @@ export const Route = createFileRoute("/checkout")({
 });
 
 function Checkout() {
+  const navigate = useNavigate();
   const cart = useShopCart();
   const createOrder = useServerFn(createShopOrder);
   const fetchOrders = useServerFn(getShopOrders);
@@ -43,10 +44,11 @@ function Checkout() {
     if (shipping && !shipping.success) { setError(shipping.error.issues[0]?.message ?? "Check your delivery address."); return; }
     setBusy(true);
     try {
-      await createOrder({ data: { items: cart.items, ...(shipping?.success ? { shipping: shipping.data } : {}), request_key: requestKey } });
+      const saved = await createOrder({ data: { items: cart.items, ...(shipping?.success ? { shipping: shipping.data } : {}), request_key: requestKey } });
       cart.clear(); setRequestKey(crypto.randomUUID());
       setMessage(needsShipping ? "Thank you for supporting CCAK! Your order is saved. We will confirm the Fargo delivery quote before requesting payment." : "Thank you for supporting CCAK! Your order is saved and ready for an M-Pesa test payment.");
       await load();
+      await navigate({ to: "/orders/$orderId", params: { orderId: saved.id } });
     } catch (e) { setError(e instanceof Error ? e.message : "Order was not saved."); }
     finally { setBusy(false); }
   };
@@ -72,8 +74,9 @@ function Checkout() {
           {signedIn ? <Button className="btn btn-forest" type="submit" disabled={busy || !requestKey}><ShoppingBag />{busy ? "Saving…" : needsShipping ? "Save order & request delivery quote" : "Save order"}</Button> : <Button asChild className="btn btn-forest"><Link to="/auth">Sign in to place your order</Link></Button>}
         </form></section>
       </div> : <p className="shop-empty">Your cart is empty. <Link to="/">Browse the harvest shop</Link></p>}
-      {signedIn && <section className="shop-orders"><div className="shop-orders-heading"><h2>Your saved orders</h2><Button variant="outline" disabled={busy} onClick={load}><RefreshCw />Refresh status</Button></div>
+      {signedIn && <section className="shop-orders"><div className="shop-orders-heading"><h2>Your saved orders</h2><Button asChild variant="outline"><Link to="/orders">My orders</Link></Button><Button variant="outline" disabled={busy} onClick={load}><RefreshCw />Refresh status</Button></div>
         {orders.length === 0 && <p>No orders yet.</p>}{orders.map((order) => <article className="shop-order" key={order.id}><h3>Order {order.id.slice(0, 8).toUpperCase()}</h3><p>Status: {order.status === "paid" ? "Test payment confirmed" : order.status.replace(/_/g, " ")}</p><p>Items: {kes(order.subtotal_kes)} · Delivery: {order.shipping_kes === null ? "Awaiting Fargo quote" : kes(order.shipping_kes)}</p><strong>Total: {order.amount_kes === null ? "Awaiting quote" : kes(order.amount_kes)}</strong>
+          <Button asChild variant="outline"><Link to="/orders/$orderId" params={{ orderId: order.id }}>Order details & receipt</Link></Button>
           {order.shipping_quote_reference && <p>Fargo quote: {order.shipping_quote_reference}</p>}
           {order.status === "ready" && <form className="portal-form shop-payment" onSubmit={(event) => startPayment(event, order.id)}><label>M-Pesa test phone<input name="phone" type="tel" placeholder="07XX XXX XXX" required minLength={9} maxLength={20} /></label><Button type="submit" className="btn btn-forest" disabled={busy}>Request test M-Pesa payment · {kes(order.amount_kes ?? 0)}</Button></form>}
           {order.status === "pending" && <p>Waiting for Safaricom confirmation. Refresh status to check the result.</p>}

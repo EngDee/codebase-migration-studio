@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { getShopQuoteRequests, saveShopQuote } from "@/lib/shop/shop.functions";
 import { kes } from "@/lib/shop/catalog";
 import { RefreshCw } from "lucide-react";
+import { ShopFulfilment } from "./ShopFulfilment";
 
 export function ShopDeliveryQuotes() {
   const fetchQuotes = useServerFn(getShopQuoteRequests);
@@ -24,5 +25,5 @@ export function ShopDeliveryQuotes() {
     <h3>Order {order.id.slice(0, 8).toUpperCase()} · {kes(order.subtotal_kes)}</h3>
     <p>{order.shipping_address && typeof order.shipping_address === "object" ? Object.values(order.shipping_address).filter(Boolean).join(" · ") : "No address"}</p>
     <form className="portal-form" onSubmit={(event) => submit(event, order.id)}><label>Confirmed Fargo charge (KES)<input name="fee" type="number" min="0" max="1000000" step="1" required /></label><label>Fargo quote reference<input name="reference" minLength={3} maxLength={200} required /></label><Button type="submit" className="btn btn-forest" disabled={busy}>Save confirmed quote</Button></form>
-  </article>)}</section>;
+  </article>)}<ShopFulfilment /></section>;
 }

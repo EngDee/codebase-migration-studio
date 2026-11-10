@@ -366,11 +366,40 @@ export type Database = {
         }
         Relationships: []
       }
+      shop_materials: {
+        Row: {
+          created_at: string
+          filename: string
+          id: string
+          product_id: string
+          storage_path: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          filename: string
+          id?: string
+          product_id: string
+          storage_path: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          filename?: string
+          id?: string
+          product_id?: string
+          storage_path?: string
+          title?: string
+        }
+        Relationships: []
+      }
       shop_orders: {
         Row: {
           amount_kes: number | null
           checkout_request_id: string | null
           created_at: string
+          delivery_status: string
+          delivery_updated_at: string | null
           id: string
           items: Json
           merchant_request_id: string | null
@@ -384,12 +413,15 @@ export type Database = {
           shipping_quote_reference: string | null
           status: string
           subtotal_kes: number
+          tracking_reference: string | null
           user_id: string
         }
         Insert: {
           amount_kes?: number | null
           checkout_request_id?: string | null
           created_at?: string
+          delivery_status?: string
+          delivery_updated_at?: string | null
           id?: string
           items: Json
           merchant_request_id?: string | null
@@ -403,12 +435,15 @@ export type Database = {
           shipping_quote_reference?: string | null
           status?: string
           subtotal_kes: number
+          tracking_reference?: string | null
           user_id: string
         }
         Update: {
           amount_kes?: number | null
           checkout_request_id?: string | null
           created_at?: string
+          delivery_status?: string
+          delivery_updated_at?: string | null
           id?: string
           items?: Json
           merchant_request_id?: string | null
@@ -422,6 +457,7 @@ export type Database = {
           shipping_quote_reference?: string | null
           status?: string
           subtotal_kes?: number
+          tracking_reference?: string | null
           user_id?: string
         }
         Relationships: [
@@ -495,6 +531,15 @@ export type Database = {
       is_national_admin: { Args: never; Returns: boolean }
       is_super_admin: { Args: never; Returns: boolean }
       membership_statistics: { Args: never; Returns: Json }
+      publish_shop_material: {
+        Args: {
+          material_filename: string
+          material_path: string
+          material_product: string
+          material_title: string
+        }
+        Returns: undefined
+      }
       quote_shop_delivery: {
         Args: { fee_kes: number; order_id: string; quote_reference: string }
         Returns: undefined
@@ -601,6 +646,10 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      update_shop_delivery: {
+        Args: { new_status: string; order_id: string; tracking: string }
+        Returns: undefined
       }
       verify_membership: {
         Args: { number: string }
