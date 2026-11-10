@@ -3,6 +3,10 @@ import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 import { brokeredPreviewStorage } from './previewAuthStorage';
 
+declare const __CCAK_SUPABASE_URL__: string;
+declare const __CCAK_SUPABASE_PUBLISHABLE_KEY__: string;
+declare const __CCAK_SUPABASE_PROJECT_ID__: string;
+
 function isNewSupabaseApiKey(value: string): boolean {
   return value.startsWith('sb_publishable_') || value.startsWith('sb_secret_');
 }
@@ -47,10 +51,18 @@ function createSupabaseFetch(supabaseUrl: string, supabaseKey: string): typeof f
 
 
 function createSupabaseClient() {
-  // Use import.meta.env for client-side (Vite build-time replacement)
-  // Fall back to process.env for SSR (server-side rendering)
-  const SUPABASE_URL = import.meta.env['VITE_SUPABASE_URL'] || process.env['SUPABASE_URL'];
-  const SUPABASE_PUBLISHABLE_KEY = import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'] || process.env['SUPABASE_PUBLISHABLE_KEY'];
+  // Dot access + compile-time defines so Vite inlines the public keys.
+  // Bracket access is NOT statically replaced and ships as empty in production.
+  const SUPABASE_URL =
+    import.meta.env.VITE_SUPABASE_URL ||
+    (typeof __CCAK_SUPABASE_URL__ !== "undefined" ? __CCAK_SUPABASE_URL__ : "") ||
+    (typeof process !== "undefined" ? process.env["SUPABASE_URL"] : "") ||
+    "https://c--bf2d016a-4949-4243-a5cc-c9149b8b72cd-prod.lovable.cloud";
+  const SUPABASE_PUBLISHABLE_KEY =
+    import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+    (typeof __CCAK_SUPABASE_PUBLISHABLE_KEY__ !== "undefined" ? __CCAK_SUPABASE_PUBLISHABLE_KEY__ : "") ||
+    (typeof process !== "undefined" ? process.env["SUPABASE_PUBLISHABLE_KEY"] : "") ||
+    "sb_publishable_zT3C2IGBadA6zC1Df3XdyQ_9uPbInJy";
 
   if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
     const missing = [

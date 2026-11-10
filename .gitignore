@@ -16,10 +16,11 @@ dist-ssr
 .nitro
 *.local
 
-# Environment files (never commit secrets or local config)
-.env
-.env.*
-!.env.example
+# Local-only overrides. The project .env is tracked so the deployment
+# builder always receives the public database connection configuration.
+# Never put a service-role key in .env.
+.env.local
+.env.*.local
 
 # Wrangler / Cloudflare
 .wrangler/
