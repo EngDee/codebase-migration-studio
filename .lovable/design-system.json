@@ -1,0 +1,550 @@
+{
+  "meta": {
+    "name": "Codebase Migration Studio",
+    "package": "@ws-78a0e5377e1b2f44578c/bf2d016a-4949-4243-a5cc-c9149b8b72cd",
+    "version": "1.0.0",
+    "framework": "react",
+    "css_framework": "tailwind",
+    "starter_template": "custom_design_system_tailwind",
+    "theme_files": [
+      "src/styles.css"
+    ],
+    "source_type": "local",
+    "source_manifest": {
+      "#enrichment": "7c5ec31e3b21d1e0de3665bcdf8cca7ef606b89e72d714daf9ab951a754204a1",
+      ".github/workflows/datadog-synthetics.yml": "6817a2e0e12fc2e1c13c18a2890b03e0",
+      ".gitignore": "0ab7c993d1ffbfd04466e1b9cb099e1d",
+      ".lovable/migrate-external-project/ledger.json": "72112bbb5523f8ac1d42f2cc8d78759b",
+      ".lovable/north-star/north-star.md": "42764d1d2a1f72bd7c3923e594005f65",
+      ".lovable/project.json": "69fae1000db735d06af9a8a59d9bd676",
+      ".prettierignore": "7279a476f196a2da5f7edd18db568dc6",
+      ".prettierrc": "185ef0234746ab738ac1ab6cec5e2bd9",
+      "AGENTS.md": "131e5ad1fe14e8bf93ad02a5c8fd35c5",
+      "README.md": "31212012b02ea69151401920fd6ea8aa",
+      "SECURITY.md": "b6fc4d29053e25e5ea436e7f784a7a52",
+      "backend-stage-report.md": "1e0893f671379929cd2004e3d7400abf",
+      "bunfig.toml": "44f440fc23b426e3176ee72e92f8f9f0",
+      "compatibility-stage-report.md": "ee712387f273db6fef4628cc290e7137",
+      "components.json": "30d3d035361ce807021f5c54620962e9",
+      "drizzle.config.ts": "c2b6029fa56b49433380b7263b06e3f7",
+      "drizzle/migrations/0000_migration.sql": "f42e1c0e183f1a88138e68c8414df582",
+      "drizzle/migrations/0001_migration.sql": "6b2ad36ea592bd2476917fb9fed2d9a3",
+      "drizzle/migrations/0002_ccak_admin_email.sql": "25320868fe012581650300ad77123611",
+      "drizzle/migrations/0003_membership_role_expansion.sql": "b48b6f707b191739db820040631645cd",
+      "drizzle/migrations/0004_secure_membership_backend.sql": "a2a40ab376a0131b8d77f7fa6f14ee6d",
+      "drizzle/migrations/0005_membership_resubmission_and_admin_confirmation.sql": "c17990f4df0d250021120f718f7ea3d6",
+      "drizzle/migrations/0006_membership_profile_scope_hardening.sql": "49f90225c586fcd96c82d2bcb3cffdf8",
+      "drizzle/migrations/0007_validate_public_inquiry_and_newsletter_submissions.sql": "10a6340f4820d49c33d3bbaccfe714f9",
+      "drizzle/migrations/0008_add_ccak_member_type.sql": "8fcbbcbad64dc6c6442129d0d1801919",
+      "drizzle/migrations/0009_membership_identity_fields_and_county_numbers.sql": "42be3834331e6dba27e543cdb9f207de",
+      "drizzle/migrations/0010_activate_secure_member_contributions.sql": "75fbf01742e1c1c62e9681c180c195f8",
+      "drizzle/migrations/0010_member_contributions_and_digital_card.sql": "6b1d670405f0b3d62f76514f31f920c1",
+      "drizzle/migrations/0011_approved_members_read_documents.sql": "68669f4e447c12243851ed34374294b4",
+      "drizzle/migrations/0012_verified_personal_super_admin_bootstrap.sql": "65eaff37ee64bd39aab0aa6bcc753339",
+      "drizzle/migrations/0013_secure_harvest_shop_orders.sql": "bd8cbedfd276d549cb13289226635e48",
+      "drizzle/migrations/0014_customer_order_fulfilment_and_materials.sql": "17cffbab3ef190cc9e1ad08619b083da",
+      "drizzle/migrations/0015_scope_county_code_reads_to_authorised_staff.sql": "236c45533ee101bacca80170a18e009f",
+      "drizzle/migrations/0016_private_guest_shop_orders.sql": "aaf3bf5c35cb28a0209280ea83d7f26b",
+      "drizzle/migrations/meta/0000_snapshot.json": "ae1c9bd1203a31b76fd4999b4e7e91d0",
+      "drizzle/migrations/meta/0001_snapshot.json": "e47d2259725958e347a3ba30d04b57f1",
+      "drizzle/migrations/meta/0002_snapshot.json": "131d38924e19a6442225ca606c541d7a",
+      "drizzle/migrations/meta/0003_snapshot.json": "78cfd7c04147d3bc10c05ca475780e23",
+      "drizzle/migrations/meta/0004_snapshot.json": "19fb1576e6da11221ddfc0ff63ce4991",
+      "drizzle/migrations/meta/0005_snapshot.json": "8d5cccd897ed5f4f1a829833bfd561b7",
+      "drizzle/migrations/meta/0006_snapshot.json": "c5f9f902c75913e04857f4202c60d2f2",
+      "drizzle/migrations/meta/0007_snapshot.json": "14aa71bc6f4b971608323b94161ba6c8",
+      "drizzle/migrations/meta/0008_snapshot.json": "bda817e29e248934b4ed676790a40769",
+      "drizzle/migrations/meta/0009_snapshot.json": "3d807831d1c37d9fc1b9ac05b3de9419",
+      "drizzle/migrations/meta/0010_snapshot.json": "404deaf80dff26c191941959cbbf5f8a",
+      "drizzle/migrations/meta/0011_snapshot.json": "472907a7b28201449f1b7398a0deb769",
+      "drizzle/migrations/meta/0012_snapshot.json": "3805f4f414e12267ac46cf357be0bdc5",
+      "drizzle/migrations/meta/0013_snapshot.json": "c2d7e4eb90a463e103f770431ddfcafd",
+      "drizzle/migrations/meta/0014_snapshot.json": "65755e9446b196da49d158647dd4967b",
+      "drizzle/migrations/meta/0015_snapshot.json": "ae1d366100d1110a83534a16a923cc1c",
+      "drizzle/migrations/meta/0016_snapshot.json": "029cc0644bc684a4eb130a4892ec3715",
+      "drizzle/migrations/meta/_journal.json": "5d8cf91390184d5fa8b26d87f27091ae",
+      "drizzle/schema.ts": "a60267d05d7dd11572f02686241f37c6",
+      "eslint.config.js": "345bdd57e188e0e4525edcd00e5003f5",
+      "package.json": "2117782d1fc7d543e471385da880114a",
+      "public/favicon.png": "efce26d3331a79f266c516ec4b7525ce",
+      "public/robots.txt": "dfd4c3c2ceb7bfdb546f65d71b44e977",
+      "public/sitemap.xml": "7ab0816694ceec28ec6cdb84ac51bdcc",
+      "real-forms-stage-report.md": "6677513de68eca289c6fdbebab2ad127",
+      "roadmap.md": "7bec0b3d5b24c6764ba4fdffb17920be",
+      "src/assets/ccak-logo.png.asset.json": "491da987ebf5bd7dc6c3ee84c844186f",
+      "src/assets/president-signature.png.asset.json": "56604e13d6dfc63cfb5aaed99d829ab5",
+      "src/ccak.css": "3d5d67099679a3cd5d95393ed7b24b1f",
+      "src/components/DarajaSandboxCheck.tsx": "f247cd32b3129c0cbbc0b80f2cb0ae23",
+      "src/components/OrderReceipt.tsx": "c027d2062c3a002f1cf800604a61b0fe",
+      "src/components/PortalShell.tsx": "6d7da586766e64005f49ee064c3bab4e",
+      "src/components/ShopCart.tsx": "2c3b70581984665e1a363eb892a74790",
+      "src/components/ShopDeliveryQuotes.tsx": "87cffa7698a2d10a949a65a605e641dd",
+      "src/components/ShopFulfilment.tsx": "cc26c41709b90b05958c113bec6cf854",
+      "src/components/membership/DigitalIdCard.tsx": "035ee633efa7e0fbfb54fbd64bee78a1",
+      "src/components/ui/accordion.tsx": "55f9dda62b4e3913c9b23e5015a86aef",
+      "src/components/ui/alert-dialog.tsx": "96350e949e9b7b674545430a410ab89c",
+      "src/components/ui/alert.tsx": "f993d7e96b1e25ce50e68ed97e11d2a8",
+      "src/components/ui/aspect-ratio.tsx": "c5c364545e1b25a94e9e752cd67ad048",
+      "src/components/ui/avatar.tsx": "72989cd32f72c4122802540ef32525a5",
+      "src/components/ui/badge.tsx": "81cade001fc4260f9943e18dcd79449b",
+      "src/components/ui/breadcrumb.tsx": "bb9ac254f12662b20d5d50b84308bf3a",
+      "src/components/ui/button.tsx": "7d07d520f486b12bd47373d694ecd2ee",
+      "src/components/ui/calendar.tsx": "d849cc610e2683271f3f1c47d093cf30",
+      "src/components/ui/card.tsx": "d6c48ea36221b9cdc3576d305d12d5d5",
+      "src/components/ui/carousel.tsx": "e324c68ae00cd5aed49317638abd429a",
+      "src/components/ui/chart.tsx": "6a3baf94f2e89f1f97d4d7a28f3622d2",
+      "src/components/ui/checkbox.tsx": "f78aac270ca482c8c2cb907ef6260462",
+      "src/components/ui/collapsible.tsx": "767631bbc344945c236f185f4078d71d",
+      "src/components/ui/command.tsx": "014782599cc838b021ec68b07ad4ea02",
+      "src/components/ui/context-menu.tsx": "3ba8244ea23df34a1dba92f3a1230dad",
+      "src/components/ui/dialog.tsx": "ef4fe8e7de8675730afe3d633b260e09",
+      "src/components/ui/drawer.tsx": "8be333e8fd8e42576b1b5f72f07f4337",
+      "src/components/ui/dropdown-menu.tsx": "28d6e98d3c7811fc0514bfa69416f087",
+      "src/components/ui/form.tsx": "1b0aa6302b9017ea2a1307c22a1d2983",
+      "src/components/ui/hover-card.tsx": "1442794c5ca2a78d69e4e613b315ed3d",
+      "src/components/ui/input-otp.tsx": "65625f2f1c4d731a760aeed7b54459d1",
+      "src/components/ui/input.tsx": "1d4cc52a4cd8afb3e18e45bda942bb8a",
+      "src/components/ui/label.tsx": "7e35df4ca8edd0835efd97ca7937ef92",
+      "src/components/ui/menubar.tsx": "3c4121a1e78d3f424a7295381a8997d3",
+      "src/components/ui/navigation-menu.tsx": "e85351147a02b29577ff83d188b63c24",
+      "src/components/ui/pagination.tsx": "fac6cdbb4bbf78b273d85cd36d6cbb49",
+      "src/components/ui/popover.tsx": "f18aa1da2144f25ee60795c539c51bcd",
+      "src/components/ui/progress.tsx": "55c462e5c9dd678dcf2c0c510b014ac4",
+      "src/components/ui/radio-group.tsx": "0e1ace237a5da3197e3eb1e6683faba9",
+      "src/components/ui/resizable.tsx": "d9fcb9203c749fcab4e125a99bb12a86",
+      "src/components/ui/scroll-area.tsx": "87b65d3eb26f2b02ff35a7acea585ba5",
+      "src/components/ui/select.tsx": "31ea1bbd6671833b010b2e852c8a55d0",
+      "src/components/ui/separator.tsx": "433d163c4ffa00b59398a0c293198b5e",
+      "src/components/ui/sheet.tsx": "0221fbf97b69611b47fcbc10bb27669a",
+      "src/components/ui/sidebar.tsx": "83c1623eb50ebc370d7b1b84a542e369",
+      "src/components/ui/skeleton.tsx": "41b182e6e2fc3805960d41e767d4a972",
+      "src/components/ui/slider.tsx": "4752f1bfa26426988d325599e01c335b",
+      "src/components/ui/sonner.tsx": "97f59f60be3413196d095fcbf7383216",
+      "src/components/ui/switch.tsx": "82f5d8b0c59bb7ff305caa9f502e79ff",
+      "src/components/ui/table.tsx": "7cc889989d53894b659903c73aded96e",
+      "src/components/ui/tabs.tsx": "56e725558c2ce72c18243bf51717f385",
+      "src/components/ui/textarea.tsx": "c7aad96fb9545210d53135a96c76ed6b",
+      "src/components/ui/toggle-group.tsx": "ac26383acf721d116ca8e3ab5c5355d5",
+      "src/components/ui/toggle.tsx": "ee8c5adac74e7242b85b544db1a8fbad",
+      "src/components/ui/tooltip.tsx": "67d71db5a1ab935695d1def497f5b8a6",
+      "src/hooks/use-mobile.tsx": "c0a0bdd4638c391a1dd06ac82074e60b",
+      "src/integrations/lovable/index.ts": "e9cf6e6968dd0392b2222ee0745ecece",
+      "src/integrations/supabase/auth-attacher.ts": "dad043cda134d909e52de0346c16625e",
+      "src/integrations/supabase/auth-middleware.ts": "eabaf8c8ba32205717921ce5f255185e",
+      "src/integrations/supabase/client.server.ts": "23f838ab7633e0a97e695f3c500d91aa",
+      "src/integrations/supabase/client.ts": "bd8b68f89b01eb2be870eaeef1cca48d",
+      "src/integrations/supabase/cron-auth.ts": "6c04781ff98ada5977945fae55d39385",
+      "src/integrations/supabase/previewAuthStorage.ts": "91a2fb985d2b9c9cf27a5151806d0d50",
+      "src/integrations/supabase/types.ts": "f25fe3bd95639b3e1d092dcb2b43823c",
+      "src/lib/documents.functions.ts": "8a1bafdc42d9d4b42fe6d9b992553c1f",
+      "src/lib/error-capture.ts": "f630d9686a9a989170f22eff4de7b30d",
+      "src/lib/error-page.ts": "8da0ddd7569bac2676b9a5c8edff8a36",
+      "src/lib/identity/verify.ts": "d7da1818feb416356a14958b79810c5e",
+      "src/lib/lovable-error-reporting.ts": "920280997099588d609de792663bcbf0",
+      "src/lib/members.ts": "b8837517db126f740f2e292100307219",
+      "src/lib/membership-rules.test.ts": "945dff17fbf8fb31797d8fb0ebddff84",
+      "src/lib/membership.functions.ts": "c605b87462d63940f82870f627934946",
+      "src/lib/news.functions.ts": "7143e3a160d3013cde7878891a36ae86",
+      "src/lib/news.test.ts": "d467b2c8974d82bf51b13fc710517435",
+      "src/lib/payments/contribution.functions.ts": "676580dcc1ccb3d0753a5e91bf732939",
+      "src/lib/payments/daraja.ts": "854780f8186b24bc2dcc6e2d5b339c1c",
+      "src/lib/payments/rules.test.ts": "c9e81335f7dda261e26977c5d5e8f7df",
+      "src/lib/payments/rules.ts": "68ae46d1a31a6f32b36ec760c98322c2",
+      "src/lib/payments/sandbox-check.test.ts": "223e4a4d6157d22fe9f0fd4602659b42",
+      "src/lib/payments/sandbox-check.ts": "53d4b3e2018f801011a5c34937a65bd1",
+      "src/lib/payments/sandbox.functions.ts": "ca07a238c027b1d94ff8b429988781c5",
+      "src/lib/public-form-schemas.test.ts": "1e90397540293b27e71dcbb870911a49",
+      "src/lib/public-form-schemas.ts": "da901eb45e2be5fe28ee32678e14dbe6",
+      "src/lib/public-forms.functions.ts": "eccd1cb9ea1579cdae4ab6d3fa5d31cd",
+      "src/lib/shop/catalog.test.ts": "3a2503e9d64dd2911ed313664984f701",
+      "src/lib/shop/catalog.ts": "ed69dc561c6620a132f7fdb778ea1b94",
+      "src/lib/shop/download.ts": "a0731c6a7654b173f24f951d7920c78a",
+      "src/lib/shop/guest-rules.test.ts": "54849cac9341f85eaed44e0468cec9c6",
+      "src/lib/shop/guest-rules.ts": "8ceb51cc126f65f8c50cac1a185c2235",
+      "src/lib/shop/guest-session.server.ts": "5975d4f1c26f1fb5025d8f666c75bd07",
+      "src/lib/shop/guest.functions.ts": "05a379479c2fe82ef2e4bd67a475c573",
+      "src/lib/shop/order-rules.test.ts": "0853858cea2b86bea48258497b3bb7c4",
+      "src/lib/shop/order-rules.ts": "4a187995b26bf67e46b2ad7c9d21ae34",
+      "src/lib/shop/orders.functions.ts": "0aab625d0a1aad7a7b5d6959d10616c0",
+      "src/lib/shop/shop.functions.ts": "db34669bf40056d76fc24a18d3363afe",
+      "src/lib/utils.ts": "d9837f38cc05303254571985e3164050",
+      "src/routeTree.gen.ts": "5b4c5339d997cf50a53745873733b034",
+      "src/router.tsx": "8f905e713b0eba7fa8148b7995a708c9",
+      "src/routes/README.md": "b3a2f259b66fd1a11f54b6d5ac83bf57",
+      "src/routes/__root.tsx": "ee54ba4c33027fee4a257e550755d104",
+      "src/routes/_authenticated/admin.tsx": "d30f8ae44b166bb417ea0bc16b9895b1",
+      "src/routes/_authenticated/membership.tsx": "a08573ea44a087fcaaf715cee12e0e58",
+      "src/routes/_authenticated/orders.$orderId.tsx": "22a48db0608e9aec42ad4bd4d8169e97",
+      "src/routes/_authenticated/orders.tsx": "01e8bc15a36ee52d33c61901d13384f1",
+      "src/routes/_authenticated/route.tsx": "aed018305b22f45c2f22baa95e6a8503",
+      "src/routes/api/mpesa/callback.ts": "f818829d771f8b014b0bdc5ab4d74ef6",
+      "src/routes/api/public/mpesa/callback.ts": "f01f9a7f0195c5485134b3b13fae4c15",
+      "src/routes/api/public/shop/mpesa/callback.ts": "4d3a219220df4c7a0ea85f05643033f7",
+      "src/routes/auth.tsx": "73d0bb16419e03c20f5113881e7a4393",
+      "src/routes/checkout.tsx": "6c1a8e989ca5f1cd44825ac6f0ea800b",
+      "src/routes/guest-order.$orderId.tsx": "534b35ae2c46789ebd5e371e12fb45c7",
+      "src/routes/index.tsx": "56bb0dc5049f319fd5d5dace8324e1cc",
+      "src/routes/reset-password.tsx": "07458888c2bc0a916b64d1183961aef0",
+      "src/server.ts": "beafb9f15f7678537e8bdf9a70f3a4bd",
+      "src/start.ts": "d77c1c12904be5077c6955d9b30071af",
+      "src/styles.css": "8e6e8f3c73db61fc9b6d799166e2a8cd",
+      "src/test/admin-bootstrap.check.py": "f4039c530fd721c54fc574fdb576db08",
+      "src/test/app-routing.test.tsx": "dda0393c89450a1e5b7874b424dca80d",
+      "src/test/setup.ts": "ef5807c07db57482ab718e40246688a2",
+      "supabase/config.toml": "4184676e0e0891a67863f13a836ab77f",
+      "tsconfig.json": "3d34aff71739a382bec105bad1c6948f",
+      "vite.config.ts": "bed10a37feefc77b571e9b431282eef2",
+      "vitest.config.ts": "cdf9aff9538e6bc3eb92842264b030a9"
+    },
+    "pipeline_version": 8
+  },
+  "tokens": {
+    "color": [
+      {
+        "name": "--background",
+        "raw": "oklch(1 0 0)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--foreground",
+        "raw": "oklch(0.129 0.042 264.695)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--card",
+        "raw": "oklch(1 0 0)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--card-foreground",
+        "raw": "oklch(0.129 0.042 264.695)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--popover",
+        "raw": "oklch(1 0 0)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--popover-foreground",
+        "raw": "oklch(0.129 0.042 264.695)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--primary",
+        "raw": "oklch(0.208 0.042 265.755)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--primary-foreground",
+        "raw": "oklch(0.984 0.003 247.858)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--secondary",
+        "raw": "oklch(0.968 0.007 247.896)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--secondary-foreground",
+        "raw": "oklch(0.208 0.042 265.755)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--muted",
+        "raw": "oklch(0.968 0.007 247.896)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--muted-foreground",
+        "raw": "oklch(0.554 0.046 257.417)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--accent",
+        "raw": "oklch(0.968 0.007 247.896)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--accent-foreground",
+        "raw": "oklch(0.208 0.042 265.755)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--destructive",
+        "raw": "oklch(0.577 0.245 27.325)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--destructive-foreground",
+        "raw": "oklch(0.984 0.003 247.858)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--border",
+        "raw": "oklch(0.929 0.013 255.508)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--input",
+        "raw": "oklch(0.929 0.013 255.508)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--ring",
+        "raw": "oklch(0.704 0.04 256.788)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--chart-1",
+        "raw": "oklch(0.646 0.222 41.116)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--chart-2",
+        "raw": "oklch(0.6 0.118 184.704)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--chart-3",
+        "raw": "oklch(0.398 0.07 227.392)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--chart-4",
+        "raw": "oklch(0.828 0.189 84.429)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--chart-5",
+        "raw": "oklch(0.769 0.188 70.08)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--sidebar",
+        "raw": "oklch(0.984 0.003 247.858)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--sidebar-foreground",
+        "raw": "oklch(0.129 0.042 264.695)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--sidebar-primary",
+        "raw": "oklch(0.208 0.042 265.755)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--sidebar-primary-foreground",
+        "raw": "oklch(0.984 0.003 247.858)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--sidebar-accent",
+        "raw": "oklch(0.968 0.007 247.896)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--sidebar-accent-foreground",
+        "raw": "oklch(0.208 0.042 265.755)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--sidebar-border",
+        "raw": "oklch(0.929 0.013 255.508)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--sidebar-ring",
+        "raw": "oklch(0.704 0.04 256.788)",
+        "source": "src/styles.css"
+      }
+    ],
+    "radius": [
+      {
+        "name": "--radius-sm",
+        "raw": "calc(var(--radius) - 4px)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--radius-md",
+        "raw": "calc(var(--radius) - 2px)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--radius-xl",
+        "raw": "calc(var(--radius) + 4px)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--radius-2xl",
+        "raw": "calc(var(--radius) + 8px)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--radius-3xl",
+        "raw": "calc(var(--radius) + 12px)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--radius-4xl",
+        "raw": "calc(var(--radius) + 16px)",
+        "source": "src/styles.css"
+      },
+      {
+        "name": "--radius",
+        "raw": "0.625rem",
+        "source": "src/styles.css"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "DarajaSandboxCheck",
+      "file": "src/components/DarajaSandboxCheck",
+      "import_path": ""
+    },
+    {
+      "name": "OrderReceipt",
+      "file": "src/components/OrderReceipt",
+      "import_path": ""
+    },
+    {
+      "name": "PortalShell",
+      "file": "src/components/PortalShell",
+      "import_path": ""
+    },
+    {
+      "name": "ShopCartProvider",
+      "file": "src/components/ShopCart",
+      "import_path": ""
+    },
+    {
+      "name": "CartLink",
+      "file": "src/components/ShopCart",
+      "import_path": ""
+    },
+    {
+      "name": "ShopDeliveryQuotes",
+      "file": "src/components/ShopDeliveryQuotes",
+      "import_path": ""
+    },
+    {
+      "name": "ShopFulfilment",
+      "file": "src/components/ShopFulfilment",
+      "import_path": ""
+    },
+    {
+      "name": "DigitalIdCard",
+      "file": "src/components/membership/DigitalIdCard",
+      "import_path": "",
+      "props": [
+        {
+          "name": "fullName",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "membershipCode",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "nationalId",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "county",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "photoUrl",
+          "type": "string"
+        },
+        {
+          "name": "memberSince",
+          "type": "string"
+        },
+        {
+          "name": "presidentName",
+          "type": "string",
+          "default": "David Muigai Miringu"
+        },
+        {
+          "name": "presidentSignatureUrl",
+          "type": "string"
+        },
+        {
+          "name": "motto",
+          "type": "string"
+        },
+        {
+          "name": "objectives",
+          "type": "any"
+        },
+        {
+          "name": "className",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Button",
+      "file": "src/components/ui/button",
+      "import_path": "",
+      "props": [
+        {
+          "name": "variant",
+          "type": "enum",
+          "values": [
+            "default",
+            "destructive",
+            "outline",
+            "secondary",
+            "ghost",
+            "link"
+          ],
+          "default": "default"
+        },
+        {
+          "name": "size",
+          "type": "enum",
+          "values": [
+            "default",
+            "sm",
+            "lg",
+            "icon"
+          ],
+          "default": "default"
+        },
+        {
+          "name": "asChild",
+          "type": "boolean",
+          "default": "false"
+        }
+      ]
+    },
+    {
+      "name": "Constants",
+      "file": "src/integrations/supabase/types",
+      "import_path": ""
+    }
+  ],
+  "assets": [
+    {
+      "file": "src/assets/ccak-logo.png.asset.json",
+      "kind": "logo",
+      "format": "png",
+      "pointer": true
+    },
+    {
+      "file": "src/assets/president-signature.png.asset.json",
+      "kind": "image",
+      "format": "png",
+      "pointer": true
+    }
+  ]
+}
