@@ -16,6 +16,8 @@ import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedMembershipRouteImport } from './routes/_authenticated/membership'
+import { Route as AuthenticatedOrdersRouteImport } from './routes/_authenticated/orders'
+import { Route as AuthenticatedOrdersOrderIdRouteImport } from './routes/_authenticated/orders.$orderId'
 import { Route as ApiMpesaCallbackRouteImport } from './routes/api/mpesa/callback'
 import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa/callback'
 import { Route as ApiPublicShopMpesaCallbackRouteImport } from './routes/api/public/shop/mpesa/callback'
@@ -54,6 +56,17 @@ const AuthenticatedMembershipRoute = AuthenticatedMembershipRouteImport.update({
   path: '/membership',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedOrdersRoute = AuthenticatedOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedOrdersOrderIdRoute =
+  AuthenticatedOrdersOrderIdRouteImport.update({
+    id: '/$orderId',
+    path: '/$orderId',
+    getParentRoute: () => AuthenticatedOrdersRoute,
+  } as any)
 const ApiMpesaCallbackRoute = ApiMpesaCallbackRouteImport.update({
   id: '/api/mpesa/callback',
   path: '/api/mpesa/callback',
@@ -78,6 +91,8 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/membership': typeof AuthenticatedMembershipRoute
+  '/orders': typeof AuthenticatedOrdersRouteWithChildren
+  '/orders/$orderId': typeof AuthenticatedOrdersOrderIdRoute
   '/api/mpesa/callback': typeof ApiMpesaCallbackRoute
   '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
   '/api/public/shop/mpesa/callback': typeof ApiPublicShopMpesaCallbackRoute
@@ -89,6 +104,8 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/membership': typeof AuthenticatedMembershipRoute
+  '/orders': typeof AuthenticatedOrdersRouteWithChildren
+  '/orders/$orderId': typeof AuthenticatedOrdersOrderIdRoute
   '/api/mpesa/callback': typeof ApiMpesaCallbackRoute
   '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
   '/api/public/shop/mpesa/callback': typeof ApiPublicShopMpesaCallbackRoute
@@ -102,6 +119,8 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/membership': typeof AuthenticatedMembershipRoute
+  '/_authenticated/orders': typeof AuthenticatedOrdersRouteWithChildren
+  '/_authenticated/orders/$orderId': typeof AuthenticatedOrdersOrderIdRoute
   '/api/mpesa/callback': typeof ApiMpesaCallbackRoute
   '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
   '/api/public/shop/mpesa/callback': typeof ApiPublicShopMpesaCallbackRoute
@@ -115,6 +134,8 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/admin'
     | '/membership'
+    | '/orders'
+    | '/orders/$orderId'
     | '/api/mpesa/callback'
     | '/api/public/mpesa/callback'
     | '/api/public/shop/mpesa/callback'
@@ -126,6 +147,8 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/admin'
     | '/membership'
+    | '/orders'
+    | '/orders/$orderId'
     | '/api/mpesa/callback'
     | '/api/public/mpesa/callback'
     | '/api/public/shop/mpesa/callback'
@@ -138,6 +161,8 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/admin'
     | '/_authenticated/membership'
+    | '/_authenticated/orders'
+    | '/_authenticated/orders/$orderId'
     | '/api/mpesa/callback'
     | '/api/public/mpesa/callback'
     | '/api/public/shop/mpesa/callback'
@@ -205,6 +230,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMembershipRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/orders': {
+      id: '/_authenticated/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof AuthenticatedOrdersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/orders/$orderId': {
+      id: '/_authenticated/orders/$orderId'
+      path: '/$orderId'
+      fullPath: '/orders/$orderId'
+      preLoaderRoute: typeof AuthenticatedOrdersOrderIdRouteImport
+      parentRoute: typeof AuthenticatedOrdersRoute
+    }
     '/api/mpesa/callback': {
       id: '/api/mpesa/callback'
       path: '/api/mpesa/callback'
@@ -229,14 +268,27 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedOrdersRouteChildren {
+  AuthenticatedOrdersOrderIdRoute: typeof AuthenticatedOrdersOrderIdRoute
+}
+
+const AuthenticatedOrdersRouteChildren: AuthenticatedOrdersRouteChildren = {
+  AuthenticatedOrdersOrderIdRoute: AuthenticatedOrdersOrderIdRoute,
+}
+
+const AuthenticatedOrdersRouteWithChildren =
+  AuthenticatedOrdersRoute._addFileChildren(AuthenticatedOrdersRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedMembershipRoute: typeof AuthenticatedMembershipRoute
+  AuthenticatedOrdersRoute: typeof AuthenticatedOrdersRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedMembershipRoute: AuthenticatedMembershipRoute,
+  AuthenticatedOrdersRoute: AuthenticatedOrdersRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =
