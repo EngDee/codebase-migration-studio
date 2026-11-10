@@ -8,6 +8,7 @@ import { PRODUCTS, kes, addressSchema } from "@/lib/shop/catalog";
 import { createShopOrder, getShopOrders, payShopOrder } from "@/lib/shop/shop.functions";
 import { supabase } from "@/integrations/supabase/client";
 import ccakLogo from "@/assets/ccak-logo.png.asset.json";
+import { createGuestOrder } from "@/lib/shop/guest.functions";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({ meta: [
@@ -21,6 +22,7 @@ function Checkout() {
   const navigate = useNavigate();
   const cart = useShopCart();
   const createOrder = useServerFn(createShopOrder);
+  const createGuest = useServerFn(createGuestOrder);
   const fetchOrders = useServerFn(getShopOrders);
   const pay = useServerFn(payShopOrder);
   const [signedIn, setSignedIn] = useState(false);
@@ -44,11 +46,12 @@ function Checkout() {
     if (shipping && !shipping.success) { setError(shipping.error.issues[0]?.message ?? "Check your delivery address."); return; }
     setBusy(true);
     try {
-      const saved = await createOrder({ data: { items: cart.items, ...(shipping?.success ? { shipping: shipping.data } : {}), request_key: requestKey } });
+      const orderInput = { items: cart.items, ...(shipping?.success ? { shipping: shipping.data } : {}), request_key: requestKey };
+      const saved = signedIn ? await createOrder({ data: orderInput }) : await createGuest({ data: { ...orderInput, customer_name: String(data["customer_name"] ?? ""), customer_email: String(data["customer_email"] ?? "") } });
       cart.clear(); setRequestKey(crypto.randomUUID());
       setMessage(needsShipping ? "Thank you for supporting CCAK! Your order is saved. We will confirm the Fargo delivery quote before requesting payment." : "Thank you for supporting CCAK! Your order is saved and ready for an M-Pesa test payment.");
-      await load();
-      await navigate({ to: "/orders/$orderId", params: { orderId: saved.id } });
+      if (signedIn) { await load(); await navigate({ to: "/orders/$orderId", params: { orderId: saved.id } }); }
+      else { await navigate({ to: "/guest-order/$orderId", params: { orderId: saved.id } }); }
     } catch (e) { setError(e instanceof Error ? e.message : "Order was not saved."); }
     finally { setBusy(false); }
   };
@@ -70,8 +73,9 @@ function Checkout() {
           <div className="shop-quantity"><Button variant="outline" size="icon" aria-label={`Decrease ${row.product?.name}`} onClick={() => cart.quantity(row.id, row.quantity - 1)}><Minus /></Button><span>{row.quantity}</span><Button variant="outline" size="icon" aria-label={`Increase ${row.product?.name}`} disabled={row.quantity >= 20} onClick={() => cart.quantity(row.id, row.quantity + 1)}><Plus /></Button><Button variant="ghost" size="icon" aria-label={`Remove ${row.product?.name}`} onClick={() => cart.quantity(row.id, 0)}><Trash2 /></Button></div>
         </div>)}<dl className="shop-totals"><div><dt>Items subtotal</dt><dd>{kes(subtotal)}</dd></div><div><dt>Fargo delivery from Nairobi</dt><dd>{needsShipping ? "Quote required" : "Not applicable"}</dd></div><div><dt>Total</dt><dd>{needsShipping ? "Awaiting courier quote" : kes(subtotal)}</dd></div></dl></section>
         <section><h2>{needsShipping ? "Shipping address" : "Confirm order"}</h2><form onSubmit={submit} className="portal-form">
+          {!signedIn && <><h3>Guest checkout</h3><label>Buyer full name<input name="customer_name" autoComplete="name" required minLength={2} maxLength={120} /></label><label>Email for your order<input name="customer_email" type="email" autoComplete="email" required maxLength={255} /></label></>}
           {needsShipping && <>{[["full_name", "Recipient full name"], ["phone", "Delivery phone"], ["country", "Country"], ["city", "City / town"], ["address", "Street address / building"], ["postal_code", "Postal code (optional)"]].map(([name, label]) => <label key={name}>{label}<input name={name} required={name !== "postal_code"} maxLength={name === "address" ? 300 : 120} defaultValue={name === "country" ? "Kenya" : undefined} /></label>)}<p>Delivery charge will be confirmed using a Fargo Courier quote for your destination.</p></>}
-          {signedIn ? <Button className="btn btn-forest" type="submit" disabled={busy || !requestKey}><ShoppingBag />{busy ? "Saving…" : needsShipping ? "Save order & request delivery quote" : "Save order"}</Button> : <Button asChild className="btn btn-forest"><Link to="/auth">Sign in to place your order</Link></Button>}
+          <Button className="btn btn-forest" type="submit" disabled={busy || !requestKey}><ShoppingBag />{busy ? "Saving…" : needsShipping ? "Save order & request delivery quote" : "Save order"}</Button>
         </form></section>
       </div> : <p className="shop-empty">Your cart is empty. <Link to="/">Browse the harvest shop</Link></p>}
       {signedIn && <section className="shop-orders"><div className="shop-orders-heading"><h2>Your saved orders</h2><Button asChild variant="outline"><Link to="/orders">My orders</Link></Button><Button variant="outline" disabled={busy} onClick={load}><RefreshCw />Refresh status</Button></div>

@@ -4,7 +4,7 @@ import signature from "@/assets/president-signature.png.asset.json";
 import { orderItems } from "@/lib/shop/order-rules";
 import { kes } from "@/lib/shop/catalog";
 
-export function OrderReceipt({ order, customerName, presidentName }: { order: Tables<"shop_orders">; customerName: string | null; presidentName: string }) {
+export function OrderReceipt({ order, customerName, presidentName }: { order: Pick<Tables<"shop_orders">, "id" | "status" | "payment_environment" | "created_at" | "paid_at" | "mpesa_receipt" | "items" | "subtotal_kes" | "shipping_kes" | "amount_kes">; customerName: string | null; presidentName: string }) {
   const paid = order.status === "paid";
   return <section className="order-receipt" aria-label="CCAK order receipt">
     <div className="receipt-brand"><img src={logo.url} alt="CCAK logo" /><div><h2>Coffee Champions Association of Kenya</h2><p>{order.payment_environment === "sandbox" ? "TEST ONLY · Not proof of payment" : paid ? "Payment receipt" : "Order summary · Not a payment receipt"}</p></div></div>
