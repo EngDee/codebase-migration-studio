@@ -1,0 +1,3 @@
+DROP POLICY "Signed in users read CCAK county codes" ON public.membership_county_codes;
+CREATE POLICY "Authorised staff read scoped county codes" ON public.membership_county_codes FOR SELECT TO authenticated USING (public.can_review_county(county));
+COMMENT ON POLICY "Authorised staff read scoped county codes" ON public.membership_county_codes IS 'National administrators read county allocation records; county administrators read only their assigned county. Ordinary registrations confer no access. Static county formatting remains available through ccak_county_code.';
