@@ -137,5 +137,5 @@ export const getMyContributionStatus = createServerFn({ method: "POST" })
     const { data: profile, error: profileError } = await context.supabase.from("profiles").select("status,member_no").eq("id", context.userId).single();
     if (profileError || !profile) throw new Error("Could not confirm card eligibility.");
     const digitalCardUnlocked = cardEligible(profile.status, profile.member_no, payments.some((p) => p.status === "paid"));
-    return { payments, digitalCardUnlocked, amountKes: amount, presidentName: process.env["CCAK_PRESIDENT_NAME"] ?? "CCAK National President" };
+    return { payments, digitalCardUnlocked, amountKes: amount, presidentName: process.env["CCAK_PRESIDENT_NAME"] ?? "David Muigai Miringu" };
   });

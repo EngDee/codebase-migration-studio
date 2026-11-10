@@ -78,6 +78,13 @@
       "when": 1794201957912,
       "tag": "0010_activate_secure_member_contributions",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1794289678101,
+      "tag": "0011_approved_members_read_documents",
+      "breakpoints": true
     }
   ]
 }

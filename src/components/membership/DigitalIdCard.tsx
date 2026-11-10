@@ -1,4 +1,5 @@
 import ccakLogo from "@/assets/ccak-logo.png.asset.json";
+import presidentSignature from "@/assets/president-signature.png.asset.json";
 
 export type DigitalIdCardProps = {
   fullName: string;
@@ -35,8 +36,8 @@ export function DigitalIdCard({
   county,
   photoUrl,
   memberSince,
-  presidentName = "CCAK National President",
-  presidentSignatureUrl,
+  presidentName = "David Muigai Miringu",
+  presidentSignatureUrl = presidentSignature.url,
   motto = DEFAULT_MOTTO,
   objectives = DEFAULT_OBJECTIVES,
   className = "",

@@ -1,0 +1,1 @@
+CREATE POLICY "Approved members read member documents" ON storage.objects FOR SELECT TO authenticated USING (bucket_id = 'member-documents' AND EXISTS (SELECT 1 FROM public.profiles p WHERE p.id = auth.uid() AND p.status = 'approved' AND p.member_no IS NOT NULL));
