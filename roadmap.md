@@ -1,5 +1,10 @@
 # CCAK backend activation
 
+## Harvest marketplace checkout
+- [ ] Activate cart quantities, checkout totals, shipping address and a thank-you result using the existing Daraja account.
+- [ ] Confirm existing product prices, delivery charges and test-versus-live payment intent before accepting money.
+- [ ] Persist secure orders and independently verify payment outcomes without affecting membership contributions.
+
 ## Personal super-admin access
 - [x] Reserve super-admin access for muigaid.gathia@gmail.com only after confirmed email ownership, preserving the association administrator.
 - [x] Verify confirmed email eligibility, unconfirmed denial, unrelated email denial and association preservation through authenticated database calls; keep the regression check.
