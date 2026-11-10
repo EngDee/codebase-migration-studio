@@ -16,6 +16,7 @@
 - Keep server-function wrappers in src/lib and enforce authorization again in database functions and RLS; never rely on page visibility for security.
 - Collect identity fields through the transactional registration RPC and immutable application snapshots; retain account UUID links until verified identity data permits a full key migration, so existing sign-in and submissions remain intact.
 - Allocate member numbers through a database-locked county/year counter on authorised approval and a unique profile index; formatting and county mappings live in database functions to prevent concurrent collisions.
+- Restrict county allocation records to national administrators and assigned-county administrators via can_review_county; ordinary members use the static county formatter, so signup cannot disclose allocation records.
 
 ## Public form submissions
 - Keep anonymous newsletter and inquiry inserts limited to form-input columns with validating RLS predicates; database defaults own administrative fields so public callers cannot forge status, identifiers or timestamps.
