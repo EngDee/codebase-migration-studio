@@ -17,6 +17,7 @@ export const Route = createFileRoute("/_authenticated/orders/$orderId")({
   loader: ({ context, params }) => context.queryClient.ensureQueryData(detailQuery(params.orderId)),
   head: () => ({ meta: [{ title: "Order details and receipt — CCAK" }, { name: "description", content: "Private order details, payment confirmation, shipping and purchased study materials." }, { property: "og:title", content: "Order details and receipt — CCAK" }, { property: "og:description", content: "CCAK order status, authorised receipt and purchased materials." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex" }] }),
   component: OrderDetail,
+  errorComponent: () => <PortalShell><h1>Order unavailable</h1><p>This order could not be loaded for your account. Please return to your orders and try again.</p><Button asChild variant="outline"><Link to="/orders">My orders</Link></Button></PortalShell>,
 });
 function OrderDetail() {
   const { orderId } = Route.useParams();

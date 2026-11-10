@@ -729,6 +729,8 @@ footer li a:hover{color:var(--gold-soft);}
 .shop-empty{padding:32px 0;}
 .shop-empty a{text-decoration:underline;}
 .order-status-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;border-block:1px solid var(--gold-soft);padding:24px 0;margin:24px 0;}
+.portal-main>.shop-orders-heading h1,.order-screen h1{font-size:28px;font-weight:700;letter-spacing:0;}
+.order-screen h2,.order-section h2,.shop-order h2{font-size:21px;font-weight:700;letter-spacing:0;}
 .order-section{margin-top:32px;padding-top:24px;border-top:1px solid var(--gold-soft);}
 .order-receipt{margin-top:24px;padding:28px;border:1px solid var(--gold-soft);background:var(--white);color:var(--coffee-deep);overflow-wrap:anywhere;}
 .receipt-brand{display:flex;gap:20px;align-items:center;margin-bottom:24px;}
