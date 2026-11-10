@@ -1,5 +1,10 @@
 # CCAK backend activation
 
+## Daraja sandbox check
+- [x] Add an authenticated national-admin sandbox configuration check with clear results and no payment requests or member-record writes.
+- [x] Test sandbox isolation, missing credentials, provider failures, token redaction and national-admin permissions; all 26 regression tests pass and preview build is OK.
+- [ ] Exercise the check through the administration page: blocked because the requesting user's account has no national-admin role; authenticated navigation correctly redirects to membership, and the association account has no matching national-admin role.
+
 ## Combined GitHub compatibility
 - [x] Repair synced payment and digital-card compatibility and safely apply pending payment storage.
 - [x] Verify existing registration fields, public-form navigation, payment restrictions and website rendering; record external-service blockers in compatibility-stage-report.md.
