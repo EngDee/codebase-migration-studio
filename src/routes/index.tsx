@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { savePublicForm } from "@/lib/public-forms.functions";
+import { getCoffeeNews, type NewsItem } from "@/lib/news.functions";
 import { newsletterSchema, publicInquirySchema } from "@/lib/public-form-schemas";
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import ccakLogo from "@/assets/ccak-logo.png.asset.json";
@@ -257,8 +258,8 @@ function Index() {
             <p className="lead">CCAK unites farmers, cooperatives, processors, exporters, researchers and government to build a coffee sector where every cherry picked builds a farmer's prosperity.</p>
             <div className="hero-actions">
               <Button asChild className="btn btn-gold"><Link to="/auth" search={{ mode: "signup" }}>Join CCAK</Link></Button>
-              <Button variant="outline" className="btn btn-outline" onClick={open("partner")}>Become a partner</Button>
-              <Button variant="outline" className="btn btn-outline" onClick={open("donate")}>Donate</Button>
+              <button type="button" className="btn btn-outline" onClick={open("partner")}>Become a partner</button>
+              <button type="button" className="btn btn-outline" onClick={open("donate")}>Donate</button>
               <a className="btn btn-outline" href="#programs">Explore projects</a>
             </div>
             <p className="hero-scroll"><span className="hero-scroll-line" aria-hidden="true" />Scroll to explore impact</p>
@@ -381,24 +382,10 @@ function Index() {
         <section className="news" id="news" aria-labelledby="news-heading">
           <div className="wrap">
             <div className="section-head">
-              <div><p className="eyebrow">Newsroom</p><h2 id="news-heading">Reports, releases and field stories</h2></div>
-              <a className="btn btn-ghost" href="#">All news →</a>
+              <div><p className="eyebrow">Newsroom</p><h2 id="news-heading">Kenyan coffee sector updates</h2><p>Live updates from verified government agencies and trusted Kenyan news outlets.</p></div>
+              <a className="btn btn-ghost" href="https://www.afa.go.ke/" target="_blank" rel="noopener noreferrer">AFA Coffee Directorate →</a>
             </div>
-            <div className="news-grid">
-              {[
-                ["Report", "2026 State of Kenyan Coffee: county-by-county yield and price data", "2026-07-24", "24 July 2026", true],
-                ["Announcement", "Value Addition Centre breaks ground in Kirinyaga", "2026-07-11", "11 July 2026", false],
-                ["Event", "Registration opens for the National Coffee Summit", "2026-07-02", "2 July 2026", false],
-              ].map(([tag, t, dt, d, f]) => (
-                <article key={t as string} className={`news-card${f ? " feature" : ""}`}>
-                  <div className="news-media" aria-hidden="true" />
-                  <div className="news-body">
-                    <span className="news-tag">{tag}</span><h3>{t}</h3>
-                    <p className="news-date"><time dateTime={dt as string}>{d}</time></p>
-                  </div>
-                </article>
-              ))}
-            </div>
+            <CoffeeNews />
           </div>
         </section>
 
@@ -639,6 +626,48 @@ function AddToCart() {
     >
       {added ? "Added" : "Add to cart"}
     </button>
+  );
+}
+
+const OFFICIAL_SOURCES = [
+  { name: "AFA Coffee Directorate", url: "https://www.afa.go.ke/", note: "Regulation, licensing and production statistics" },
+  { name: "Nairobi Coffee Exchange", url: "https://www.nce.co.ke/", note: "Weekly auction prices and volumes" },
+  { name: "KALRO Coffee Research Institute", url: "https://www.kalro.org/coffee/", note: "Varieties, pest and disease advisories" },
+  { name: "Ministry of Agriculture", url: "https://kilimo.go.ke/", note: "Coffee policy, reforms and farmer support" },
+];
+
+function CoffeeNews() {
+  const fetchNews = useServerFn(getCoffeeNews);
+  const [items, setItems] = useState<NewsItem[] | null>(null);
+  useEffect(() => {
+    fetchNews().then((r) => setItems(r.items)).catch(() => setItems([]));
+  }, []);
+  return (
+    <>
+      <div className="news-grid">
+        {items === null && <p>Loading latest coffee updates…</p>}
+        {items?.map((n, i) => (
+          <article key={n.link} className={`news-card${i === 0 ? " feature" : ""}`}>
+            <div className="news-media" aria-hidden="true" />
+            <div className="news-body">
+              <span className="news-tag">{n.source}</span>
+              <h3><a href={n.link} target="_blank" rel="noopener noreferrer">{n.title}</a></h3>
+              {n.date && <p className="news-date"><time dateTime={new Date(n.date).toISOString()}>{new Date(n.date).toLocaleDateString("en-KE", { day: "numeric", month: "long", year: "numeric" })}</time></p>}
+            </div>
+          </article>
+        ))}
+        {items?.length === 0 && OFFICIAL_SOURCES.map((s) => (
+          <article key={s.url} className="news-card">
+            <div className="news-media" aria-hidden="true" />
+            <div className="news-body">
+              <span className="news-tag">Official source</span>
+              <h3><a href={s.url} target="_blank" rel="noopener noreferrer">{s.name}</a></h3>
+              <p className="news-date">{s.note}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </>
   );
 }
 
