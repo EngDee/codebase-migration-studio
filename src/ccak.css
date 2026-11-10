@@ -712,6 +712,7 @@ footer li a:hover{color:var(--gold-soft);}
 .digital-id-section .section-note { margin-bottom: 1rem; max-width: 40rem; line-height: 1.45; }
 
 .shop-test-note{border-left:4px solid var(--gold);padding:12px 16px;margin-bottom:24px;background:var(--white);color:var(--coffee);}
+.shop-page .portal-top .logo-text strong,.shop-page .portal-top .logo-text small{color:var(--coffee-deep);}
 .shop-checkout-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:32px;}
 .shop-checkout-grid section{min-width:0;}
 .shop-cart-row{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid var(--gold-soft);padding:20px 0;flex-wrap:wrap;}
