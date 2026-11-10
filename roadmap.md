@@ -1,5 +1,9 @@
 # CCAK backend activation
 
+## Daraja sandbox check
+- [ ] Add an authenticated national-admin sandbox configuration check with clear results and no payment requests or member-record writes.
+- [ ] Test sandbox isolation and exercise the check through the administration page.
+
 ## Combined GitHub compatibility
 - [x] Repair synced payment and digital-card compatibility and safely apply pending payment storage.
 - [x] Verify existing registration fields, public-form navigation, payment restrictions and website rendering; record external-service blockers in compatibility-stage-report.md.
