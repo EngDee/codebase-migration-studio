@@ -29,4 +29,5 @@
 - Sandbox diagnostics are national-admin-only and use only a fixed sandbox OAuth GET with redirects blocked; never issue STK requests or write payment records, so checks cannot charge members.
 - Keep contribution writes server-only after authenticated membership checks; members receive read-only access so payment status cannot be forged.
 - Use a public TanStack callback route and independently query Daraja before updating a matched payment; callbacks alone do not establish payment authenticity.
+- Resolve shop callbacks against member orders first and guest orders only when no member order exists; apply identical verification and pending-only updates to the matched table so account-free payments can settle safely.
 - Read configurable card signatory details inside authenticated server handlers, never from browser process.env; external KYC rejection must not fall back to a local success.

@@ -1,6 +1,7 @@
 # CCAK backend activation
 
 ## Guest checkout
+- [x] Fix guest callback settlement with shared Safaricom verification and regression coverage for paid, failed, duplicate and rejected confirmations.
 - [ ] Allow account-free checkout with private guest order status, receipts, payment requests and purchased downloads.
 - [ ] Preserve server pricing, Fargo quote approval and test-only payments; test guest access without creating demo orders.
 
