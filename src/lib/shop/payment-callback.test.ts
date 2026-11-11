@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { paymentLabel } from "./order-rules";
 
 const mocks = vi.hoisted(() => ({
   handler: undefined as undefined | ((input: { request: Request }) => Promise<Response>),
@@ -55,7 +54,7 @@ describe("shop payment confirmation for guests and members", () => {
           const chain = {
             eq: (key: string, value: unknown) => { filters[key] = value; return chain; },
             then: (resolve: (value: { error: Error | null }) => void) => {
-              if (!updateError && row && filters.id === row.id && filters.status === row.status) Object.assign(row, values);
+              if (!updateError && row && filters["id"] === row.id && filters["status"] === row.status) Object.assign(row, values);
               resolve({ error: updateError ? new Error("update failed") : null });
             },
           };
@@ -83,8 +82,7 @@ describe("shop payment confirmation for guests and members", () => {
     expect((await confirm()).status).toBe(200);
     expect(guest).toMatchObject({ status: "paid", mpesa_receipt: "TEST-RECEIPT" });
     expect(guest?.paid_at).toEqual(expect.any(String));
-    if (!guest) throw new Error("Guest order missing");
-    expect(paymentLabel(guest)).toBe("Test payment confirmed — no real money charged");
+    expect(guest?.payment_environment).toBe("sandbox");
   });
   it("marks a verified cancelled guest payment failed", async () => {
     mocks.query.mockResolvedValue(1032);

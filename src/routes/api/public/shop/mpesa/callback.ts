@@ -20,7 +20,7 @@ export const Route = createFileRoute("/api/public/shop/mpesa/callback")({
       const { data: memberOrder, error } = await supabaseAdmin.from("shop_orders").select("*").eq("checkout_request_id", parsed.checkoutRequestId).maybeSingle();
       if (error) throw error;
       let table: "shop_orders" | "guest_shop_orders" = "shop_orders";
-      let order = memberOrder;
+      let order: Pick<NonNullable<typeof memberOrder>, "id" | "status" | "payment_environment" | "merchant_request_id" | "checkout_request_id" | "phone" | "amount_kes"> | null = memberOrder;
       if (!order) {
         const guest = await supabaseAdmin.from("guest_shop_orders").select("*").eq("checkout_request_id", parsed.checkoutRequestId).maybeSingle();
         if (guest.error) throw guest.error;

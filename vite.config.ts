@@ -13,13 +13,13 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
  * Publishable key only — never a service-role secret.
  */
 const PUBLIC_SUPABASE_URL =
-  process.env.VITE_SUPABASE_URL ||
+  process.env["VITE_SUPABASE_URL"] ||
   "https://c--bf2d016a-4949-4243-a5cc-c9149b8b72cd-prod.lovable.cloud";
 const PUBLIC_SUPABASE_PUBLISHABLE_KEY =
-  process.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  process.env["VITE_SUPABASE_PUBLISHABLE_KEY"] ||
   "sb_publishable_zT3C2IGBadA6zC1Df3XdyQ_9uPbInJy";
 const PUBLIC_SUPABASE_PROJECT_ID =
-  process.env.VITE_SUPABASE_PROJECT_ID || "tqqapezkdjejvzibswom";
+  process.env["VITE_SUPABASE_PROJECT_ID"] || "tqqapezkdjejvzibswom";
 
 export default defineConfig({
   tanstackStart: {
