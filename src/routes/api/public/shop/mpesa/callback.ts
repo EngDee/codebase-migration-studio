@@ -17,12 +17,20 @@ export const Route = createFileRoute("/api/public/shop/mpesa/callback")({
       const confirmed = await queryStkResult(parsed.checkoutRequestId);
       if (confirmed !== parsed.resultCode) return new Response(null, { status: 409 });
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const { data: order, error } = await supabaseAdmin.from("shop_orders").select("*").eq("checkout_request_id", parsed.checkoutRequestId).maybeSingle();
+      const { data: memberOrder, error } = await supabaseAdmin.from("shop_orders").select("*").eq("checkout_request_id", parsed.checkoutRequestId).maybeSingle();
       if (error) throw error;
+      let table: "shop_orders" | "guest_shop_orders" = "shop_orders";
+      let order = memberOrder;
+      if (!order) {
+        const guest = await supabaseAdmin.from("guest_shop_orders").select("*").eq("checkout_request_id", parsed.checkoutRequestId).maybeSingle();
+        if (guest.error) throw guest.error;
+        order = guest.data;
+        table = "guest_shop_orders";
+      }
       if (!order || order.merchant_request_id !== parsed.merchantRequestId || order.payment_environment !== "sandbox") return new Response(null, { status: 404 });
       if (parsed.success && (!parsed.mpesaReceiptNumber || !order.phone || !order.amount_kes || !callbackMatchesPayment(parsed, { ...order, phone: order.phone, amount_kes: order.amount_kes }))) return new Response(null, { status: 409 });
       if (order.status !== "pending") return Response.json({ ResultCode: 0, ResultDesc: "Accepted" });
-      const { error: updateError } = await supabaseAdmin.from("shop_orders").update({ status: parsed.success ? "paid" : "failed", mpesa_receipt: parsed.mpesaReceiptNumber ?? null, paid_at: parsed.success ? new Date().toISOString() : null }).eq("id", order.id).eq("status", "pending");
+      const { error: updateError } = await supabaseAdmin.from(table).update({ status: parsed.success ? "paid" : "failed", mpesa_receipt: parsed.mpesaReceiptNumber ?? null, paid_at: parsed.success ? new Date().toISOString() : null }).eq("id", order.id).eq("status", "pending");
       if (updateError) throw updateError;
       return Response.json({ ResultCode: 0, ResultDesc: "Accepted" });
     } catch { return Response.json({ error: "Payment verification unavailable" }, { status: 503 }); }
