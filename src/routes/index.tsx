@@ -8,6 +8,7 @@ import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 
 import ccakLogo from "@/assets/ccak-logo.png.asset.json";
 import { PRODUCTS, kes, type CartItem } from "@/lib/shop/catalog";
 import { CartLink, useShopCart } from "@/components/ShopCart";
+import { useAccount } from "@/hooks/use-account";
 
 const TITLE = "CCAK — Coffee Champions Association of Kenya";
 const DESC =
@@ -142,6 +143,7 @@ type ModalKind = keyof typeof MODAL_COPY;
 const CHERRY_COLORS = ["#2E7D32", "#C9A227", "#8B4513"];
 
 function Index() {
+  const { data: account } = useAccount();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [modal, setModal] = useState<ModalKind | null>(null);
@@ -222,8 +224,7 @@ function Index() {
               {NAV.map(([h, l]) => <a key={h} href={h}>{l}</a>)}
             </div>
             <div className="nav-cta">
-              <Link to="/auth" className="btn btn-outline btn-compact">Member login</Link>
-              <Button asChild className="btn btn-forest btn-compact"><Link to="/auth" search={{ mode: "signup" }}>Join CCAK</Link></Button>
+              {account ? <Button asChild className="btn btn-forest btn-compact"><Link to="/membership">My membership</Link></Button> : <><Link to="/auth" className="btn btn-outline btn-compact">Member login</Link><Button asChild className="btn btn-forest btn-compact"><Link to="/auth" search={{ mode: "signup" }}>Join CCAK</Link></Button></>}
             </div>
             <button
               className="nav-toggle"
@@ -238,8 +239,7 @@ function Index() {
           <div className={`mobile-menu${menuOpen ? " open" : ""}`} id="mobileMenu">
             {NAV.map(([h, l]) => <a key={h} href={h} onClick={() => setMenuOpen(false)}>{l}</a>)}
             <div className="mobile-cta">
-              <Button asChild variant="ghost" className="btn btn-ghost"><Link to="/auth">Member login</Link></Button>
-              <Button asChild className="btn btn-forest"><Link to="/auth" search={{ mode: "signup" }}>Join CCAK</Link></Button>
+              {account ? <Button asChild className="btn btn-forest"><Link to="/membership">My membership</Link></Button> : <><Button asChild variant="ghost" className="btn btn-ghost"><Link to="/auth">Member login</Link></Button><Button asChild className="btn btn-forest"><Link to="/auth" search={{ mode: "signup" }}>Join CCAK</Link></Button></>}
             </div>
           </div>
         </div>

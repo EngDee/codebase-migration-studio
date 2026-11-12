@@ -1,5 +1,10 @@
 # CCAK backend activation
 
+## Account reliability and production payments
+- [ ] Repair public confirmation redirects, error handling and shared session updates; verify login/signup on preview and published website.
+- [ ] Replace sandbox-only shop guards with explicit production configuration and environment-matched confirmations, preserving historical test receipts.
+- [ ] Activate and verify real STK payments: waiting for Safaricom-approved production credentials, account transaction type and confirmed membership contribution fee; do not charge during diagnostics.
+
 ## Guest checkout
 - [x] Fix guest callback settlement with shared Safaricom verification and regression coverage for paid, failed, duplicate and rejected confirmations.
 - [ ] Allow account-free checkout with private guest order status, receipts, payment requests and purchased downloads.
