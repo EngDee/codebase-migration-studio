@@ -29,7 +29,8 @@ export function priceCart(input: unknown) {
   return { items, subtotal: items.reduce((sum, item) => sum + item.unit_price_kes * item.quantity, 0), needsShipping: items.some((item) => item.physical) };
 }
 
-export function requireShopTestMode(mode: string | undefined) {
-  if (mode && mode !== "sandbox") throw new Error("Shop payments are test-only. Production payments are blocked.");
+export function requireShopPaymentMode(mode: string | undefined): "production" | "sandbox" {
+  if (mode !== "production" && mode !== "sandbox") throw new Error("M-Pesa is awaiting activation. Please contact CCAK before paying.");
+  return mode;
 }
 export const kes = (amount: number) => `KES ${amount.toLocaleString("en-KE")}`;

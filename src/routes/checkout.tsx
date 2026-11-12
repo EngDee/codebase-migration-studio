@@ -12,7 +12,7 @@ import { createGuestOrder } from "@/lib/shop/guest.functions";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({ meta: [
-    { title: "Harvest checkout — CCAK" }, { name: "description", content: "Your CCAK coffee and merchandise order, Fargo delivery quote and M-Pesa test payment." },
+    { title: "Harvest checkout — CCAK" }, { name: "description", content: "Your CCAK coffee and merchandise order, Fargo delivery quote and M-Pesa payment." },
     { property: "og:title", content: "Harvest checkout — CCAK" }, { property: "og:description", content: "Coffee, merchandise and training from the Coffee Champions Association of Kenya." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
   ] }), component: Checkout,
@@ -49,7 +49,7 @@ function Checkout() {
       const orderInput = { items: cart.items, ...(shipping?.success ? { shipping: shipping.data } : {}), request_key: requestKey };
       const saved = signedIn ? await createOrder({ data: orderInput }) : await createGuest({ data: { ...orderInput, customer_name: String(data["customer_name"] ?? ""), customer_email: String(data["customer_email"] ?? "") } });
       cart.clear(); setRequestKey(crypto.randomUUID());
-      setMessage(needsShipping ? "Thank you for supporting CCAK! Your order is saved. We will confirm the Fargo delivery quote before requesting payment." : "Thank you for supporting CCAK! Your order is saved and ready for an M-Pesa test payment.");
+      setMessage(needsShipping ? "Thank you for supporting CCAK! Your order is saved. We will confirm the Fargo delivery quote before requesting payment." : "Thank you for supporting CCAK! Your order is saved and ready for an M-Pesa payment.");
       if (signedIn) { await load(); await navigate({ to: "/orders/$orderId", params: { orderId: saved.id } }); }
       else { await navigate({ to: "/guest-order/$orderId", params: { orderId: saved.id } }); }
     } catch (e) { setError(e instanceof Error ? e.message : "Order was not saved."); }
@@ -65,7 +65,7 @@ function Checkout() {
   return <div className="portal shop-page">
     <header className="portal-top"><Link to="/" className="logo"><img className="logo-mark" src={ccakLogo.url} alt="CCAK logo" /><span className="logo-text"><strong>Coffee Champions</strong><small>Association of Kenya</small></span></Link><Button asChild variant="ghost" className="btn btn-ghost"><Link to="/">Continue shopping</Link></Button></header>
     <main className="portal-main">
-      <h1>Harvest checkout</h1><p className="shop-test-note">M-Pesa test mode · No real money charged · Orders are not dispatched during testing</p>
+      <h1>Harvest checkout</h1>
       {message && <p className="portal-msg" role="status">{message}</p>}{error && <p className="portal-msg" role="alert">{error}</p>}
       {rows.length > 0 ? <div className="shop-checkout-grid">
         <section aria-labelledby="cart-title"><h2 id="cart-title">Your cart</h2>{rows.map((row) => <div className="shop-cart-row" key={row.id}>
@@ -79,13 +79,13 @@ function Checkout() {
         </form></section>
       </div> : <p className="shop-empty">Your cart is empty. <Link to="/">Browse the harvest shop</Link></p>}
       {signedIn && <section className="shop-orders"><div className="shop-orders-heading"><h2>Your saved orders</h2><Button asChild variant="outline"><Link to="/orders">My orders</Link></Button><Button variant="outline" disabled={busy} onClick={load}><RefreshCw />Refresh status</Button></div>
-        {orders.length === 0 && <p>No orders yet.</p>}{orders.map((order) => <article className="shop-order" key={order.id}><h3>Order {order.id.slice(0, 8).toUpperCase()}</h3><p>Status: {order.status === "paid" ? "Test payment confirmed" : order.status.replace(/_/g, " ")}</p><p>Items: {kes(order.subtotal_kes)} · Delivery: {order.shipping_kes === null ? "Awaiting Fargo quote" : kes(order.shipping_kes)}</p><strong>Total: {order.amount_kes === null ? "Awaiting quote" : kes(order.amount_kes)}</strong>
+        {orders.length === 0 && <p>No orders yet.</p>}{orders.map((order) => <article className="shop-order" key={order.id}><h3>Order {order.id.slice(0, 8).toUpperCase()}</h3><p>Status: {order.payment_environment === "sandbox" ? "Test · " : ""}{order.status.replace(/_/g, " ")}</p><p>Items: {kes(order.subtotal_kes)} · Delivery: {order.shipping_kes === null ? "Awaiting Fargo quote" : kes(order.shipping_kes)}</p><strong>Total: {order.amount_kes === null ? "Awaiting quote" : kes(order.amount_kes)}</strong>
           <Button asChild variant="outline"><Link to="/orders/$orderId" params={{ orderId: order.id }}>Order details & receipt</Link></Button>
           {order.shipping_quote_reference && <p>Fargo quote: {order.shipping_quote_reference}</p>}
-          {order.status === "ready" && <form className="portal-form shop-payment" onSubmit={(event) => startPayment(event, order.id)}><label>M-Pesa test phone<input name="phone" type="tel" placeholder="07XX XXX XXX" required minLength={9} maxLength={20} /></label><Button type="submit" className="btn btn-forest" disabled={busy}>Request test M-Pesa payment · {kes(order.amount_kes ?? 0)}</Button></form>}
+          {order.status === "ready" && <form className="portal-form shop-payment" onSubmit={(event) => startPayment(event, order.id)}><label>M-Pesa phone<input name="phone" type="tel" placeholder="07XX XXX XXX" required minLength={9} maxLength={20} /></label><Button type="submit" className="btn btn-forest" disabled={busy}>{order.payment_environment === "sandbox" ? "Request test M-Pesa payment" : "Pay with M-Pesa"} · {kes(order.amount_kes ?? 0)}</Button></form>}
           {order.status === "pending" && <p>Waiting for Safaricom confirmation. Refresh status to check the result.</p>}
-          {order.status === "paid" && <p>Thank you for supporting our coffee community and the CCAK mission! Your test payment is confirmed; no dispatch will take place.</p>}
-          {order.status === "failed" && <p>Test payment failed. No real money was charged. Contact CCAK before placing a replacement order.</p>}
+          {order.status === "paid" && <p>{order.payment_environment === "sandbox" ? "Test payment confirmed; no dispatch will take place." : "Thank you for supporting our coffee community and the CCAK mission! Your payment is confirmed."}</p>}
+          {order.status === "failed" && <p>Payment was not confirmed. Contact CCAK before placing a replacement order.</p>}
         </article>)}
       </section>}
     </main></div>;

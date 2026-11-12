@@ -9,6 +9,7 @@ import { normaliseMpesaPhone } from "./rules";
 export { normaliseMpesaPhone } from "./rules";
 
 export function requireDarajaConfiguration() {
+  baseUrl();
   for (const name of ["DARAJA_CONSUMER_KEY", "DARAJA_CONSUMER_SECRET", "DARAJA_SHORTCODE", "DARAJA_PASSKEY"]) {
     if (!process.env[name]) throw new Error("M-Pesa payments are not activated yet. Please contact CCAK.");
   }
@@ -18,7 +19,9 @@ const SANDBOX_BASE = "https://sandbox.safaricom.co.ke";
 const PROD_BASE = "https://api.safaricom.co.ke";
 
 function baseUrl() {
-  return process.env["DARAJA_ENV"] === "production" ? PROD_BASE : SANDBOX_BASE;
+  const mode = process.env["DARAJA_ENV"];
+  if (mode !== "production" && mode !== "sandbox") throw new Error("M-Pesa is awaiting activation. Please contact CCAK before paying.");
+  return mode === "production" ? PROD_BASE : SANDBOX_BASE;
 }
 
 function requireEnv(name: string): string {
@@ -28,10 +31,11 @@ function requireEnv(name: string): string {
 }
 
 /** OAuth access token (cached briefly in memory). */
-let tokenCache: { token: string; expiresAt: number } | null = null;
+let tokenCache: { token: string; expiresAt: number; base: string } | null = null;
 
 export async function getDarajaAccessToken(): Promise<string> {
-  if (tokenCache && Date.now() < tokenCache.expiresAt - 30_000) {
+  const base = baseUrl();
+  if (tokenCache && tokenCache.base === base && Date.now() < tokenCache.expiresAt - 30_000) {
     return tokenCache.token;
   }
   const key = requireEnv("DARAJA_CONSUMER_KEY");
@@ -48,16 +52,17 @@ export async function getDarajaAccessToken(): Promise<string> {
   tokenCache = {
     token: data.access_token,
     expiresAt: Date.now() + Number(data.expires_in) * 1000,
+    base,
   };
   return data.access_token;
 }
 
 function timestamp(): string {
-  const d = new Date();
+  const d = new Date(Date.now() + 3 * 60 * 60 * 1000);
   const p = (n: number) => String(n).padStart(2, "0");
   return (
-    `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}` +
-    `${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}`
+    `${d.getUTCFullYear()}${p(d.getUTCMonth() + 1)}${p(d.getUTCDate())}` +
+    `${p(d.getUTCHours())}${p(d.getUTCMinutes())}${p(d.getUTCSeconds())}`
   );
 }
 
@@ -82,6 +87,11 @@ export type StkPushResult = {
 };
 
 export async function initiateStkPush(input: StkPushInput): Promise<StkPushResult> {
+  requireDarajaConfiguration();
+  const transactionType = process.env["DARAJA_TRANSACTION_TYPE"];
+  if (process.env["DARAJA_ENV"] === "production" && transactionType !== "CustomerPayBillOnline" && transactionType !== "CustomerBuyGoodsOnline") {
+    throw new Error("CCAK must confirm its M-Pesa PayBill or Till configuration before accepting payments.");
+  }
   const shortcode = requireEnv("DARAJA_SHORTCODE");
   const passkey = requireEnv("DARAJA_PASSKEY");
   const phone = normaliseMpesaPhone(input.phone);
@@ -93,7 +103,7 @@ export async function initiateStkPush(input: StkPushInput): Promise<StkPushResul
     BusinessShortCode: shortcode,
     Password: stkPassword(shortcode, passkey, ts),
     Timestamp: ts,
-    TransactionType: "CustomerPayBillOnline",
+    TransactionType: transactionType || "CustomerPayBillOnline",
     Amount: amount,
     PartyA: phone,
     PartyB: shortcode,

@@ -2,13 +2,14 @@ import { createServerFn } from "@tanstack/react-start";
 import { setResponseHeader } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { checkoutSchema, priceCart, requireShopTestMode } from "./catalog";
+import { checkoutSchema, priceCart, requireShopPaymentMode } from "./catalog";
 import { initiateStkPush, normaliseMpesaPhone, requireDarajaConfiguration } from "@/lib/payments/daraja";
 
 export const createShopOrder = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => checkoutSchema.parse(data))
   .handler(async ({ data, context }) => {
+    const environment = requireShopPaymentMode(process.env["DARAJA_ENV"]);
     const priced = priceCart(data.items);
     if (priced.needsShipping && !data.shipping) throw new Error("Delivery address is required.");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -21,6 +22,7 @@ export const createShopOrder = createServerFn({ method: "POST" })
       shipping_kes: priced.needsShipping ? null : 0,
       amount_kes: priced.needsShipping ? null : priced.subtotal,
       status: priced.needsShipping ? "awaiting_quote" : "ready",
+      payment_environment: environment,
     }).select("id").single();
     if (error || !order) throw new Error("Order was not saved. Please try again.");
     return order;
@@ -39,11 +41,12 @@ export const payShopOrder = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => z.object({ order_id: z.string().uuid(), phone: z.string().min(9).max(20) }).parse(data))
   .handler(async ({ data, context }) => {
-    requireShopTestMode(process.env["DARAJA_ENV"]);
+    const environment = requireShopPaymentMode(process.env["DARAJA_ENV"]);
     requireDarajaConfiguration();
     const phone = normaliseMpesaPhone(data.phone);
     const { data: order, error } = await context.supabase.from("shop_orders").select("*").eq("id", data.order_id).eq("user_id", context.userId).single();
     if (error || !order || order.status !== "ready" || !order.amount_kes) throw new Error("Order must have a confirmed total before payment.");
+    if (order.payment_environment !== environment) throw new Error("This order belongs to an earlier payment environment. Please contact CCAK before paying.");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: claimed, error: claimError } = await supabaseAdmin.from("shop_orders").update({ status: "pending", phone }).eq("id", order.id).eq("status", "ready").select("id").maybeSingle();
     if (claimError || !claimed) throw new Error("A payment request is already in progress.");
@@ -52,10 +55,10 @@ export const payShopOrder = createServerFn({ method: "POST" })
       const stk = await initiateStkPush({ amount: order.amount_kes, phone, accountReference: `SHOP${order.id.replace(/-/g, "").slice(0, 8)}`, transactionDesc: "CCAK shop", callbackUrl: `${origin.replace(/\/+$/, "")}/api/public/shop/mpesa/callback` });
       const { error: attachError } = await supabaseAdmin.from("shop_orders").update({ checkout_request_id: stk.checkoutRequestId, merchant_request_id: stk.merchantRequestId }).eq("id", order.id);
       if (attachError) throw new Error("Payment tracking failed. Contact CCAK before trying again.");
-      return { message: "Test payment request accepted by Safaricom. No real money is charged." };
+      return { message: environment === "production" ? "Safaricom accepted your payment request. Enter your M-Pesa PIN on your phone to pay the order total." : "Test payment request accepted by Safaricom. No real money is charged." };
     } catch {
       await supabaseAdmin.from("shop_orders").update({ status: "failed" }).eq("id", order.id).eq("status", "pending");
-      throw new Error("Safaricom could not complete the test payment request. Check the sandbox credentials or contact CCAK.");
+      throw new Error("Safaricom could not complete the payment request. Contact CCAK before trying again.");
     }
   });
 
