@@ -1,12 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { guestCheckoutSchema } from "./guest-rules";
-import { priceCart, requireShopTestMode } from "./catalog";
+import { priceCart, requireShopPaymentMode } from "./catalog";
 import { guestSession } from "./guest-session.server";
 import { initiateStkPush, normaliseMpesaPhone, requireDarajaConfiguration } from "@/lib/payments/daraja";
 import { orderItems, canDownloadMaterial } from "./order-rules";
 
 export const createGuestOrder = createServerFn({ method: "POST" }).inputValidator((input: unknown) => guestCheckoutSchema.parse(input)).handler(async ({ data }) => {
+  const environment = requireShopPaymentMode(process.env["DARAJA_ENV"]);
   const hash = await guestSession(true);
   const priced = priceCart(data.items);
   if (priced.needsShipping && !data.shipping) throw new Error("Delivery address is required.");
@@ -16,7 +17,7 @@ export const createGuestOrder = createServerFn({ method: "POST" }).inputValidato
   if (previous.data) return previous.data;
   const recent = await supabaseAdmin.from("guest_shop_orders").select("id", { count: "exact", head: true }).eq("guest_session_hash", hash).gte("created_at", new Date(Date.now() - 3600000).toISOString());
   if (recent.error || (recent.count ?? 0) >= 10) throw new Error("Please wait before placing more orders, or contact CCAK.");
-  const result = await supabaseAdmin.from("guest_shop_orders").insert({ guest_session_hash: hash, request_key: data.request_key, customer_name: data.customer_name, customer_email: data.customer_email, items: priced.items, subtotal_kes: priced.subtotal, shipping_address: data.shipping ?? null, shipping_kes: priced.needsShipping ? null : 0, amount_kes: priced.needsShipping ? null : priced.subtotal, status: priced.needsShipping ? "awaiting_quote" : "ready" }).select("id").single();
+  const result = await supabaseAdmin.from("guest_shop_orders").insert({ payment_environment: environment, guest_session_hash: hash, request_key: data.request_key, customer_name: data.customer_name, customer_email: data.customer_email, items: priced.items, subtotal_kes: priced.subtotal, shipping_address: data.shipping ?? null, shipping_kes: priced.needsShipping ? null : 0, amount_kes: priced.needsShipping ? null : priced.subtotal, status: priced.needsShipping ? "awaiting_quote" : "ready" }).select("id").single();
   if (result.error || !result.data) throw new Error("Order was not saved. Please try again.");
   return result.data;
 });
@@ -33,12 +34,13 @@ export const getGuestOrder = createServerFn({ method: "POST" }).inputValidator((
 });
 export const payGuestOrder = createServerFn({ method: "POST" }).inputValidator((input: unknown) => z.object({ order_id: z.string().uuid(), phone: z.string().min(9).max(20) }).parse(input)).handler(async ({ data }) => {
   const hash = await guestSession();
-  requireShopTestMode(process.env["DARAJA_ENV"]); requireDarajaConfiguration();
+  const environment = requireShopPaymentMode(process.env["DARAJA_ENV"]); requireDarajaConfiguration();
   const phone = normaliseMpesaPhone(data.phone);
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const result = await supabaseAdmin.from("guest_shop_orders").select("*").eq("id", data.order_id).eq("guest_session_hash", hash).maybeSingle();
   const order = result.data;
   if (result.error || !order || order.status !== "ready" || !order.amount_kes) throw new Error("A confirmed order total is required before payment.");
+  if (order.payment_environment !== environment) throw new Error("This order belongs to an earlier payment environment. Please contact CCAK before paying.");
   const claimed = await supabaseAdmin.from("guest_shop_orders").update({ status: "pending", phone }).eq("id", order.id).eq("guest_session_hash", hash).eq("status", "ready").select("id").maybeSingle();
   if (claimed.error || !claimed.data) throw new Error("Payment is already in progress.");
   try {
@@ -46,8 +48,8 @@ export const payGuestOrder = createServerFn({ method: "POST" }).inputValidator((
     const stk = await initiateStkPush({ amount: order.amount_kes, phone, accountReference: `GUEST${order.id.replace(/-/g, "").slice(0, 7)}`, transactionDesc: "CCAK shop", callbackUrl: `${origin.replace(/\/+$/, "")}/api/public/shop/mpesa/callback` });
     const attached = await supabaseAdmin.from("guest_shop_orders").update({ checkout_request_id: stk.checkoutRequestId, merchant_request_id: stk.merchantRequestId }).eq("id", order.id).eq("status", "pending");
     if (attached.error) throw new Error("Payment tracking failed.");
-    return { message: "Safaricom accepted the test payment request. No real money is charged." };
-  } catch { await supabaseAdmin.from("guest_shop_orders").update({ status: "failed" }).eq("id", order.id).eq("status", "pending"); throw new Error("Test payment could not be started. Contact CCAK before trying again."); }
+    return { message: environment === "production" ? "Safaricom accepted your payment request. Enter your M-Pesa PIN on your phone to pay the order total." : "Safaricom accepted the test payment request. No real money is charged." };
+  } catch { await supabaseAdmin.from("guest_shop_orders").update({ status: "failed" }).eq("id", order.id).eq("status", "pending"); throw new Error("Payment could not be started. Contact CCAK before trying again."); }
 });
 export const prepareGuestMaterial = createServerFn({ method: "POST" }).inputValidator((input: unknown) => z.object({ order_id: z.string().uuid(), material_id: z.string().uuid() }).parse(input)).handler(async ({ data }) => {
   const hash = await guestSession();

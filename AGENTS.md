@@ -25,9 +25,12 @@
 ## Contributions
 - Customer order details are owner-scoped; private study files require confirmed production payment in both server checks and storage RLS, so sandbox transactions never fulfil real purchases. Receipt printing uses immutable order amounts and labels test/unpaid summaries explicitly.
 - National staff publish private study PDFs and update production-paid deliveries through audited authenticated RPCs; customer-visible delivery status comes from these records rather than inferred payment progress.
-- Shop orders use server-priced immutable item snapshots and separate test-only payment records; physical-goods totals require an audited, national-admin-confirmed Fargo quote before STK requests, preventing invented delivery fees or membership entitlement changes.
+- Shop orders use server-priced immutable item snapshots and an explicit configured payment environment; callbacks must match that environment and historical sandbox orders must never be promoted to live payments. Physical-goods totals require an audited, national-admin-confirmed Fargo quote before STK requests.
 - Sandbox diagnostics are national-admin-only and use only a fixed sandbox OAuth GET with redirects blocked; never issue STK requests or write payment records, so checks cannot charge members.
 - Keep contribution writes server-only after authenticated membership checks; members receive read-only access so payment status cannot be forged.
 - Use a public TanStack callback route and independently query Daraja before updating a matched payment; callbacks alone do not establish payment authenticity.
 - Resolve shop callbacks against member orders first and guest orders only when no member order exists; apply identical verification and pending-only updates to the matched table so account-free payments can settle safely.
 - Read configurable card signatory details inside authenticated server handlers, never from browser process.env; external KYC rejection must not fall back to a local success.
+
+## Account reliability
+- Keep one root identity-transition subscriber and a shared account query; send confirmation links to the public auth page and handle every auth request failure inside the form so connection errors cannot strand users or imply a successful submission.

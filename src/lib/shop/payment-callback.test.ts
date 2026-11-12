@@ -112,6 +112,23 @@ describe("shop payment confirmation for guests and members", () => {
     expect((await confirm()).status).toBe(404);
     expect(guest.status).toBe("pending");
   });
+  it("settles a verified production guest payment", async () => {
+    process.env["DARAJA_ENV"] = "production";
+    guest = { ...pendingOrder, payment_environment: "production" };
+    expect((await confirm()).status).toBe(200);
+    expect(guest.status).toBe("paid");
+  });
+  it("settles a verified production member payment", async () => {
+    process.env["DARAJA_ENV"] = "production";
+    member = { ...pendingOrder, payment_environment: "production" }; guest = null;
+    expect((await confirm()).status).toBe(200);
+    expect(member.status).toBe("paid");
+  });
+  it("never promotes historical sandbox payments through production", async () => {
+    process.env["DARAJA_ENV"] = "production";
+    expect((await confirm()).status).toBe(404);
+    expect(guest?.status).toBe("pending");
+  });
   it("returns 404 for an unknown payment", async () => {
     guest = null;
     expect((await confirm()).status).toBe(404);
