@@ -4,10 +4,13 @@ import { canRunSandboxCheck, checkDarajaSandbox } from "./sandbox-check";
 const config = { DARAJA_ENV: "sandbox", DARAJA_CONSUMER_KEY: "test-key", DARAJA_CONSUMER_SECRET: "test-secret", DARAJA_SHORTCODE: "174379", DARAJA_PASSKEY: "test-passkey" };
 
 describe("no-charge Daraja sandbox diagnostic", () => {
-  it("blocks production before any network request", async () => {
-    const request = vi.fn();
-    expect((await checkDarajaSandbox({ ...config, DARAJA_ENV: "production" }, request)).ok).toBe(false);
-    expect(request).not.toHaveBeenCalled();
+  it("tests sandbox OAuth even when the site is in production mode", async () => {
+    const request = vi.fn().mockResolvedValue(Response.json({ access_token: "test-token" }));
+    const result = await checkDarajaSandbox({ ...config, DARAJA_ENV: "production" }, request);
+    expect(result.ok).toBe(true);
+    expect(request).toHaveBeenCalledTimes(1);
+    expect(request.mock.calls[0]?.[0]).toBe("https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials");
+    expect(JSON.stringify(result)).not.toContain("test-token");
   });
   it("blocks unknown environments before any network request", async () => {
     const request = vi.fn();

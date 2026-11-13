@@ -17,11 +17,16 @@ export async function checkDarajaSandbox(
   const finish = (): SandboxCheckResult => ({
     ok: checks.every((check) => check.ok), checks, checkedAt: new Date().toISOString(),
   });
-  const sandbox = !config["DARAJA_ENV"] || config["DARAJA_ENV"] === "sandbox";
-  checks.push({ name: "Sandbox mode", ok: sandbox, message: sandbox
-    ? "Sandbox mode confirmed."
-    : "Check blocked: select sandbox mode before testing. Production is never contacted." });
-  if (!sandbox) return finish();
+  // This diagnostic only ever calls Safaricom's sandbox OAuth URL, so it is safe
+  // regardless of the site's payment mode; real payments keep using DARAJA_ENV.
+  const env = config["DARAJA_ENV"];
+  const envKnown = !env || env === "sandbox" || env === "production";
+  checks.push({ name: "Sandbox mode", ok: envKnown, message: envKnown
+    ? env === "production"
+      ? "Testing Safaricom's sandbox only; real payments stay in live mode."
+      : "Sandbox mode confirmed."
+    : "Check blocked: DARAJA_ENV must be sandbox or production before testing." });
+  if (!envKnown) return finish();
 
   for (const [name, label] of [
     ["DARAJA_CONSUMER_KEY", "Consumer key"],
