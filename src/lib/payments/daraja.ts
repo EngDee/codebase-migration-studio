@@ -106,7 +106,7 @@ export async function initiateStkPush(input: StkPushInput): Promise<StkPushResul
     TransactionType: transactionType || "CustomerPayBillOnline",
     Amount: amount,
     PartyA: phone,
-    PartyB: shortcode,
+    PartyB: process.env["DARAJA_PARTY_B"] || shortcode,
     PhoneNumber: phone,
     CallBackURL: input.callbackUrl,
     AccountReference: input.accountReference.slice(0, 12),
