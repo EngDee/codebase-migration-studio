@@ -8,6 +8,7 @@ import { getMyRoles, hasStaffRole, MEMBER_TYPES, photoUrl } from "@/lib/members"
 import { getAdministration, reviewApplication } from "@/lib/membership.functions";
 import { Button } from "@/components/ui/button";
 import { DarajaSandboxCheck } from "@/components/DarajaSandboxCheck";
+import { DarajaProductionCheck } from "@/components/DarajaProductionCheck";
 import { canRunSandboxCheck } from "@/lib/payments/sandbox-check";
 import { ShopDeliveryQuotes } from "@/components/ShopDeliveryQuotes";
 
@@ -80,7 +81,7 @@ function Admin() {
         {canTestPayments && <Button variant="ghost" className={tab === "shipping" ? "on" : ""} onClick={() => setTab("shipping")}>Delivery quotes</Button>}
       </div>
 
-      {tab === "payments" && canTestPayments && <DarajaSandboxCheck />}
+      {tab === "payments" && canTestPayments && <><DarajaProductionCheck /><DarajaSandboxCheck /></>}
       {tab === "shipping" && canTestPayments && <ShopDeliveryQuotes />}
 
       {tab === "members" && (
