@@ -28,6 +28,12 @@ import { CartLink } from "@ws-78a0e5377e1b2f44578c/bf2d016a-4949-4243-a5cc-c9149
 import { Constants } from "@ws-78a0e5377e1b2f44578c/bf2d016a-4949-4243-a5cc-c9149b8b72cd"
 ```
 
+### DarajaProductionCheck
+
+```ts
+import { DarajaProductionCheck } from "@ws-78a0e5377e1b2f44578c/bf2d016a-4949-4243-a5cc-c9149b8b72cd"
+```
+
 ### DarajaSandboxCheck
 
 ```ts
