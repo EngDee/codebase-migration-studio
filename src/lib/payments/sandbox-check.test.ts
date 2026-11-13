@@ -28,7 +28,7 @@ describe("no-charge Daraja sandbox diagnostic", () => {
     expect(request).toHaveBeenCalledTimes(1);
     expect(request.mock.calls[0]?.[0]).toBe("https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials");
     expect(request.mock.calls[0]?.[1].method).toBe("GET");
-    expect(request.mock.calls[0]?.[1].redirect).toBe("error");
+    expect(request.mock.calls[0]?.[1].redirect).toBe("manual");
     expect(JSON.stringify(result)).not.toContain("test-token");
     expect(JSON.stringify(result)).not.toContain("test-secret");
   });
