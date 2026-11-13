@@ -43,7 +43,7 @@ export async function getDarajaAccessToken(): Promise<string> {
   const auth = Buffer.from(`${key}:${secret}`).toString("base64");
   const res = await fetch(
     `${baseUrl()}/oauth/v1/generate?grant_type=client_credentials`,
-    { headers: { Authorization: `Basic ${auth}` }, redirect: "error", signal: AbortSignal.timeout(15000) },
+    { headers: { Authorization: `Basic ${auth}` }, redirect: "manual", signal: AbortSignal.timeout(15000) },
   );
   if (!res.ok) {
     throw new Error("Safaricom authentication failed. Check the payment credentials.");
@@ -120,7 +120,7 @@ export async function initiateStkPush(input: StkPushInput): Promise<StkPushResul
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
-    redirect: "error",
+    redirect: "manual",
     signal: AbortSignal.timeout(15000),
   });
 
@@ -185,7 +185,7 @@ export async function queryStkResult(checkoutRequestId: string): Promise<number>
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     body: JSON.stringify({ BusinessShortCode: shortcode, Password: stkPassword(shortcode, requireEnv("DARAJA_PASSKEY"), ts), Timestamp: ts, CheckoutRequestID: checkoutRequestId }),
     signal: AbortSignal.timeout(15000),
-    redirect: "error",
+    redirect: "manual",
   });
   if (!res.ok) throw new Error("Payment confirmation is temporarily unavailable.");
   return z.object({ ResultCode: z.coerce.number().int() }).parse(await res.json()).ResultCode;

@@ -41,7 +41,7 @@ export async function checkDarajaProduction(
   if (credsOk) {
     try {
       const res = await request("https://api.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials", {
-        method: "GET", redirect: "error", signal: AbortSignal.timeout(15000),
+        method: "GET", redirect: "manual", signal: AbortSignal.timeout(15000),
         headers: { Authorization: `Basic ${btoa(`${config["DARAJA_CONSUMER_KEY"]}:${config["DARAJA_CONSUMER_SECRET"]}`)}` },
       });
       const body: unknown = res.ok ? await res.json() : null;

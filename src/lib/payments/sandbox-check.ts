@@ -40,7 +40,7 @@ export async function checkDarajaSandbox(
       method: "GET",
       headers: { Authorization: `Basic ${btoa(`${config["DARAJA_CONSUMER_KEY"]}:${config["DARAJA_CONSUMER_SECRET"]}`)}` },
       signal: AbortSignal.timeout(15000),
-      redirect: "error",
+      redirect: "manual",
     });
     if (!response.ok) {
       checks.push({ name: "Safaricom sandbox access", ok: false, message: response.status === 401 || response.status === 403
