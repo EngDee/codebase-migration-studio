@@ -1,5 +1,12 @@
 # CCAK backend activation
 
+## Sequential checkout implementation
+- [ ] Task 1 — Automatic verified Fargo shipping estimates and totals: blocked pending the approved courier rate sheet or contracted rate API documentation/access; do not use the previously suggested illustrative fees as real charges. Verify shipping calculations and saved totals before proceeding.
+- [ ] Task 2 — Direct checkout M-Pesa prompt for guest and member orders: start only after Task 1 is complete and verified; retain confirmed shipping totals and independently verified payment settlement. A real charge needs explicit authorisation.
+- [ ] Task 3 — Proforma invoices before payment and branded receipts after verified production payment, with printable/PDF output: start only after Task 2 is complete and verified; do not label these tax receipts without verified tax/eTIMS requirements.
+- [ ] Task 4 — Whole-site regression and desktop/mobile browser checks, including authentication and order access; report production and external-service checks separately.
+- Baseline verification for this request: all 12 existing test files / 66 tests passed; this does not verify live courier rates, real Safaricom payments, or published authentication.
+
 ## Account reliability and production payments
 - [ ] Repair public confirmation redirects, error handling and shared session updates; verify login/signup on preview and published website.
 - [ ] Replace sandbox-only shop guards with explicit production configuration and environment-matched confirmations, preserving historical test receipts.
