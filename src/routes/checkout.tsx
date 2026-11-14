@@ -9,6 +9,7 @@ import { createShopOrder, getShopOrders, payShopOrder } from "@/lib/shop/shop.fu
 import { supabase } from "@/integrations/supabase/client";
 import ccakLogo from "@/assets/ccak-logo.png.asset.json";
 import { createGuestOrder } from "@/lib/shop/guest.functions";
+import { STANDARD_PARCEL_FEE_KES } from "@/lib/shop/shipping";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({ meta: [
@@ -74,7 +75,7 @@ function Checkout() {
         </div>)}<dl className="shop-totals"><div><dt>Items subtotal</dt><dd>{kes(subtotal)}</dd></div><div><dt>Fargo delivery from Nairobi</dt><dd>{needsShipping ? "Quote required" : "Not applicable"}</dd></div><div><dt>Total</dt><dd>{needsShipping ? "Awaiting courier quote" : kes(subtotal)}</dd></div></dl></section>
         <section><h2>{needsShipping ? "Shipping address" : "Confirm order"}</h2><form onSubmit={submit} className="portal-form">
           {!signedIn && <><h3>Guest checkout</h3><label>Buyer full name<input name="customer_name" autoComplete="name" required minLength={2} maxLength={120} /></label><label>Email for your order<input name="customer_email" type="email" autoComplete="email" required maxLength={255} /></label></>}
-          {needsShipping && <>{[["full_name", "Recipient full name"], ["phone", "Delivery phone"], ["country", "Country"], ["city", "City / town"], ["address", "Street address / building"], ["postal_code", "Postal code (optional)"]].map(([name, label]) => <label key={name}>{label}<input name={name} required={name !== "postal_code"} maxLength={name === "address" ? 300 : 120} defaultValue={name === "country" ? "Kenya" : undefined} /></label>)}<p>Delivery charge will be confirmed using a Fargo Courier quote for your destination.</p></>}
+          {needsShipping && <>{[["full_name", "Recipient full name"], ["phone", "Delivery phone"], ["country", "Country"], ["city", "City / town"], ["address", "Street address / building"], ["postal_code", "Postal code (optional)"]].map(([name, label]) => <label key={name}>{label}<input name={name} required={name !== "postal_code"} maxLength={name === "address" ? 300 : 120} defaultValue={name === "country" ? "Kenya" : undefined} /></label>)}<p>CCAK standard parcel delivery: {kes(STANDARD_PARCEL_FEE_KES)} for parcels below 5 kg. Packed weight will be confirmed before payment. Parcels weighing 5 kg or more require a separate quote.</p></>}
           <Button className="btn btn-forest" type="submit" disabled={busy || !requestKey}><ShoppingBag />{busy ? "Saving…" : needsShipping ? "Save order & request delivery quote" : "Save order"}</Button>
         </form></section>
       </div> : <p className="shop-empty">Your cart is empty. <Link to="/">Browse the harvest shop</Link></p>}

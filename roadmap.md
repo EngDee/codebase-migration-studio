@@ -1,7 +1,7 @@
 # CCAK backend activation
 
 ## Sequential checkout implementation
-- [ ] Task 1 — Automatic verified Fargo shipping estimates and totals: blocked pending the approved courier rate sheet or contracted rate API documentation/access; do not use the previously suggested illustrative fees as real charges. Verify shipping calculations and saved totals before proceeding.
+- [ ] Task 1 — Owner-approved KES 350 standard fee strictly below 5 kg: implemented staff packed-weight verification and audited fee approval for guest/member orders. Tests and browser review pending; automatic checkout pricing still needs verified packed product weights. Exactly 5 kg and above retain confirmed quotes. No existing orders repriced.
 - [ ] Task 2 — Direct checkout M-Pesa prompt for guest and member orders: start only after Task 1 is complete and verified; retain confirmed shipping totals and independently verified payment settlement. A real charge needs explicit authorisation.
 - [ ] Task 3 — Proforma invoices before payment and branded receipts after verified production payment, with printable/PDF output: start only after Task 2 is complete and verified; do not label these tax receipts without verified tax/eTIMS requirements.
 - [ ] Task 4 — Whole-site regression and desktop/mobile browser checks, including authentication and order access; report production and external-service checks separately.
