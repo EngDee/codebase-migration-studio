@@ -86,6 +86,20 @@ import { ShopCartProvider } from "@ws-78a0e5377e1b2f44578c/bf2d016a-4949-4243-a5
 import { ShopDeliveryQuotes } from "@ws-78a0e5377e1b2f44578c/bf2d016a-4949-4243-a5cc-c9149b8b72cd"
 ```
 
+National administrators confirm packed weight and apply the CCAK standard parcel fee, or save a verified courier quote for other parcels. Handles both guest and member orders using audited database permissions.
+
+**Examples:**
+
+_Administrator delivery workspace_
+```tsx
+<ShopDeliveryQuotes aria-label="Delivery approvals" />
+```
+
+**Avoid:**
+
+- Do not treat shopper-entered or estimated product weights as verified packed weight.
+- Do not expose delivery approval actions to customers or use the standard fee for parcels weighing 5 kg or more.
+
 ### ShopFulfilment
 
 ```ts

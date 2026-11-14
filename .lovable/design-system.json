@@ -2,7 +2,7 @@
   "meta": {
     "name": "Codebase Migration Studio",
     "package": "@ws-78a0e5377e1b2f44578c/bf2d016a-4949-4243-a5cc-c9149b8b72cd",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "framework": "react",
     "css_framework": "tailwind",
     "starter_template": "custom_design_system_tailwind",
@@ -11,7 +11,7 @@
     ],
     "source_type": "local",
     "source_manifest": {
-      "#enrichment": "a8bb916f95a2288fae0626006deb056c2bf4c5b43e5d75e0947716022273ec28",
+      "#enrichment": "2b5aadba8c3aacae22bed06d5a2ea64f3fadc9f3885f727648c293a8c9cf3297",
       ".github/workflows/datadog-synthetics.yml": "6817a2e0e12fc2e1c13c18a2890b03e0",
       ".gitignore": "0ab7c993d1ffbfd04466e1b9cb099e1d",
       ".lovable/meta.yaml": "954a981e8847ec1692669dbb04ae9ae9",
@@ -21,7 +21,7 @@
       ".lovable/sources.yaml": "ee6247f6fe77fe1387244cd3c757e6a3",
       ".prettierignore": "7279a476f196a2da5f7edd18db568dc6",
       ".prettierrc": "185ef0234746ab738ac1ab6cec5e2bd9",
-      "AGENTS.md": "5f9871db46c90865fb4e0b856caff70e",
+      "AGENTS.md": "84cb4df40d4d035a542657acea29f528",
       "README.md": "31212012b02ea69151401920fd6ea8aa",
       "SECURITY.md": "b6fc4d29053e25e5ea436e7f784a7a52",
       "backend-stage-report.md": "1e0893f671379929cd2004e3d7400abf",
@@ -67,12 +67,12 @@
       "drizzle/migrations/meta/_journal.json": "5d8cf91390184d5fa8b26d87f27091ae",
       "drizzle/schema.ts": "a60267d05d7dd11572f02686241f37c6",
       "eslint.config.js": "345bdd57e188e0e4525edcd00e5003f5",
-      "package.json": "2117782d1fc7d543e471385da880114a",
+      "package.json": "70a64e7058a740f8041ffe0f65c4ad73",
       "public/favicon.png": "efce26d3331a79f266c516ec4b7525ce",
       "public/robots.txt": "dfd4c3c2ceb7bfdb546f65d71b44e977",
       "public/sitemap.xml": "7ab0816694ceec28ec6cdb84ac51bdcc",
       "real-forms-stage-report.md": "6677513de68eca289c6fdbebab2ad127",
-      "roadmap.md": "891ff2d38a0a6727e26efdbcac764fda",
+      "roadmap.md": "7f6271e91cb457fac5e5dcbcd9fd3411",
       "src/assets/ccak-logo.png.asset.json": "491da987ebf5bd7dc6c3ee84c844186f",
       "src/assets/president-signature.png.asset.json": "56604e13d6dfc63cfb5aaed99d829ab5",
       "src/ccak.css": "3d5d67099679a3cd5d95393ed7b24b1f",
@@ -81,7 +81,7 @@
       "src/components/OrderReceipt.tsx": "c027d2062c3a002f1cf800604a61b0fe",
       "src/components/PortalShell.tsx": "6d7da586766e64005f49ee064c3bab4e",
       "src/components/ShopCart.tsx": "2c3b70581984665e1a363eb892a74790",
-      "src/components/ShopDeliveryQuotes.tsx": "87cffa7698a2d10a949a65a605e641dd",
+      "src/components/ShopDeliveryQuotes.tsx": "726ca459dc52257b1fc1d2c5aee7e705",
       "src/components/ShopFulfilment.tsx": "cc26c41709b90b05958c113bec6cf854",
       "src/components/membership/DigitalIdCard.tsx": "035ee633efa7e0fbfb54fbd64bee78a1",
       "src/components/ui/accordion.tsx": "55f9dda62b4e3913c9b23e5015a86aef",
@@ -178,7 +178,10 @@
       "src/lib/shop/order-rules.ts": "4a187995b26bf67e46b2ad7c9d21ae34",
       "src/lib/shop/orders.functions.ts": "0aab625d0a1aad7a7b5d6959d10616c0",
       "src/lib/shop/payment-callback.test.ts": "536591a967dfc564646df477dfdb532c",
-      "src/lib/shop/shop.functions.ts": "5f90d667f6215a112a021e4d95c803cc",
+      "src/lib/shop/shipping-approval.test.ts": "b941ada3bf0c46296a6e549eaa42b052",
+      "src/lib/shop/shipping.test.ts": "50807d35795b790a7e9bf75d725f931a",
+      "src/lib/shop/shipping.ts": "9144ca03a7907916383aeb6f952905bf",
+      "src/lib/shop/shop.functions.ts": "611aadcddc609b7e8e3f3ddc2ad004ce",
       "src/lib/utils.ts": "d9837f38cc05303254571985e3164050",
       "src/routeTree.gen.ts": "5b4c5339d997cf50a53745873733b034",
       "src/router.tsx": "8f905e713b0eba7fa8148b7995a708c9",
@@ -193,7 +196,7 @@
       "src/routes/api/public/mpesa/callback.ts": "f01f9a7f0195c5485134b3b13fae4c15",
       "src/routes/api/public/shop/mpesa/callback.ts": "9538797054bb8d64731778232eebfe00",
       "src/routes/auth.tsx": "039f669dfbc64293ea0c3c7aa6bf6036",
-      "src/routes/checkout.tsx": "dff9eb486d13576a5c4159964d25f163",
+      "src/routes/checkout.tsx": "28a469b3184546d68a4c0e81a9dccb10",
       "src/routes/guest-order.$orderId.tsx": "e72499d56d1fa6c25dc8489ae3e6b902",
       "src/routes/index.tsx": "9094b6ec50825badbcd1fdcf6d1f5f13",
       "src/routes/reset-password.tsx": "eb7f1cb2d7ff47e38eff382da732cc79",
@@ -447,8 +450,16 @@
       "file": "src/components/ShopDeliveryQuotes",
       "import_path": "",
       "usage": "National administrators confirm packed weight and apply the CCAK standard parcel fee, or save a verified courier quote for other parcels. Handles both guest and member orders using audited database permissions.",
-      "examples": [{ "label": "Administrator delivery workspace", "code": "<ShopDeliveryQuotes aria-label=\"Delivery approvals\" />" }],
-      "antipatterns": ["Do not treat shopper-entered or estimated product weights as verified packed weight.", "Do not expose delivery approval actions to customers or use the standard fee for parcels weighing 5 kg or more."]
+      "examples": [
+        {
+          "label": "Administrator delivery workspace",
+          "code": "\u003cShopDeliveryQuotes aria-label=\"Delivery approvals\" /\u003e"
+        }
+      ],
+      "antipatterns": [
+        "Do not treat shopper-entered or estimated product weights as verified packed weight.",
+        "Do not expose delivery approval actions to customers or use the standard fee for parcels weighing 5 kg or more."
+      ]
     },
     {
       "name": "ShopFulfilment",
