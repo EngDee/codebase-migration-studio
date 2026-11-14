@@ -445,7 +445,10 @@
     {
       "name": "ShopDeliveryQuotes",
       "file": "src/components/ShopDeliveryQuotes",
-      "import_path": ""
+      "import_path": "",
+      "usage": "National administrators confirm packed weight and apply the CCAK standard parcel fee, or save a verified courier quote for other parcels. Handles both guest and member orders using audited database permissions.",
+      "examples": [{ "label": "Administrator delivery workspace", "code": "<ShopDeliveryQuotes aria-label=\"Delivery approvals\" />" }],
+      "antipatterns": ["Do not treat shopper-entered or estimated product weights as verified packed weight.", "Do not expose delivery approval actions to customers or use the standard fee for parcels weighing 5 kg or more."]
     },
     {
       "name": "ShopFulfilment",

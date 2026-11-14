@@ -4,6 +4,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { checkoutSchema, priceCart, requireShopPaymentMode } from "./catalog";
 import { initiateStkPush, normaliseMpesaPhone, requireDarajaConfiguration } from "@/lib/payments/daraja";
+import { standardParcelFee, standardShippingSchema } from "./shipping";
 
 export const createShopOrder = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -67,16 +68,34 @@ export const getShopQuoteRequests = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     const { data: permitted, error: roleError } = await context.supabase.rpc("is_national_admin");
     if (roleError || !permitted) throw new Error("National administrator access required.");
-    const { data, error } = await context.supabase.from("shop_orders").select("*").eq("status", "awaiting_quote").order("created_at");
-    if (error) throw new Error("Could not load delivery quote requests.");
-    return data;
+    const members = await context.supabase.from("shop_orders").select("*").eq("status", "awaiting_quote").order("created_at");
+    const guests = await context.supabase.from("guest_shop_orders").select("*").eq("status", "awaiting_quote").order("created_at");
+    if (members.error || guests.error) throw new Error("Could not load delivery quote requests.");
+    return [
+      ...members.data.map((order) => ({ ...order, kind: "member" as const })),
+      ...guests.data.map(({ guest_session_hash: _hash, request_key: _key, ...order }) => ({ ...order, kind: "guest" as const })),
+    ];
   });
 
 export const saveShopQuote = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => z.object({ order_id: z.string().uuid(), fee_kes: z.number().int().min(0).max(1000000), quote_reference: z.string().trim().min(3).max(200) }).parse(data))
+  .inputValidator((data: unknown) => z.object({ order_id: z.string().uuid(), kind: z.enum(["member", "guest"]).default("member"), fee_kes: z.number().int().min(0).max(1000000), quote_reference: z.string().trim().min(3).max(200) }).parse(data))
   .handler(async ({ data, context }) => {
-    const { error } = await context.supabase.rpc("quote_shop_delivery", data);
+    const { kind, ...quote } = data;
+    const { error } = await context.supabase.rpc(kind === "guest" ? "quote_guest_shop_delivery" : "quote_shop_delivery", quote);
     if (error) throw new Error("Delivery quote was not saved. Check permissions and order status.");
     return { saved: true };
+  });
+
+export const saveStandardShipping = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) => standardShippingSchema.parse(data))
+  .handler(async ({ data, context }) => {
+    const fee = standardParcelFee(data.weight_kg);
+    const { error } = await context.supabase.rpc(data.kind === "guest" ? "quote_guest_shop_delivery" : "quote_shop_delivery", {
+      order_id: data.order_id, fee_kes: fee,
+      quote_reference: `CCAK standard parcel fee; packed weight ${data.weight_kg} kg`,
+    });
+    if (error) throw new Error("Delivery fee was not saved. Check administrator access and order status.");
+    return { saved: true, fee_kes: fee };
   });
