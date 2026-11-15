@@ -39,6 +39,12 @@ export async function checkDarajaSandbox(
     checks.push({ name: label, ok: saved, message: saved ? "Securely saved." : "Not configured. Add it securely before testing." });
   }
   if (checks.some((check) => !check.ok)) return finish();
+  if (env === "production") {
+    // Live credentials are always rejected by Safaricom's sandbox, so skip the call.
+    checks.push({ name: "Safaricom sandbox access", ok: true,
+      message: "Skipped: live Till credentials are in use. Use 'Check live readiness' to confirm Safaricom access." });
+    return finish();
+  }
 
   try {
     const response = await request("https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials", {
