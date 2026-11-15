@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as DonateRouteImport } from './routes/donate'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedMembershipRouteImport } from './routes/_authenticated/membership'
@@ -21,6 +22,7 @@ import { Route as GuestOrderOrderIdRouteImport } from './routes/guest-order.$ord
 import { Route as AuthenticatedOrdersOrderIdRouteImport } from './routes/_authenticated/orders.$orderId'
 import { Route as ApiMpesaCallbackRouteImport } from './routes/api/mpesa/callback'
 import { Route as ApiPublicMpesaCallbackRouteImport } from './routes/api/public/mpesa/callback'
+import { Route as ApiPublicDonateMpesaCallbackRouteImport } from './routes/api/public/donate/mpesa/callback'
 import { Route as ApiPublicShopMpesaCallbackRouteImport } from './routes/api/public/shop/mpesa/callback'
 
 const IndexRoute = IndexRouteImport.update({
@@ -40,6 +42,11 @@ const AuthRoute = AuthRouteImport.update({
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DonateRoute = DonateRouteImport.update({
+  id: '/donate',
+  path: '/donate',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -83,6 +90,12 @@ const ApiPublicMpesaCallbackRoute = ApiPublicMpesaCallbackRouteImport.update({
   path: '/api/public/mpesa/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicDonateMpesaCallbackRoute =
+  ApiPublicDonateMpesaCallbackRouteImport.update({
+    id: '/api/public/donate/mpesa/callback',
+    path: '/api/public/donate/mpesa/callback',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicShopMpesaCallbackRoute =
   ApiPublicShopMpesaCallbackRouteImport.update({
     id: '/api/public/shop/mpesa/callback',
@@ -94,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
+  '/donate': typeof DonateRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/membership': typeof AuthenticatedMembershipRoute
@@ -102,12 +116,14 @@ export interface FileRoutesByFullPath {
   '/orders/$orderId': typeof AuthenticatedOrdersOrderIdRoute
   '/api/mpesa/callback': typeof ApiMpesaCallbackRoute
   '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
+  '/api/public/donate/mpesa/callback': typeof ApiPublicDonateMpesaCallbackRoute
   '/api/public/shop/mpesa/callback': typeof ApiPublicShopMpesaCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
+  '/donate': typeof DonateRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/membership': typeof AuthenticatedMembershipRoute
@@ -116,6 +132,7 @@ export interface FileRoutesByTo {
   '/orders/$orderId': typeof AuthenticatedOrdersOrderIdRoute
   '/api/mpesa/callback': typeof ApiMpesaCallbackRoute
   '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
+  '/api/public/donate/mpesa/callback': typeof ApiPublicDonateMpesaCallbackRoute
   '/api/public/shop/mpesa/callback': typeof ApiPublicShopMpesaCallbackRoute
 }
 export interface FileRoutesById {
@@ -124,6 +141,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
+  '/donate': typeof DonateRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/membership': typeof AuthenticatedMembershipRoute
@@ -132,6 +150,7 @@ export interface FileRoutesById {
   '/_authenticated/orders/$orderId': typeof AuthenticatedOrdersOrderIdRoute
   '/api/mpesa/callback': typeof ApiMpesaCallbackRoute
   '/api/public/mpesa/callback': typeof ApiPublicMpesaCallbackRoute
+  '/api/public/donate/mpesa/callback': typeof ApiPublicDonateMpesaCallbackRoute
   '/api/public/shop/mpesa/callback': typeof ApiPublicShopMpesaCallbackRoute
 }
 export interface FileRouteTypes {
@@ -140,6 +159,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/checkout'
+    | '/donate'
     | '/reset-password'
     | '/admin'
     | '/membership'
@@ -148,12 +168,14 @@ export interface FileRouteTypes {
     | '/orders/$orderId'
     | '/api/mpesa/callback'
     | '/api/public/mpesa/callback'
+    | '/api/public/donate/mpesa/callback'
     | '/api/public/shop/mpesa/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/checkout'
+    | '/donate'
     | '/reset-password'
     | '/admin'
     | '/membership'
@@ -162,6 +184,7 @@ export interface FileRouteTypes {
     | '/orders/$orderId'
     | '/api/mpesa/callback'
     | '/api/public/mpesa/callback'
+    | '/api/public/donate/mpesa/callback'
     | '/api/public/shop/mpesa/callback'
   id:
     | '__root__'
@@ -169,6 +192,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/checkout'
+    | '/donate'
     | '/reset-password'
     | '/_authenticated/admin'
     | '/_authenticated/membership'
@@ -177,6 +201,7 @@ export interface FileRouteTypes {
     | '/_authenticated/orders/$orderId'
     | '/api/mpesa/callback'
     | '/api/public/mpesa/callback'
+    | '/api/public/donate/mpesa/callback'
     | '/api/public/shop/mpesa/callback'
   fileRoutesById: FileRoutesById
 }
@@ -185,10 +210,12 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   CheckoutRoute: typeof CheckoutRoute
+  DonateRoute: typeof DonateRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   GuestOrderOrderIdRoute: typeof GuestOrderOrderIdRoute
   ApiMpesaCallbackRoute: typeof ApiMpesaCallbackRoute
   ApiPublicMpesaCallbackRoute: typeof ApiPublicMpesaCallbackRoute
+  ApiPublicDonateMpesaCallbackRoute: typeof ApiPublicDonateMpesaCallbackRoute
   ApiPublicShopMpesaCallbackRoute: typeof ApiPublicShopMpesaCallbackRoute
 }
 
@@ -220,6 +247,13 @@ declare module '@tanstack/react-router' {
       path: '/checkout'
       fullPath: '/checkout'
       preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/donate': {
+      id: '/donate'
+      path: '/donate'
+      fullPath: '/donate'
+      preLoaderRoute: typeof DonateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -278,6 +312,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicMpesaCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/donate/mpesa/callback': {
+      id: '/api/public/donate/mpesa/callback'
+      path: '/api/public/donate/mpesa/callback'
+      fullPath: '/api/public/donate/mpesa/callback'
+      preLoaderRoute: typeof ApiPublicDonateMpesaCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/shop/mpesa/callback': {
       id: '/api/public/shop/mpesa/callback'
       path: '/api/public/shop/mpesa/callback'
@@ -319,10 +360,12 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   CheckoutRoute: CheckoutRoute,
+  DonateRoute: DonateRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   GuestOrderOrderIdRoute: GuestOrderOrderIdRoute,
   ApiMpesaCallbackRoute: ApiMpesaCallbackRoute,
   ApiPublicMpesaCallbackRoute: ApiPublicMpesaCallbackRoute,
+  ApiPublicDonateMpesaCallbackRoute: ApiPublicDonateMpesaCallbackRoute,
   ApiPublicShopMpesaCallbackRoute: ApiPublicShopMpesaCallbackRoute,
 }
 export const routeTree = rootRouteImport

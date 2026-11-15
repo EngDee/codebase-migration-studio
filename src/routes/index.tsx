@@ -255,7 +255,7 @@ function Index() {
             <div className="hero-actions">
               <Button asChild className="btn btn-gold"><Link to="/auth" search={{ mode: "signup" }}>Join CCAK</Link></Button>
               <button type="button" className="btn btn-outline" onClick={open("partner")}>Become a partner</button>
-              <button type="button" className="btn btn-outline" onClick={open("donate")}>Donate</button>
+              <Link to="/donate" className="btn btn-outline">Donate</Link>
               <a className="btn btn-outline" href="#programs">Explore projects</a>
             </div>
             <p className="hero-scroll"><span className="hero-scroll-line" aria-hidden="true" />Scroll to explore impact</p>
