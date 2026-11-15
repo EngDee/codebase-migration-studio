@@ -44,6 +44,48 @@ export type Database = {
         }
         Relationships: []
       }
+      donations: {
+        Row: {
+          amount_kes: number
+          checkout_request_id: string | null
+          created_at: string
+          donor_name: string | null
+          id: string
+          merchant_request_id: string | null
+          mpesa_receipt: string | null
+          paid_at: string | null
+          payment_environment: string
+          phone: string
+          status: string
+        }
+        Insert: {
+          amount_kes: number
+          checkout_request_id?: string | null
+          created_at?: string
+          donor_name?: string | null
+          id?: string
+          merchant_request_id?: string | null
+          mpesa_receipt?: string | null
+          paid_at?: string | null
+          payment_environment: string
+          phone: string
+          status?: string
+        }
+        Update: {
+          amount_kes?: number
+          checkout_request_id?: string | null
+          created_at?: string
+          donor_name?: string | null
+          id?: string
+          merchant_request_id?: string | null
+          mpesa_receipt?: string | null
+          paid_at?: string | null
+          payment_environment?: string
+          phone?: string
+          status?: string
+        }
+        Relationships: []
+      }
       guest_shop_orders: {
         Row: {
           amount_kes: number | null
