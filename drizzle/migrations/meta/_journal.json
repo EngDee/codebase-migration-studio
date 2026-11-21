@@ -141,6 +141,13 @@
       "when": 1795264992401,
       "tag": "0019_coffee_farm_calculator",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1795265398974,
+      "tag": "0020_crypto_payments",
+      "breakpoints": true
     }
   ]
 }

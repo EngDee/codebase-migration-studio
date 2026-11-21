@@ -746,3 +746,13 @@ footer li a:hover{color:var(--gold-soft);}
 .shop-page .portal-form label{display:block;}
 .shop-page .portal-form input{width:100%;}
 @media(max-width:700px){.shop-checkout-grid{grid-template-columns:minmax(0,1fr);}.shop-page .portal-top{flex-wrap:wrap;gap:12px;}.shop-totals>div{flex-wrap:wrap;}.shop-totals dd{text-align:left;}}
+.crypto-pay{margin-top:32px;padding-top:24px;border-top:1px solid rgba(78,52,46,.15);display:grid;gap:14px;}
+.crypto-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;}
+.crypto-grid button{border:1px solid rgba(78,52,46,.25);border-radius:8px;padding:10px;background:#fff;text-align:left;display:grid;gap:2px;cursor:pointer;color:var(--coffee-deep);}
+.crypto-grid button small{font-size:11px;opacity:.75;}
+.crypto-grid button.on{border-color:var(--forest);box-shadow:0 0 0 2px var(--forest);}
+.crypto-grid button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+.crypto-wallet{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;background:#fff;border:1px solid rgba(78,52,46,.15);border-radius:8px;padding:14px;}
+.crypto-wallet > div{flex:1;min-width:200px;display:grid;gap:8px;}
+.crypto-address{word-break:break-all;background:var(--cream);padding:8px;border-radius:6px;font-size:13px;}
+.crypto-warning{color:#8a5a00;font-size:14px;}

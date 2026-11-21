@@ -1,3 +1,4 @@
+import { CryptoPayment } from "@/components/payments/CryptoPayment";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState, type FormEvent } from "react";
@@ -66,6 +67,7 @@ function Donate() {
         <label>Your name (optional)<input name="donor_name" autoComplete="name" maxLength={120} /></label>
         <Button className="btn btn-forest" type="submit" disabled={busy}><HeartHandshake aria-hidden="true" />{busy ? "Sending prompt…" : `Donate KES ${Number(amount || 0).toLocaleString()} with M-Pesa`}</Button>
       </form>}
+      <CryptoPayment amountKes={Number(amount) || 0} purpose="donation" />
     </main>
   </div>;
 }

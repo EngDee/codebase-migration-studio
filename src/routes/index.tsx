@@ -22,11 +22,16 @@ const jsonLd = {
   "@type": "NGO",
   name: "Coffee Champions Association of Kenya",
   alternateName: "CCAK",
-  url: "https://www.ccak.or.ke/",
+  url: "https://coffeechampions.co.ke/",
   logo: LOGO_URL,
   description:
     "CCAK unites farmers, cooperatives, processors, exporters, researchers and government to build a coffee sector where every cherry picked builds a farmer's prosperity.",
   address: { "@type": "PostalAddress", addressLocality: "Nairobi", addressCountry: "KE" },
+  founder: { "@type": "Person", name: "David Muigai Miringu", jobTitle: "National President", worksFor: "Coffee Champions Association of Kenya" },
+  employee: { "@type": "Person", name: "David Muigai Miringu", jobTitle: "National President / Chairperson" },
+  areaServed: ["Kenya", "Kiambu County", "Nairobi County", "Nyeri County"].map((name) => ({ "@type": "AdministrativeArea", name })),
+  knowsAbout: ["Coffee", "Kenya coffee", "Agriculture", "Youths in coffee", "Women in coffee", "Baristas", "Coffee entrepreneurs", "Coffee on Wheels", "Green energy", "Environmental conservation", "Carbon credits", "Coffee revolving funds"],
+  keywords: "coffee, Kenya coffee, agriculture, youths in coffee, baristas, entrepreneurs, women in coffee, coffee on wheels, David Muigai Miringu, president, Kenya, Kiambu County, Nairobi County, Nyeri County, green energy, environmental conservation, carbon credits, coffee revolving funds",
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+254-703-424-972",
@@ -50,12 +55,14 @@ export const Route = createFileRoute("/")({
         content:
           "The Coffee Champions Association of Kenya (CCAK) unites farmers, cooperatives, processors, exporters and government to build a coffee sector where every cherry picked builds a farmer's prosperity.",
       },
+      { name: "keywords", content: "coffee, Kenya coffee, agriculture, youths in coffee, baristas, entrepreneurs, women in coffee, coffee on wheels, David Muigai Miringu, CCAK president, Kiambu County, Nairobi County, Nyeri County, green energy, environmental conservation, carbon credits, coffee revolving funds" },
+      { name: "author", content: "Coffee Champions Association of Kenya — National President David Muigai Miringu" },
       { name: "theme-color", content: "#4E342E" },
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: TITLE },
       { property: "og:title", content: TITLE },
       { property: "og:description", content: DESC },
-      { property: "og:url", content: "https://www.ccak.or.ke/" },
+      { property: "og:url", content: "https://coffeechampions.co.ke/" },
       { property: "og:image", content: OG_IMAGE },
       { property: "og:locale", content: "en_KE" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -64,7 +71,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [
-      { rel: "canonical", href: "https://www.ccak.or.ke/" },
+      { rel: "canonical", href: "https://coffeechampions.co.ke/" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {

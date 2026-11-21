@@ -190,6 +190,63 @@ export type Database = {
         }
         Relationships: []
       }
+      crypto_payments: {
+        Row: {
+          amount_crypto_approx: string | null
+          amount_kes: number
+          asset_id: string
+          created_at: string
+          id: string
+          payer_contact: string | null
+          payer_name: string | null
+          purpose: string
+          reference: string | null
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          txid: string
+          user_id: string | null
+          wallet_address: string
+        }
+        Insert: {
+          amount_crypto_approx?: string | null
+          amount_kes: number
+          asset_id: string
+          created_at?: string
+          id?: string
+          payer_contact?: string | null
+          payer_name?: string | null
+          purpose: string
+          reference?: string | null
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          txid: string
+          user_id?: string | null
+          wallet_address: string
+        }
+        Update: {
+          amount_crypto_approx?: string | null
+          amount_kes?: number
+          asset_id?: string
+          created_at?: string
+          id?: string
+          payer_contact?: string | null
+          payer_name?: string | null
+          purpose?: string
+          reference?: string | null
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          txid?: string
+          user_id?: string | null
+          wallet_address?: string
+        }
+        Relationships: []
+      }
       donations: {
         Row: {
           amount_kes: number
@@ -1356,6 +1413,10 @@ export type Database = {
         Args: { fee_kes: number; order_id: string; quote_reference: string }
         Returns: undefined
       }
+      review_crypto_payment: {
+        Args: { decision: string; note?: string; payment_id: string }
+        Returns: undefined
+      }
       review_membership_application: {
         Args: {
           application_id: string
@@ -1395,6 +1456,7 @@ export type Database = {
         }
       }
       save_farm_quotation: { Args: { payload: Json }; Returns: Json }
+      submit_crypto_payment: { Args: { payload: Json }; Returns: Json }
       submit_membership_application: {
         Args: { payload: Json }
         Returns: {

@@ -1,3 +1,4 @@
+import { CryptoPayment } from "@/components/payments/CryptoPayment";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState, type FormEvent } from "react";
@@ -84,6 +85,7 @@ function Checkout() {
           <Button asChild variant="outline"><Link to="/orders/$orderId" params={{ orderId: order.id }}>Order details & receipt</Link></Button>
           {order.shipping_quote_reference && <p>Fargo quote: {order.shipping_quote_reference}</p>}
           {order.status === "ready" && <form className="portal-form shop-payment" onSubmit={(event) => startPayment(event, order.id)}><label>M-Pesa phone<input name="phone" type="tel" placeholder="07XX XXX XXX" required minLength={9} maxLength={20} /></label><Button type="submit" className="btn btn-forest" disabled={busy}>{order.payment_environment === "sandbox" ? "Request test M-Pesa payment" : "Pay with M-Pesa"} · {kes(order.amount_kes ?? 0)}</Button></form>}
+          {order.status === "ready" && order.payment_environment === "production" && <CryptoPayment amountKes={order.amount_kes ?? 0} purpose="shop_order" reference={order.id} />}
           {order.status === "pending" && <p>Waiting for Safaricom confirmation. Refresh status to check the result.</p>}
           {order.status === "paid" && <p>{order.payment_environment === "sandbox" ? "Test payment confirmed; no dispatch will take place." : "Thank you for supporting our coffee community and the CCAK mission! Your payment is confirmed."}</p>}
           {order.status === "failed" && <p>Payment was not confirmed. Contact CCAK before placing a replacement order.</p>}

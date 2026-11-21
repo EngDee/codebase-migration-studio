@@ -1,3 +1,4 @@
+import { AdminCryptoPayments } from "@/components/payments/AdminCryptoPayments";
 import { AdminPriceDashboard } from "@/components/coffee-calculator/AdminPriceDashboard";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -32,7 +33,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
   component: Admin,
 });
 
-type Tab = "members" | "inquiries" | "newsletter" | "payments" | "shipping" | "farm-prices";
+type Tab = "members" | "inquiries" | "newsletter" | "payments" | "shipping" | "farm-prices" | "crypto";
 
 function Admin() {
   const [tab, setTab] = useState<Tab>("members");
@@ -81,11 +82,13 @@ function Admin() {
         {canTestPayments && <Button variant="ghost" className={tab === "payments" ? "on" : ""} onClick={() => setTab("payments")}>Payment checks</Button>}
         {canTestPayments && <Button variant="ghost" className={tab === "shipping" ? "on" : ""} onClick={() => setTab("shipping")}>Delivery quotes</Button>}
         <button className={tab === "farm-prices" ? "on" : ""} onClick={() => setTab("farm-prices")}>Farm prices</button>
+        {canTestPayments && <button className={tab === "crypto" ? "on" : ""} onClick={() => setTab("crypto")}>Crypto payments</button>}
       </div>
 
       {tab === "payments" && canTestPayments && <><DarajaProductionCheck /><DarajaSandboxCheck /></>}
       {tab === "shipping" && canTestPayments && <ShopDeliveryQuotes />}
       {tab === "farm-prices" && <AdminPriceDashboard />}
+      {tab === "crypto" && canTestPayments && <AdminCryptoPayments />}
 
       {tab === "members" && (
         <>

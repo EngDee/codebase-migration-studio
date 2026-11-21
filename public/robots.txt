@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /membership
+Disallow: /orders
 
-Sitemap: https://www.ccak.or.ke/sitemap.xml
+Sitemap: https://coffeechampions.co.ke/sitemap.xml

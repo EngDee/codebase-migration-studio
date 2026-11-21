@@ -70,3 +70,6 @@
 - [ ] Activate membership email notifications: requires a verified sending domain and email setup.
 
 Later stages outside the completed form activation: full registration wizard, card downloads/QR display, announcements and report-export interfaces.
+## Pending
+- Academy virtual classes (courses, lecturers, attendance, lecturer pay) — next build
+- Monero (XMR) wallet — waiting for address
