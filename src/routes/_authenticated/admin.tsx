@@ -1,3 +1,4 @@
+import { AdminPriceDashboard } from "@/components/coffee-calculator/AdminPriceDashboard";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
@@ -31,7 +32,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
   component: Admin,
 });
 
-type Tab = "members" | "inquiries" | "newsletter" | "payments" | "shipping";
+type Tab = "members" | "inquiries" | "newsletter" | "payments" | "shipping" | "farm-prices";
 
 function Admin() {
   const [tab, setTab] = useState<Tab>("members");
@@ -79,10 +80,12 @@ function Admin() {
         <button className={tab === "newsletter" ? "on" : ""} onClick={() => setTab("newsletter")}>Newsletter ({subs.length})</button>
         {canTestPayments && <Button variant="ghost" className={tab === "payments" ? "on" : ""} onClick={() => setTab("payments")}>Payment checks</Button>}
         {canTestPayments && <Button variant="ghost" className={tab === "shipping" ? "on" : ""} onClick={() => setTab("shipping")}>Delivery quotes</Button>}
+        <button className={tab === "farm-prices" ? "on" : ""} onClick={() => setTab("farm-prices")}>Farm prices</button>
       </div>
 
       {tab === "payments" && canTestPayments && <><DarajaProductionCheck /><DarajaSandboxCheck /></>}
       {tab === "shipping" && canTestPayments && <ShopDeliveryQuotes />}
+      {tab === "farm-prices" && <AdminPriceDashboard />}
 
       {tab === "members" && (
         <>

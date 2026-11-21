@@ -6,6 +6,8 @@ export type DigitalIdCardProps = {
   membershipCode: string;
   nationalId: string;
   county: string;
+  /** Constitutional position label, e.g. "National President / Chairperson". */
+  position?: string | null;
   photoUrl?: string | null;
   memberSince?: string;
   /** Display name of the authorising president (configurable). */
@@ -34,6 +36,7 @@ export function DigitalIdCard({
   membershipCode,
   nationalId,
   county,
+  position,
   photoUrl,
   memberSince,
   presidentName = "David Muigai Miringu",
@@ -75,6 +78,7 @@ export function DigitalIdCard({
           </div>
           <div className="ccak-id-fields">
             <Field label="Full name" value={fullName} strong />
+            {position && <Field label="Official role" value={position} strong />}
             <Field label="Membership code" value={membershipCode} mono />
             <Field label="National ID" value={maskNationalId(nationalId)} mono />
             <Field label="County" value={county} />

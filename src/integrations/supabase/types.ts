@@ -44,6 +44,152 @@ export type Database = {
         }
         Relationships: []
       }
+      coffee_services: {
+        Row: {
+          base_unit_price_kes: number | null
+          category_id: string
+          code: string
+          created_at: string
+          description: string | null
+          effective_from: string | null
+          equipment_component_kes: number | null
+          id: string
+          is_active: boolean
+          is_package: boolean
+          labour_component_kes: number | null
+          last_verified_at: string | null
+          material_component_kes: number | null
+          minimum_charge_kes: number | null
+          name: string
+          package_includes: string[] | null
+          source_link: string | null
+          source_name: string | null
+          terrain_multiplier_extreme: number | null
+          terrain_multiplier_flat: number | null
+          terrain_multiplier_gentle: number | null
+          terrain_multiplier_moderate: number | null
+          terrain_multiplier_steep: number | null
+          transport_component_kes: number | null
+          unit: string
+          updated_at: string
+          verification_status: string
+        }
+        Insert: {
+          base_unit_price_kes?: number | null
+          category_id: string
+          code: string
+          created_at?: string
+          description?: string | null
+          effective_from?: string | null
+          equipment_component_kes?: number | null
+          id?: string
+          is_active?: boolean
+          is_package?: boolean
+          labour_component_kes?: number | null
+          last_verified_at?: string | null
+          material_component_kes?: number | null
+          minimum_charge_kes?: number | null
+          name: string
+          package_includes?: string[] | null
+          source_link?: string | null
+          source_name?: string | null
+          terrain_multiplier_extreme?: number | null
+          terrain_multiplier_flat?: number | null
+          terrain_multiplier_gentle?: number | null
+          terrain_multiplier_moderate?: number | null
+          terrain_multiplier_steep?: number | null
+          transport_component_kes?: number | null
+          unit: string
+          updated_at?: string
+          verification_status?: string
+        }
+        Update: {
+          base_unit_price_kes?: number | null
+          category_id?: string
+          code?: string
+          created_at?: string
+          description?: string | null
+          effective_from?: string | null
+          equipment_component_kes?: number | null
+          id?: string
+          is_active?: boolean
+          is_package?: boolean
+          labour_component_kes?: number | null
+          last_verified_at?: string | null
+          material_component_kes?: number | null
+          minimum_charge_kes?: number | null
+          name?: string
+          package_includes?: string[] | null
+          source_link?: string | null
+          source_name?: string | null
+          terrain_multiplier_extreme?: number | null
+          terrain_multiplier_flat?: number | null
+          terrain_multiplier_gentle?: number | null
+          terrain_multiplier_moderate?: number | null
+          terrain_multiplier_steep?: number | null
+          transport_component_kes?: number | null
+          unit?: string
+          updated_at?: string
+          verification_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "coffee_services_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "service_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      coffee_varieties: {
+        Row: {
+          characteristics: string | null
+          code: string
+          created_at: string
+          disease_susceptibility: string | null
+          id: string
+          is_active: boolean
+          management_notes: string | null
+          name: string
+          planting_density_per_acre: number | null
+          row_spacing_m: number
+          seedling_unit_price_kes: number | null
+          tree_spacing_m: number
+          updated_at: string
+        }
+        Insert: {
+          characteristics?: string | null
+          code: string
+          created_at?: string
+          disease_susceptibility?: string | null
+          id?: string
+          is_active?: boolean
+          management_notes?: string | null
+          name: string
+          planting_density_per_acre?: number | null
+          row_spacing_m: number
+          seedling_unit_price_kes?: number | null
+          tree_spacing_m: number
+          updated_at?: string
+        }
+        Update: {
+          characteristics?: string | null
+          code?: string
+          created_at?: string
+          disease_susceptibility?: string | null
+          id?: string
+          is_active?: boolean
+          management_notes?: string | null
+          name?: string
+          planting_density_per_acre?: number | null
+          row_spacing_m?: number
+          seedling_unit_price_kes?: number | null
+          tree_spacing_m?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       donations: {
         Row: {
           amount_kes: number
@@ -85,6 +231,129 @@ export type Database = {
           status?: string
         }
         Relationships: []
+      }
+      farm_assessments: {
+        Row: {
+          area_under_coffee_acres: number | null
+          county: string | null
+          created_at: string
+          establishment_status: string | null
+          existing_trees: number | null
+          experience_years: number | null
+          farm_location: string | null
+          farm_shape: string | null
+          farm_size_acres: number
+          farmer_full_name: string
+          id: string
+          land_utilisation_factor: number | null
+          notes: string | null
+          phone: string | null
+          selected_variety_ids: string[] | null
+          subcounty: string | null
+          terrain: string | null
+          updated_at: string
+          user_id: string | null
+          water_availability: string[] | null
+        }
+        Insert: {
+          area_under_coffee_acres?: number | null
+          county?: string | null
+          created_at?: string
+          establishment_status?: string | null
+          existing_trees?: number | null
+          experience_years?: number | null
+          farm_location?: string | null
+          farm_shape?: string | null
+          farm_size_acres: number
+          farmer_full_name: string
+          id?: string
+          land_utilisation_factor?: number | null
+          notes?: string | null
+          phone?: string | null
+          selected_variety_ids?: string[] | null
+          subcounty?: string | null
+          terrain?: string | null
+          updated_at?: string
+          user_id?: string | null
+          water_availability?: string[] | null
+        }
+        Update: {
+          area_under_coffee_acres?: number | null
+          county?: string | null
+          created_at?: string
+          establishment_status?: string | null
+          existing_trees?: number | null
+          experience_years?: number | null
+          farm_location?: string | null
+          farm_shape?: string | null
+          farm_size_acres?: number
+          farmer_full_name?: string
+          id?: string
+          land_utilisation_factor?: number | null
+          notes?: string | null
+          phone?: string | null
+          selected_variety_ids?: string[] | null
+          subcounty?: string | null
+          terrain?: string | null
+          updated_at?: string
+          user_id?: string | null
+          water_availability?: string[] | null
+        }
+        Relationships: []
+      }
+      farm_calculations: {
+        Row: {
+          actual_planting_population: number | null
+          assessment_id: string
+          calculation_payload: Json | null
+          created_at: string
+          id: string
+          plantable_area_acres: number | null
+          replacement_seedlings: number | null
+          seedlings_needed: number | null
+          theoretical_trees: number | null
+          variety_id: string | null
+        }
+        Insert: {
+          actual_planting_population?: number | null
+          assessment_id: string
+          calculation_payload?: Json | null
+          created_at?: string
+          id?: string
+          plantable_area_acres?: number | null
+          replacement_seedlings?: number | null
+          seedlings_needed?: number | null
+          theoretical_trees?: number | null
+          variety_id?: string | null
+        }
+        Update: {
+          actual_planting_population?: number | null
+          assessment_id?: string
+          calculation_payload?: Json | null
+          created_at?: string
+          id?: string
+          plantable_area_acres?: number | null
+          replacement_seedlings?: number | null
+          seedlings_needed?: number | null
+          theoretical_trees?: number | null
+          variety_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "farm_calculations_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "farm_assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "farm_calculations_variety_id_fkey"
+            columns: ["variety_id"]
+            isOneToOne: false
+            referencedRelation: "coffee_varieties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       guest_shop_orders: {
         Row: {
@@ -200,6 +469,45 @@ export type Database = {
         }
         Relationships: []
       }
+      labour_rates: {
+        Row: {
+          county: string | null
+          id: string
+          is_active: boolean
+          last_verified_at: string | null
+          productivity_note: string | null
+          rate_kes: number | null
+          task_code: string
+          task_name: string
+          unit: string
+          verification_status: string
+        }
+        Insert: {
+          county?: string | null
+          id?: string
+          is_active?: boolean
+          last_verified_at?: string | null
+          productivity_note?: string | null
+          rate_kes?: number | null
+          task_code: string
+          task_name: string
+          unit: string
+          verification_status?: string
+        }
+        Update: {
+          county?: string | null
+          id?: string
+          is_active?: boolean
+          last_verified_at?: string | null
+          productivity_note?: string | null
+          rate_kes?: number | null
+          task_code?: string
+          task_name?: string
+          unit?: string
+          verification_status?: string
+        }
+        Relationships: []
+      }
       member_contributions: {
         Row: {
           account_reference: string | null
@@ -276,6 +584,7 @@ export type Database = {
           national_id: string | null
           phone: string
           photo_path: string | null
+          position: string | null
           review_notes: string | null
           reviewed_at: string | null
           reviewed_by: string | null
@@ -300,6 +609,7 @@ export type Database = {
           national_id?: string | null
           phone: string
           photo_path?: string | null
+          position?: string | null
           review_notes?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
@@ -324,6 +634,7 @@ export type Database = {
           national_id?: string | null
           phone?: string
           photo_path?: string | null
+          position?: string | null
           review_notes?: string | null
           reviewed_at?: string | null
           reviewed_by?: string | null
@@ -411,6 +722,60 @@ export type Database = {
         }
         Relationships: []
       }
+      price_change_history: {
+        Row: {
+          changed_at: string
+          changed_by: string | null
+          field_name: string
+          id: string
+          labour_rate_id: string | null
+          new_value: number | null
+          note: string | null
+          old_value: number | null
+          service_id: string | null
+          variety_id: string | null
+        }
+        Insert: {
+          changed_at?: string
+          changed_by?: string | null
+          field_name: string
+          id?: string
+          labour_rate_id?: string | null
+          new_value?: number | null
+          note?: string | null
+          old_value?: number | null
+          service_id?: string | null
+          variety_id?: string | null
+        }
+        Update: {
+          changed_at?: string
+          changed_by?: string | null
+          field_name?: string
+          id?: string
+          labour_rate_id?: string | null
+          new_value?: number | null
+          note?: string | null
+          old_value?: number | null
+          service_id?: string | null
+          variety_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "price_change_history_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "coffee_services"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "price_change_history_variety_id_fkey"
+            columns: ["variety_id"]
+            isOneToOne: false
+            referencedRelation: "coffee_varieties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           business_name: string | null
@@ -428,6 +793,7 @@ export type Database = {
           national_id: string | null
           phone: string | null
           photo_path: string | null
+          position: string | null
           reviewed_at: string | null
           status: Database["public"]["Enums"]["member_status"]
           sub_county: string | null
@@ -451,6 +817,7 @@ export type Database = {
           national_id?: string | null
           phone?: string | null
           photo_path?: string | null
+          position?: string | null
           reviewed_at?: string | null
           status?: Database["public"]["Enums"]["member_status"]
           sub_county?: string | null
@@ -474,12 +841,253 @@ export type Database = {
           national_id?: string | null
           phone?: string | null
           photo_path?: string | null
+          position?: string | null
           reviewed_at?: string | null
           status?: Database["public"]["Enums"]["member_status"]
           sub_county?: string | null
           submitted_at?: string | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      quotation_items: {
+        Row: {
+          description: string
+          id: string
+          is_price_confirmed: boolean
+          item_type: string
+          line_total_kes: number | null
+          quantity: number
+          quotation_id: string
+          service_id: string | null
+          sort_order: number | null
+          unit: string
+          unit_price_kes: number | null
+          variety_id: string | null
+        }
+        Insert: {
+          description: string
+          id?: string
+          is_price_confirmed?: boolean
+          item_type: string
+          line_total_kes?: number | null
+          quantity?: number
+          quotation_id: string
+          service_id?: string | null
+          sort_order?: number | null
+          unit: string
+          unit_price_kes?: number | null
+          variety_id?: string | null
+        }
+        Update: {
+          description?: string
+          id?: string
+          is_price_confirmed?: boolean
+          item_type?: string
+          line_total_kes?: number | null
+          quantity?: number
+          quotation_id?: string
+          service_id?: string | null
+          sort_order?: number | null
+          unit?: string
+          unit_price_kes?: number | null
+          variety_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotation_items_quotation_id_fkey"
+            columns: ["quotation_id"]
+            isOneToOne: false
+            referencedRelation: "quotations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotation_items_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "coffee_services"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotation_items_variety_id_fkey"
+            columns: ["variety_id"]
+            isOneToOne: false
+            referencedRelation: "coffee_varieties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quotations: {
+        Row: {
+          assessment_id: string | null
+          assumptions: string | null
+          consultancy_total_kes: number | null
+          cost_per_acre_kes: number | null
+          county: string | null
+          created_at: string
+          equipment_total_kes: number | null
+          estimated_trees: number | null
+          exclusions: string | null
+          farm_location: string | null
+          farm_size_acres: number | null
+          farmer_full_name: string
+          grand_total_kes: number | null
+          has_unconfirmed_prices: boolean
+          id: string
+          labour_total_kes: number | null
+          materials_total_kes: number | null
+          payment_terms: string | null
+          phone: string | null
+          quotation_number: string
+          status: string
+          subtotal_kes: number | null
+          tax_kes: number | null
+          transport_kes: number | null
+          updated_at: string
+          user_id: string | null
+          valid_until: string | null
+          variety_summary: string | null
+        }
+        Insert: {
+          assessment_id?: string | null
+          assumptions?: string | null
+          consultancy_total_kes?: number | null
+          cost_per_acre_kes?: number | null
+          county?: string | null
+          created_at?: string
+          equipment_total_kes?: number | null
+          estimated_trees?: number | null
+          exclusions?: string | null
+          farm_location?: string | null
+          farm_size_acres?: number | null
+          farmer_full_name: string
+          grand_total_kes?: number | null
+          has_unconfirmed_prices?: boolean
+          id?: string
+          labour_total_kes?: number | null
+          materials_total_kes?: number | null
+          payment_terms?: string | null
+          phone?: string | null
+          quotation_number: string
+          status?: string
+          subtotal_kes?: number | null
+          tax_kes?: number | null
+          transport_kes?: number | null
+          updated_at?: string
+          user_id?: string | null
+          valid_until?: string | null
+          variety_summary?: string | null
+        }
+        Update: {
+          assessment_id?: string | null
+          assumptions?: string | null
+          consultancy_total_kes?: number | null
+          cost_per_acre_kes?: number | null
+          county?: string | null
+          created_at?: string
+          equipment_total_kes?: number | null
+          estimated_trees?: number | null
+          exclusions?: string | null
+          farm_location?: string | null
+          farm_size_acres?: number | null
+          farmer_full_name?: string
+          grand_total_kes?: number | null
+          has_unconfirmed_prices?: boolean
+          id?: string
+          labour_total_kes?: number | null
+          materials_total_kes?: number | null
+          payment_terms?: string | null
+          phone?: string | null
+          quotation_number?: string
+          status?: string
+          subtotal_kes?: number | null
+          tax_kes?: number | null
+          transport_kes?: number | null
+          updated_at?: string
+          user_id?: string | null
+          valid_until?: string | null
+          variety_summary?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotations_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "farm_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      service_bookings: {
+        Row: {
+          assessment_id: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          preferred_date: string | null
+          quotation_id: string | null
+          status: string
+          user_id: string | null
+        }
+        Insert: {
+          assessment_id?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          preferred_date?: string | null
+          quotation_id?: string | null
+          status?: string
+          user_id?: string | null
+        }
+        Update: {
+          assessment_id?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          preferred_date?: string | null
+          quotation_id?: string | null
+          status?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_bookings_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "farm_assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "service_bookings_quotation_id_fkey"
+            columns: ["quotation_id"]
+            isOneToOne: false
+            referencedRelation: "quotations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      service_categories: {
+        Row: {
+          description: string | null
+          id: string
+          name: string
+          slug: string
+          sort_order: number
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          name: string
+          slug: string
+          sort_order?: number
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          name?: string
+          slug?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -587,6 +1195,87 @@ export type Database = {
           },
         ]
       }
+      supplier_seedling_prices: {
+        Row: {
+          id: string
+          last_verified_at: string | null
+          stock_available: boolean | null
+          supplier_id: string
+          unit_price_kes: number
+          variety_id: string
+          verification_status: string
+        }
+        Insert: {
+          id?: string
+          last_verified_at?: string | null
+          stock_available?: boolean | null
+          supplier_id: string
+          unit_price_kes: number
+          variety_id: string
+          verification_status?: string
+        }
+        Update: {
+          id?: string
+          last_verified_at?: string | null
+          stock_available?: boolean | null
+          supplier_id?: string
+          unit_price_kes?: number
+          variety_id?: string
+          verification_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supplier_seedling_prices_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "supplier_seedling_prices_variety_id_fkey"
+            columns: ["variety_id"]
+            isOneToOne: false
+            referencedRelation: "coffee_varieties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      suppliers: {
+        Row: {
+          certification_status: string | null
+          county: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          notes: string | null
+          nursery_location: string | null
+          phone: string | null
+        }
+        Insert: {
+          certification_status?: string | null
+          county?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          notes?: string | null
+          nursery_location?: string | null
+          phone?: string | null
+        }
+        Update: {
+          certification_status?: string | null
+          county?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          notes?: string | null
+          nursery_location?: string | null
+          phone?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           county: string | null
@@ -641,12 +1330,14 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_ccak_staff: { Args: never; Returns: boolean }
       is_confirmed_bootstrap_admin: {
         Args: { account_email: string; confirmed_at: string }
         Returns: boolean
       }
       is_national_admin: { Args: never; Returns: boolean }
       is_super_admin: { Args: never; Returns: boolean }
+      is_valid_ccak_position: { Args: { p: string }; Returns: boolean }
       membership_statistics: { Args: never; Returns: Json }
       publish_shop_material: {
         Args: {
@@ -687,6 +1378,7 @@ export type Database = {
           national_id: string | null
           phone: string
           photo_path: string | null
+          position: string | null
           review_notes: string | null
           reviewed_at: string | null
           reviewed_by: string | null
@@ -702,6 +1394,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      save_farm_quotation: { Args: { payload: Json }; Returns: Json }
       submit_membership_application: {
         Args: { payload: Json }
         Returns: {
@@ -720,6 +1413,7 @@ export type Database = {
           national_id: string | null
           phone: string
           photo_path: string | null
+          position: string | null
           review_notes: string | null
           reviewed_at: string | null
           reviewed_by: string | null
@@ -753,6 +1447,7 @@ export type Database = {
           national_id: string | null
           phone: string
           photo_path: string | null
+          position: string | null
           review_notes: string | null
           reviewed_at: string | null
           reviewed_by: string | null
@@ -768,9 +1463,114 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      update_coffee_service_price: {
+        Args: {
+          p_base_unit_price_kes: number
+          p_equipment_component_kes?: number
+          p_labour_component_kes?: number
+          p_material_component_kes?: number
+          p_minimum_charge_kes?: number
+          p_note?: string
+          p_service_id: string
+          p_source_link?: string
+          p_source_name?: string
+          p_transport_component_kes?: number
+          p_verification_status?: string
+        }
+        Returns: {
+          base_unit_price_kes: number | null
+          category_id: string
+          code: string
+          created_at: string
+          description: string | null
+          effective_from: string | null
+          equipment_component_kes: number | null
+          id: string
+          is_active: boolean
+          is_package: boolean
+          labour_component_kes: number | null
+          last_verified_at: string | null
+          material_component_kes: number | null
+          minimum_charge_kes: number | null
+          name: string
+          package_includes: string[] | null
+          source_link: string | null
+          source_name: string | null
+          terrain_multiplier_extreme: number | null
+          terrain_multiplier_flat: number | null
+          terrain_multiplier_gentle: number | null
+          terrain_multiplier_moderate: number | null
+          terrain_multiplier_steep: number | null
+          transport_component_kes: number | null
+          unit: string
+          updated_at: string
+          verification_status: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "coffee_services"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      update_labour_rate: {
+        Args: {
+          p_note?: string
+          p_productivity_note?: string
+          p_rate_id: string
+          p_rate_kes: number
+          p_verification_status: string
+        }
+        Returns: {
+          county: string | null
+          id: string
+          is_active: boolean
+          last_verified_at: string | null
+          productivity_note: string | null
+          rate_kes: number | null
+          task_code: string
+          task_name: string
+          unit: string
+          verification_status: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "labour_rates"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       update_shop_delivery: {
         Args: { new_status: string; order_id: string; tracking: string }
         Returns: undefined
+      }
+      update_variety_seedling_price: {
+        Args: {
+          p_note?: string
+          p_seedling_unit_price_kes: number
+          p_variety_id: string
+        }
+        Returns: {
+          characteristics: string | null
+          code: string
+          created_at: string
+          disease_susceptibility: string | null
+          id: string
+          is_active: boolean
+          management_notes: string | null
+          name: string
+          planting_density_per_acre: number | null
+          row_spacing_m: number
+          seedling_unit_price_kes: number | null
+          tree_spacing_m: number
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "coffee_varieties"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       verify_membership: {
         Args: { number: string }

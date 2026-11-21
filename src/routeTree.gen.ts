@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as DonateRouteImport } from './routes/donate'
+import { Route as FarmCalculatorRouteImport } from './routes/farm-calculator'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedMembershipRouteImport } from './routes/_authenticated/membership'
@@ -47,6 +48,11 @@ const CheckoutRoute = CheckoutRouteImport.update({
 const DonateRoute = DonateRouteImport.update({
   id: '/donate',
   path: '/donate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmCalculatorRoute = FarmCalculatorRouteImport.update({
+  id: '/farm-calculator',
+  path: '/farm-calculator',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/donate': typeof DonateRoute
+  '/farm-calculator': typeof FarmCalculatorRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/membership': typeof AuthenticatedMembershipRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/donate': typeof DonateRoute
+  '/farm-calculator': typeof FarmCalculatorRoute
   '/reset-password': typeof ResetPasswordRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/membership': typeof AuthenticatedMembershipRoute
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/checkout': typeof CheckoutRoute
   '/donate': typeof DonateRoute
+  '/farm-calculator': typeof FarmCalculatorRoute
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/membership': typeof AuthenticatedMembershipRoute
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/checkout'
     | '/donate'
+    | '/farm-calculator'
     | '/reset-password'
     | '/admin'
     | '/membership'
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/checkout'
     | '/donate'
+    | '/farm-calculator'
     | '/reset-password'
     | '/admin'
     | '/membership'
@@ -193,6 +204,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/checkout'
     | '/donate'
+    | '/farm-calculator'
     | '/reset-password'
     | '/_authenticated/admin'
     | '/_authenticated/membership'
@@ -211,6 +223,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   CheckoutRoute: typeof CheckoutRoute
   DonateRoute: typeof DonateRoute
+  FarmCalculatorRoute: typeof FarmCalculatorRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   GuestOrderOrderIdRoute: typeof GuestOrderOrderIdRoute
   ApiMpesaCallbackRoute: typeof ApiMpesaCallbackRoute
@@ -254,6 +267,13 @@ declare module '@tanstack/react-router' {
       path: '/donate'
       fullPath: '/donate'
       preLoaderRoute: typeof DonateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farm-calculator': {
+      id: '/farm-calculator'
+      path: '/farm-calculator'
+      fullPath: '/farm-calculator'
+      preLoaderRoute: typeof FarmCalculatorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reset-password': {
@@ -361,6 +381,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   CheckoutRoute: CheckoutRoute,
   DonateRoute: DonateRoute,
+  FarmCalculatorRoute: FarmCalculatorRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   GuestOrderOrderIdRoute: GuestOrderOrderIdRoute,
   ApiMpesaCallbackRoute: ApiMpesaCallbackRoute,

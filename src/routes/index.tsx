@@ -222,6 +222,7 @@ function Index() {
             </a>
             <div className="nav-links">
               {NAV.map(([h, l]) => <a key={h} href={h}>{l}</a>)}
+              <Link to="/farm-calculator" style={{ whiteSpace: "nowrap" }}>Farm Calculator</Link>
             </div>
             <div className="nav-cta">
               {account ? <Button asChild className="btn btn-forest btn-compact"><Link to="/membership">My membership</Link></Button> : <><Link to="/auth" className="btn btn-outline btn-compact">Member login</Link><Button asChild className="btn btn-forest btn-compact"><Link to="/auth" search={{ mode: "signup" }}>Join CCAK</Link></Button></>}
@@ -238,6 +239,7 @@ function Index() {
           </nav>
           <div className={`mobile-menu${menuOpen ? " open" : ""}`} id="mobileMenu">
             {NAV.map(([h, l]) => <a key={h} href={h} onClick={() => setMenuOpen(false)}>{l}</a>)}
+            <Link to="/farm-calculator" onClick={() => setMenuOpen(false)}>Farm Cost Calculator</Link>
             <div className="mobile-cta">
               {account ? <Button asChild className="btn btn-forest"><Link to="/membership">My membership</Link></Button> : <><Button asChild variant="ghost" className="btn btn-ghost"><Link to="/auth">Member login</Link></Button><Button asChild className="btn btn-forest"><Link to="/auth" search={{ mode: "signup" }}>Join CCAK</Link></Button></>}
             </div>

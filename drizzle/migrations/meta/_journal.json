@@ -120,6 +120,27 @@
       "when": 1794293757726,
       "tag": "0016_private_guest_shop_orders",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1795264787984,
+      "tag": "0017_constitutional_positions_and_exec_admins",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1795264841774,
+      "tag": "0018_president_identity_transfer_and_position_guard",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1795264992401,
+      "tag": "0019_coffee_farm_calculator",
+      "breakpoints": true
     }
   ]
 }

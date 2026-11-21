@@ -8,7 +8,33 @@ export const MEMBER_TYPES = [
   ["trader", "Trader / exporter"], ["enterprise", "Coffee enterprise"], ["other", "Other"],
 ] as const;
 
-export const registrationSchema = z.object({
+export const CONSTITUTIONAL_POSITIONS = [
+  { id: "president", label: "National President / Chairperson", category: "National Executive Committee" },
+  { id: "deputy_president", label: "Deputy President", category: "National Executive Committee" },
+  { id: "sec_gen", label: "Secretary-General", category: "National Executive Committee" },
+  { id: "deputy_sec_gen", label: "Deputy Secretary-General", category: "National Executive Committee" },
+  { id: "treasurer", label: "National Treasurer", category: "National Executive Committee" },
+  { id: "nat_coordinator", label: "Organizing Secretary / National Coordinator", category: "National Executive Committee" },
+  { id: "director_rd", label: "Director of Research & Development", category: "Directorate & Secretariat" },
+  { id: "manager_marketing", label: "Communications & Marketing Manager", category: "Directorate & Secretariat" },
+  { id: "manager_hr", label: "Human Resource Manager", category: "Directorate & Secretariat" },
+  { id: "exec_member", label: "Executive Committee Member", category: "Directorate & Secretariat" },
+  { id: "county_coordinator", label: "County Coordinator", category: "County & Grassroots Leadership" },
+  { id: "county_sec", label: "County Secretary", category: "County & Grassroots Leadership" },
+  { id: "county_treasurer", label: "County Treasurer", category: "County & Grassroots Leadership" },
+  { id: "county_youth_rep", label: "County Youth Coordinator", category: "County & Grassroots Leadership" },
+  { id: "county_women_rep", label: "County Women Representative", category: "County & Grassroots Leadership" },
+  { id: "coffee_champion", label: "Certified Coffee Champion", category: "Professional Field & General Assembly" },
+  { id: "coop_society_rep", label: "Cooperative Society Representative", category: "Professional Field & General Assembly" },
+  { id: "ordinary_member", label: "Ordinary Member / General Assembly Delegate", category: "Professional Field & General Assembly" },
+] as const;
+export type PositionId = (typeof CONSTITUTIONAL_POSITIONS)[number]["id"];
+export const POSITION_IDS = CONSTITUTIONAL_POSITIONS.map((p) => p.id) as [PositionId, ...PositionId[]];
+export function positionLabel(id: string | null | undefined) {
+  return CONSTITUTIONAL_POSITIONS.find((p) => p.id === id)?.label ?? null;
+}
+
+export const registrationBaseSchema = z.object({
   full_name: z.string().trim().min(2, "Enter your full name").max(120),
   phone: z.string().trim().regex(/^\+?[0-9 ]{9,15}$/, "Enter a valid phone number"),
   county: z.string().refine((v) => COUNTIES.includes(v), "Choose a Kenyan county"),
@@ -23,13 +49,17 @@ export const registrationSchema = z.object({
   }, "Enter a valid date of birth in the past"),
   business_name: z.string().trim().max(150).optional().default(""),
   farm_size: z.string().trim().max(60).optional().default(""),
+  position: z.union([z.enum(POSITION_IDS), z.literal("")]).optional().default(""),
 });
+const needsPosition = (v: { member_type: string; position?: string }) => v.member_type !== "ccak_member" || Boolean(v.position);
+const positionIssue = { message: "Choose your constitutional position", path: ["position"] };
+export const registrationSchema = registrationBaseSchema.refine(needsPosition, positionIssue);
 
-export const applicationSchema = registrationSchema.extend({
+export const applicationSchema = registrationBaseSchema.extend({
   terms_accepted: z.literal(true, { error: "Accept the membership terms" }),
   photo_path: z.string().max(300).nullable().optional(),
   supporting_documents: z.array(z.string().max(300)).max(5).default([]),
-});
+}).refine(needsPosition, positionIssue);
 
 export const reviewSchema = z.object({
   application_id: z.string().uuid(),

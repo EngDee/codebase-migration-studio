@@ -5,7 +5,12 @@ const application = { full_name: "David Muigai", phone: "+254703424972", county:
 
 describe("Membership submission rules", () => {
   it("accepts CCAK Member as a registration type", () => {
-    expect(applicationSchema.safeParse({ ...application, member_type: "ccak_member" }).success).toBe(true);
+    expect(applicationSchema.safeParse({ ...application, member_type: "ccak_member", position: "county_coordinator" }).success).toBe(true);
+  });
+  it("CCAK Members must choose one of the constitutional positions", () => {
+    expect(applicationSchema.safeParse({ ...application, member_type: "ccak_member" }).success).toBe(false);
+    expect(applicationSchema.safeParse({ ...application, member_type: "ccak_member", position: "chief" }).success).toBe(false);
+    expect(applicationSchema.safeParse({ ...application, member_type: "ccak_member", position: "president" }).success).toBe(true);
   });
   it("requires a National ID and preserves leading zeros", () => {
     expect(applicationSchema.safeParse({ ...application, national_id: "" }).success).toBe(false);

@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 import { PortalShell } from "@/components/PortalShell";
 import { DigitalIdCard } from "@/components/membership/DigitalIdCard";
-import { COUNTIES, MEMBER_TYPES, registrationSchema, hasStaffRole, photoUrl } from "@/lib/members";
+import { COUNTIES, MEMBER_TYPES, CONSTITUTIONAL_POSITIONS, positionLabel, registrationSchema, hasStaffRole, photoUrl } from "@/lib/members";
 import { getMembership, submitApplication, updateMemberDetails } from "@/lib/membership.functions";
 import {
   getMyContributionStatus,
@@ -41,6 +41,8 @@ function Membership() {
   const [digitalCardUnlocked, setDigitalCardUnlocked] = useState(false);
   const [payBusy, setPayBusy] = useState(false);
   const [payMsg, setPayMsg] = useState<{ ok?: boolean; text: string } | null>(null);
+  const [memberType, setMemberType] = useState("");
+  useEffect(() => { setMemberType(profile?.member_type ?? ""); }, [profile?.member_type]);
   const [payPhone, setPayPhone] = useState("");
   const [payNationalId, setPayNationalId] = useState("");
   const [contributionKes, setContributionKes] = useState(500);
@@ -247,6 +249,7 @@ function Membership() {
                     : ""
                 } : {})}
                 presidentName={presidentName}
+                position={positionLabel(p?.position)}
               />
             </>
           ) : (
@@ -346,7 +349,7 @@ function Membership() {
           ))}
         </select>
         <label htmlFor="rType">Membership type</label>
-        <select id="rType" name="member_type" defaultValue={p?.member_type ?? ""} required>
+        <select id="rType" name="member_type" defaultValue={p?.member_type ?? ""} required onChange={(e) => setMemberType(e.target.value)}>
           <option value="" disabled>
             Choose type
           </option>
@@ -356,6 +359,21 @@ function Membership() {
             </option>
           ))}
         </select>
+        {memberType === "ccak_member" && (
+          <>
+            <label htmlFor="rPosition">Constitutional position / role</label>
+            <select id="rPosition" name="position" defaultValue={p?.position ?? ""} required>
+              <option value="" disabled>Choose position</option>
+              {[...new Set(CONSTITUTIONAL_POSITIONS.map((x) => x.category))].map((cat) => (
+                <optgroup key={cat} label={cat}>
+                  {CONSTITUTIONAL_POSITIONS.filter((x) => x.category === cat).map((x) => (
+                    <option key={x.id} value={x.id}>{x.label}</option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
+          </>
+        )}
         <label htmlFor="rSubCounty">Sub-county</label>
         <input id="rSubCounty" name="sub_county" defaultValue={p?.sub_county ?? ""} maxLength={80} />
         <label htmlFor="rBiz">Farm / business name</label>

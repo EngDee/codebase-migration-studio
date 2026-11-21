@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { applicationSchema, reviewSchema, registrationSchema, hasStaffRole } from "@/lib/members";
+import { applicationSchema, reviewSchema, registrationBaseSchema, hasStaffRole } from "@/lib/members";
 import { z } from "zod";
 
 export const getMembership = createServerFn({ method: "POST" })
@@ -27,7 +27,7 @@ export const submitApplication = createServerFn({ method: "POST" })
 
 export const updateMemberDetails = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => registrationSchema.extend({ photo_path: z.string().max(300).nullable() }).parse(input))
+  .inputValidator((input: unknown) => registrationBaseSchema.extend({ photo_path: z.string().max(300).nullable() }).refine((v) => v.member_type !== "ccak_member" || Boolean(v.position), { message: "Choose your constitutional position", path: ["position"] }).parse(input))
   .handler(async ({ data, context }) => {
     if (data.photo_path && !data.photo_path.startsWith(`${context.userId}/`)) throw new Error("Invalid photo.");
     const { data: profile, error } = await context.supabase.from("profiles").update(data).eq("id", context.userId).select("*").single();
