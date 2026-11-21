@@ -577,10 +577,12 @@ export type Database = {
           mpesa_receipt: string | null
           national_id: string
           paid_at: string | null
+          payment_environment: string
           phone: string
           result_desc: string | null
           status: string
           updated_at: string
+          verification_checked_at: string | null
         }
         Insert: {
           account_reference?: string | null
@@ -593,10 +595,12 @@ export type Database = {
           mpesa_receipt?: string | null
           national_id: string
           paid_at?: string | null
+          payment_environment?: string
           phone: string
           result_desc?: string | null
           status?: string
           updated_at?: string
+          verification_checked_at?: string | null
         }
         Update: {
           account_reference?: string | null
@@ -609,10 +613,12 @@ export type Database = {
           mpesa_receipt?: string | null
           national_id?: string
           paid_at?: string | null
+          payment_environment?: string
           phone?: string
           result_desc?: string | null
           status?: string
           updated_at?: string
+          verification_checked_at?: string | null
         }
         Relationships: [
           {

@@ -21,7 +21,13 @@ export const Route = createFileRoute("/api/public/mpesa/callback")({
       const { data: payment, error } = await supabaseAdmin.from("member_contributions").select("*").eq("checkout_request_id", parsed.checkoutRequestId).maybeSingle();
       if (error) throw error;
       if (!payment || payment.merchant_request_id !== parsed.merchantRequestId) return new Response(null, { status: 404 });
+      if (payment.payment_environment !== process.env["DARAJA_ENV"]) return new Response(null, { status: 409 });
       if (parsed.success && (!parsed.mpesaReceiptNumber || !callbackMatchesPayment(parsed, payment))) return new Response(null, { status: 409 });
+      if (payment.status === "paid" && parsed.success && !payment.mpesa_receipt) {
+        const { error: receiptError } = await supabaseAdmin.from("member_contributions").update({ mpesa_receipt: parsed.mpesaReceiptNumber, updated_at: new Date().toISOString() })
+          .eq("id", payment.id).eq("status", "paid").is("mpesa_receipt", null);
+        if (receiptError) throw receiptError;
+      }
       if (payment.status !== "pending") return Response.json({ ResultCode: 0, ResultDesc: "Accepted" });
       const { error: updateError } = await supabaseAdmin.from("member_contributions").update({
         status: parsed.success ? "paid" : "failed", result_desc: parsed.resultDesc,

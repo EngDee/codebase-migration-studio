@@ -1,8 +1,9 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { initiateStkPush, normaliseMpesaPhone, requireDarajaConfiguration } from "./daraja";
+import { initiateStkPush, normaliseMpesaPhone, requireDarajaConfiguration, queryStkResult } from "./daraja";
 import { cardEligible } from "./rules";
+import { canReconcileContribution, isLiveContribution } from "./contribution-documents";
 import { verifyMemberIdentity } from "@/lib/identity/verify";
 
 /** Default annual contribution in KES – override with MEMBER_CONTRIBUTION_KES. */
@@ -39,6 +40,11 @@ export const initiateContributionPayment = createServerFn({ method: "POST" })
     if (!profile.member_no) {
       throw new Error("Your membership number has not been issued yet. Contact the association.");
     }
+    const { data: existing, error: existingError } = await context.supabase.from("member_contributions")
+      .select("status,payment_environment").eq("member_user_id", context.userId);
+    if (existingError) throw new Error("Could not check existing payments. Please try again.");
+    if (existing?.some(isLiveContribution)) throw new Error("Your contribution is already paid. Refresh to access your card and receipt.");
+    if (existing?.some((payment) => payment.status === "pending")) throw new Error("You already have a payment awaiting confirmation. Refresh its status instead of paying again.");
 
     const identity = await verifyMemberIdentity(
       {
@@ -57,7 +63,7 @@ export const initiateContributionPayment = createServerFn({ method: "POST" })
     const origin =
       process.env["PUBLIC_APP_URL"] ||
       process.env["VITE_APP_URL"] ||
-      "https://codebase-migration-studio.lovable.app";
+      "https://coffeechampions.co.ke";
     const callbackUrl = `${origin.replace(/\/+$/, "")}/api/public/mpesa/callback`;
 
     // Only the server can write payment rows, after checking member eligibility.
@@ -73,6 +79,7 @@ export const initiateContributionPayment = createServerFn({ method: "POST" })
         phone,
         national_id: data.national_id,
         status: "pending",
+        payment_environment: process.env["DARAJA_ENV"],
         account_reference: reference,
       })
       .select("id")
@@ -126,7 +133,7 @@ export const getMyContributionStatus = createServerFn({ method: "POST" })
     const amount = contributionAmountKes();
     const { data, error } = await context.supabase
       .from("member_contributions")
-      .select("id, amount_kes, status, mpesa_receipt, paid_at, created_at")
+      .select("id, amount_kes, status, payment_environment, mpesa_receipt, paid_at, created_at, result_desc, checkout_request_id, verification_checked_at")
       .eq("member_user_id", context.userId)
       .order("created_at", { ascending: false })
       .limit(10);
@@ -134,8 +141,36 @@ export const getMyContributionStatus = createServerFn({ method: "POST" })
       throw new Error("Could not load your contribution status. Please try again.");
     }
     const payments = data ?? [];
+    let verificationWarning: string | null = null;
+    const pending = payments.find((payment) => canReconcileContribution(payment, process.env["DARAJA_ENV"]));
+    if (pending?.checkout_request_id && (!pending.verification_checked_at || Date.now() - Date.parse(pending.verification_checked_at) > 60_000)) {
+      // Owner has already been authenticated and read the row through RLS. Claim a bounded verification attempt.
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const checkedAt = new Date().toISOString();
+      let claim = supabaseAdmin.from("member_contributions").update({ verification_checked_at: checkedAt })
+        .eq("id", pending.id).eq("member_user_id", context.userId).eq("status", "pending");
+      claim = pending.verification_checked_at ? claim.eq("verification_checked_at", pending.verification_checked_at) : claim.is("verification_checked_at", null);
+      const { data: claimed, error: claimError } = await claim.select("id").maybeSingle();
+      if (claimed && !claimError) {
+        try {
+          const resultCode = await queryStkResult(pending.checkout_request_id);
+          if (resultCode === 0) {
+            const { data: settled, error: settlementError } = await supabaseAdmin.from("member_contributions").update({
+              status: "paid", paid_at: checkedAt, updated_at: checkedAt,
+              result_desc: "Reconciled through Safaricom STK query ResultCode 0; paid_at records reconciliation time. Receipt reference awaiting provider callback.",
+            }).eq("id", pending.id).eq("member_user_id", context.userId).eq("status", "pending")
+              .eq("payment_environment", pending.payment_environment)
+              .select("id, amount_kes, status, payment_environment, mpesa_receipt, paid_at, created_at, result_desc, checkout_request_id, verification_checked_at").maybeSingle();
+            if (settlementError) throw settlementError;
+            if (settled) payments.splice(payments.findIndex((payment) => payment.id === settled.id), 1, settled);
+          }
+        } catch {
+          verificationWarning = "Safaricom confirmation is temporarily unavailable. Do not pay again; refresh the payment status shortly.";
+        }
+      }
+    }
     const { data: profile, error: profileError } = await context.supabase.from("profiles").select("status,member_no").eq("id", context.userId).single();
     if (profileError || !profile) throw new Error("Could not confirm card eligibility.");
-    const digitalCardUnlocked = cardEligible(profile.status, profile.member_no, payments.some((p) => p.status === "paid"));
-    return { payments, digitalCardUnlocked, amountKes: amount, presidentName: process.env["CCAK_PRESIDENT_NAME"] ?? "David Muigai Miringu" };
+    const digitalCardUnlocked = cardEligible(profile.status, profile.member_no, payments.some(isLiveContribution));
+    return { payments, verificationWarning, digitalCardUnlocked, amountKes: amount, presidentName: process.env["CCAK_PRESIDENT_NAME"] ?? "David Muigai Miringu" };
   });

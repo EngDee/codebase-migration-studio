@@ -1,0 +1,3 @@
+ALTER TABLE public.member_contributions ADD COLUMN payment_environment text NOT NULL DEFAULT 'legacy_unverified' CHECK (payment_environment IN ('production','sandbox','legacy_unverified'));
+ALTER TABLE public.member_contributions ADD COLUMN verification_checked_at timestamptz;
+COMMENT ON COLUMN public.member_contributions.payment_environment IS 'Historical rows remain unverified until independently checked; new requests persist their configured Daraja environment.';

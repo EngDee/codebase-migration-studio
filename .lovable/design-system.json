@@ -439,6 +439,22 @@
   },
   "components": [
     {
+      "name": "ContributionReceipt",
+      "file": "src/components/membership/ContributionReceipt",
+      "import_path": "",
+      "usage": "Display an owner's immutable membership contribution invoice. A paid receipt and zero balance require a confirmed production payment.",
+      "examples": [{ "label": "Membership payment acknowledgement", "code": "<ContributionReceipt payment={payment} fullName={member.full_name} membershipCode={member.member_no} />" }],
+      "antipatterns": ["Never label a sandbox or unverified payment as paid.", "Do not call this a tax invoice or invent an M-Pesa reference."]
+    },
+    {
+      "name": "MembershipDocuments",
+      "file": "src/components/membership/MembershipDocuments",
+      "import_path": "",
+      "usage": "Provide private membership card PDF/PNG and contribution invoice downloads. Mount only with owner-authorized data and server-confirmed card eligibility.",
+      "examples": [{ "label": "Approved member's documents", "code": "<MembershipDocuments payment={payment} cardProps={cardDetails} cardUnlocked={digitalCardUnlocked} />" }],
+      "antipatterns": ["Never mount active cards based on client-supplied payment status.", "Do not expose private documents through public file URLs."]
+    },
+    {
       "name": "DarajaProductionCheck",
       "file": "src/components/DarajaProductionCheck",
       "import_path": ""

@@ -22,6 +22,8 @@
 
   /* Accessible focus ring — used everywhere via :focus-visible */
   --focus-ring: 0 0 0 3px rgba(201,162,39,0.55);
+  --document-gap: 1rem;
+  --document-space: 1.5rem;
 }
 
 /* -------------------------------------------------------------------------
@@ -498,6 +500,16 @@ footer li a:hover{color:var(--gold-soft);}
   gap: 1.5rem;
   max-width: 420px;
   margin: 0 auto;
+}
+.membership-documents { margin-block: var(--document-space); min-width: 0; }
+.membership-receipt header { background: transparent; position: static; }
+.membership-receipt p { margin-block: var(--document-gap); }
+.membership-card-output { padding: var(--document-gap); }
+@media print {
+  body:has([data-membership-print]) *:not(:has([data-membership-print])):not([data-membership-print]):not([data-membership-print] *) { display: none !important; }
+  [data-membership-print] { margin: 0 !important; padding: 0 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  [data-membership-print] .ccak-id-suite { max-width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  [data-membership-print] .ccak-id-card { break-inside: avoid; box-shadow: none; }
 }
 @media (min-width: 900px) {
   .ccak-id-suite {

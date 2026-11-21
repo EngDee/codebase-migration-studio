@@ -148,6 +148,13 @@
       "when": 1795265398974,
       "tag": "0020_crypto_payments",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1795278526355,
+      "tag": "0021_contribution_verification_environment",
+      "breakpoints": true
     }
   ]
 }

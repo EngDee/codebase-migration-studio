@@ -4,7 +4,8 @@ import { useEffect, useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Tables } from "@/integrations/supabase/types";
 import { PortalShell } from "@/components/PortalShell";
-import { DigitalIdCard } from "@/components/membership/DigitalIdCard";
+import { MembershipDocuments } from "@/components/membership/MembershipDocuments";
+import { isLiveContribution, type ContributionDocument } from "@/lib/payments/contribution-documents";
 import { COUNTIES, MEMBER_TYPES, CONSTITUTIONAL_POSITIONS, positionLabel, registrationSchema, hasStaffRole, photoUrl } from "@/lib/members";
 import { getMembership, submitApplication, updateMemberDetails } from "@/lib/membership.functions";
 import {
@@ -39,6 +40,7 @@ function Membership() {
   const [busy, setBusy] = useState(false);
   const [application, setApplication] = useState<Tables<"membership_applications"> | null>(null);
   const [digitalCardUnlocked, setDigitalCardUnlocked] = useState(false);
+  const [payments, setPayments] = useState<ContributionDocument[]>([]);
   const [payBusy, setPayBusy] = useState(false);
   const [payMsg, setPayMsg] = useState<{ ok?: boolean; text: string } | null>(null);
   const [memberType, setMemberType] = useState("");
@@ -80,10 +82,12 @@ function Membership() {
     try {
       const contrib = await fetchContributions();
       setDigitalCardUnlocked(Boolean(contrib.digitalCardUnlocked));
+      setPayments(contrib.payments);
+      if (contrib.verificationWarning) setPayMsg({ text: contrib.verificationWarning });
       setPresidentName(contrib.presidentName);
       if (typeof contrib.amountKes === "number") setContributionKes(contrib.amountKes);
     } catch {
-      // Table may not exist yet before migration
+      setPayMsg({ text: "Could not load payment confirmation. Do not pay again if you have already paid; check the status below." });
       setDigitalCardUnlocked(false);
     }
   };
@@ -166,6 +170,7 @@ function Membership() {
       for (let i = 0; i < 8; i++) {
         await new Promise((r) => setTimeout(r, 4000));
         const contrib = await fetchContributions();
+        setPayments(contrib.payments);
         if (contrib.digitalCardUnlocked) {
           setDigitalCardUnlocked(true);
           setPayMsg({ ok: true, text: "Payment confirmed. Your digital membership card is ready." });
@@ -181,6 +186,7 @@ function Membership() {
 
   const p = profile;
   const approved = p?.status === "approved" && Boolean(p.member_no);
+  const documentPayment = payments.find(isLiveContribution) ?? payments[0];
 
   return (
     <PortalShell isAdmin={isAdmin}>
@@ -234,23 +240,6 @@ function Membership() {
                 Your contribution is paid. You can present this card at county events; field officers
                 can verify status from the membership portal.
               </p>
-              <DigitalIdCard
-                fullName={p?.full_name || user.email || "Member"}
-                membershipCode={p?.member_no || "—"}
-                nationalId={p?.national_id || "—"}
-                county={p?.county || "—"}
-                photoUrl={photo}
-                {...(p?.reviewed_at ? { memberSince:
-                  p?.reviewed_at
-                    ? new Date(p.reviewed_at).toLocaleDateString("en-KE", {
-                        year: "numeric",
-                        month: "short",
-                      })
-                    : ""
-                } : {})}
-                presidentName={presidentName}
-                position={positionLabel(p?.position)}
-              />
             </>
           ) : (
             <>
@@ -291,6 +280,21 @@ function Membership() {
               </form>
             </>
           )}
+          <Button variant="outline" type="button" disabled={payBusy} onClick={() => void load()}>Check payment status</Button>
+          {documentPayment && <MembershipDocuments
+            payment={documentPayment}
+            cardUnlocked={digitalCardUnlocked}
+            cardProps={{
+              fullName: p?.full_name || user.email || "Member",
+              membershipCode: p?.member_no || "—",
+              nationalId: p?.national_id || "—",
+              county: p?.county || "—",
+              photoUrl: photo,
+              presidentName,
+              position: positionLabel(p?.position),
+              ...(p?.reviewed_at ? { memberSince: new Date(p.reviewed_at).toLocaleDateString("en-KE", { year: "numeric", month: "short" }) } : {}),
+            }}
+          />}
         </section>
       )}
 

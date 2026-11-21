@@ -1,5 +1,10 @@
 # CCAK backend activation
 
+## Current request — membership payment and downloads
+- [ ] Independently verify and reconcile the existing KES 500 contribution; never request another charge.
+- [ ] Add owner-only invoice/receipt PDF and printable digital card downloads.
+- [ ] Verify the paid account, downloads, payment safeguards and preview build.
+
 ## Sequential checkout implementation
 - [ ] Task 1 — Owner-approved KES 350 standard fee strictly below 5 kg: implemented staff packed-weight verification and audited fee approval for guest/member orders. All 74 tests pass; preview build OK; desktop and 619×639 checkout verified without overflow or runtime errors. Live saved-order/admin approval remains unverified without an authorised real order. Automatic checkout pricing needs verified packed product weights; exactly 5 kg and above retain confirmed quotes. No existing orders repriced. Tasks 2–4 remain paused until this task's live flow is verified.
 - [ ] Task 2 — Direct checkout M-Pesa prompt for guest and member orders: start only after Task 1 is complete and verified; retain confirmed shipping totals and independently verified payment settlement. A real charge needs explicit authorisation.
