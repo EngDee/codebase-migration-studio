@@ -37,3 +37,6 @@
 ## Account reliability
 - Keep one root identity-transition subscriber and a shared account query; send confirmation links to the public auth page and handle every auth request failure inside the form so connection errors cannot strand users or imply a successful submission.
 - M-Pesa readiness checks are national-admin-only and contact Safaricom only via a fixed production OAuth GET; Till payouts use DARAJA_PARTY_B with shortcode fallback so checks never charge anyone.
+
+## Shared brand assets
+- Load bundled variable fonts through relative font-face URLs in the exported brand CSS and retain their licenses under src/assets/fonts; attached consumers must not depend on excluded preview-route head links.
