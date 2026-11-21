@@ -1,3 +1,4 @@
+import "./ccak.css"
 export { DarajaSandboxCheck } from "./components/DarajaSandboxCheck"
 export { OrderReceipt } from "./components/OrderReceipt"
 export { PortalShell } from "./components/PortalShell"
