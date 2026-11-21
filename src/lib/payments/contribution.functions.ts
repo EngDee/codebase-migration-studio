@@ -27,6 +27,8 @@ export const initiateContributionPayment = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => initiateSchema.parse(input))
   .handler(async ({ data, context }) => {
     requireDarajaConfiguration();
+    const paymentEnvironment = process.env["DARAJA_ENV"];
+    if (paymentEnvironment !== "production" && paymentEnvironment !== "sandbox") throw new Error("M-Pesa is awaiting activation.");
     const { data: profile, error: profileError } = await context.supabase
       .from("profiles")
       .select("id, full_name, phone, national_id, county, member_no, status")
@@ -79,7 +81,7 @@ export const initiateContributionPayment = createServerFn({ method: "POST" })
         phone,
         national_id: data.national_id,
         status: "pending",
-        payment_environment: process.env["DARAJA_ENV"],
+        payment_environment: paymentEnvironment,
         account_reference: reference,
       })
       .select("id")

@@ -480,11 +480,11 @@ footer li a:hover{color:var(--gold-soft);}
 .row-actions{display:flex;gap:8px;flex-shrink:0;}
 
 @media(max-width:640px){
-  .portal-top{padding:10px 14px;gap:10px;}
+  .portal-top{padding:10px 14px;gap:10px;flex-wrap:wrap;}
   .portal-top .logo-mark{width:40px;height:40px;}
   .portal-top .logo-text{font-size:15px;}
   .portal-top .logo-text small{display:none;}
-  .portal-nav{gap:10px;}
+  .portal-nav{gap:10px;flex-wrap:wrap;flex-shrink:1;min-width:0;}
   .portal-nav a{font-size:13px;}
   .member-card{flex-direction:column;text-align:center;}
   .member-card>div:last-child{align-items:center;}
