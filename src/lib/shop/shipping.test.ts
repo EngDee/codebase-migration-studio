@@ -44,4 +44,19 @@ describe("CCAK standard parcel shipping", () => {
   it("charges no delivery for digital courses", () => {
     expect(automaticDelivery([{ id: "export-course", quantity: 1, physical: false }]).fee).toBe(0);
   });
+  it("calculates mixed cart weight from the confirmed coffee and tote weights", () => {
+    const result = automaticDelivery([
+      { id: "nyeri-aa", quantity: 2, physical: true },
+      { id: "kirinyaga-pb", quantity: 1, physical: true },
+      { id: "ccak-tote", quantity: 3, physical: true },
+    ], { country: "Kenya", county: "Kiambu" });
+    expect(result.weightKg).toBe(1.05);
+    expect(result.fee).toBe(350);
+  });
+  it("moves a coffee order into the heavy tier when a tote takes it above 5 kg", () => {
+    expect(automaticDelivery([
+      { id: "nyeri-aa", quantity: 20, physical: true },
+      { id: "ccak-tote", quantity: 1, physical: true },
+    ], { country: "Kenya", county: "Nairobi" })).toMatchObject({ weightKg: 5.1, fee: 1000 });
+  });
 });

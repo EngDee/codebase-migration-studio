@@ -39,4 +39,5 @@
 - M-Pesa readiness checks are national-admin-only and contact Safaricom only via a fixed production OAuth GET; Till payouts use DARAJA_PARTY_B with shortcode fallback so checks never charge anyone.
 
 ## Shared brand assets
+- Keep product unit weights and quantity descriptions in the shared browser-safe product catalog; derive delivery weights from it and copy unit details into server-priced order snapshots so listing and checkout cannot drift.
 - Load bundled variable fonts through relative font-face URLs in the exported brand CSS and retain their licenses under src/assets/fonts; attached consumers must not depend on excluded preview-route head links.

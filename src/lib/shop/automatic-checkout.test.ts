@@ -30,14 +30,6 @@ function query() {
 vi.mock("@/integrations/supabase/auth-middleware", () => ({ requireSupabaseAuth: {} }));
 vi.mock("@/integrations/supabase/client.server", () => ({ supabaseAdmin: { from: query } }));
 vi.mock("./guest-session.server", () => ({ guestSession: async () => "session-hash" }));
-vi.mock("./shipping", async (importOriginal) => {
-  const original = await importOriginal<typeof import("./shipping")>();
-  return {
-    ...original,
-    automaticDelivery: (items: Parameters<typeof original.automaticDelivery>[0], address: Parameters<typeof original.automaticDelivery>[1]) =>
-      original.automaticDelivery(items, address, { "nyeri-aa": 0.3 }),
-  };
-});
 import { createShopOrder } from "./shop.functions";
 import { createGuestOrder } from "./guest.functions";
 

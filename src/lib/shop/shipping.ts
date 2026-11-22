@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { PRODUCTS } from "./products";
 
 export const STANDARD_PARCEL_FEE_KES = 350;
 export const STANDARD_PARCEL_LIMIT_KG = 5;
@@ -6,11 +7,11 @@ export const OTHER_COUNTY_FEE_KES = 500;
 export const HEAVY_PARCEL_FEE_KES = 1000;
 
 /** Owner-confirmed packed unit weights only. Null means configuration is still required. */
-export const PACKED_PRODUCT_WEIGHTS_KG: Record<string, number | null> = {
-  "nyeri-aa": null,
-  "kirinyaga-pb": null,
-  "ccak-tote": null,
-};
+export const PACKED_PRODUCT_WEIGHTS_KG: Readonly<Record<string, number | null>> = Object.fromEntries(
+  PRODUCTS.filter((product) => product.physical).map((product) => [
+    product.id, product.unit_weight_grams === null ? null : product.unit_weight_grams / 1000,
+  ]),
+);
 
 export function isKenya(country: string): boolean {
   return ["kenya", "ke", "ken"].includes(country.trim().toLowerCase());

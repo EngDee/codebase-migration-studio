@@ -1,9 +1,10 @@
 # CCAK backend activation
 
 ## Current request — automatic Kenyan delivery
+- [x] Apply confirmed 250 g coffee / 100 g tote weights and quantity descriptions to listings, order snapshots and delivery. All 59 shop tests pass, including member/guest save tests using real catalog weights; desktop/mobile county totals and quantity changes verified without test orders or charges.
 - [x] Implement shared county-based KES 350/500 fees below 5 kg and KES 1,000 at 5 kg or above in both member and guest creation; configured Kenyan orders save payment-ready without admin approval. No existing orders repriced.
 - [x] Collect an explicit Kenyan county and display automatic totals when weights are configured; retain international quotes. Desktop/mobile selection verified without overflow.
-- [ ] Activate automatic pricing for real physical products: blocked by missing owner-confirmed packed unit weights for both coffee packs and the tote. All 55 shop tests pass, including eight mocked member/guest save flows; no real order or charge created. Exactly 5 kg currently uses KES 1,000 pending owner correction.
+- [x] Activate automatic pricing for physical products using confirmed catalog weights. Exactly 5 kg currently uses KES 1,000 pending owner correction. Real persistent checkout/payment remains unverified under the no-demonstration-records/no-charge constraint; publish is required to update the live site.
 
 ## Current request — membership payment and downloads
 - [x] Independently verified the existing KES 500 contribution through production Safaricom ResultCode 0 and reconciled receipt UKL7E2US1Z with an audit entry; no charge requested.
@@ -11,7 +12,7 @@
 - [x] Verified the actual paid account and all three downloads, print layout, desktop/mobile overflow and 92 passing tests; preview build OK. Publishing the new download controls to the custom domain is still required.
 
 ## Sequential checkout implementation
-- [ ] Task 1 — Automatic Kenyan delivery supersedes the former uniform fee/manual approval requirement; current activation blocker is owner-confirmed packed product weights, as detailed above. No existing orders repriced. Tasks 2–4 remain paused until this task's live flow is verified.
+- [ ] Task 1 — Automatic Kenyan delivery is configured with confirmed product weights; no existing orders repriced. Real saved-order/payment flow remains unverified under the no-demonstration-records/no-charge constraint. Tasks 2–4 remain paused until this task's live flow is verified.
 - [ ] Task 2 — Direct checkout M-Pesa prompt for guest and member orders: start only after Task 1 is complete and verified; retain confirmed shipping totals and independently verified payment settlement. A real charge needs explicit authorisation.
 - [ ] Task 3 — Proforma invoices before payment and branded receipts after verified production payment, with printable/PDF output: start only after Task 2 is complete and verified; do not label these tax receipts without verified tax/eTIMS requirements.
 - [ ] Task 4 — Whole-site regression and desktop/mobile browser checks, including authentication and order access; report production and external-service checks separately.

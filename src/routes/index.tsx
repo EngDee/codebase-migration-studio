@@ -347,7 +347,7 @@ function Index() {
               {PRODUCTS.map((product) => (
                 <li key={product.id} className="product-card">
                   <div className="product-media" aria-hidden="true"><span>{product.tag}</span></div>
-                  <div className="product-body"><h3>{product.name}</h3><p className="price">{kes(product.price)}</p><AddToCart id={product.id} /></div>
+                  <div className="product-body"><h3>{product.name}</h3><p>{product.quantity_description}</p><p className="price">{kes(product.price)}</p><AddToCart id={product.id} /></div>
                 </li>
               ))}
             </ul>
