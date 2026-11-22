@@ -5,19 +5,21 @@ import { priceCart, requireShopPaymentMode } from "./catalog";
 import { guestSession } from "./guest-session.server";
 import { initiateStkPush, normaliseMpesaPhone, requireDarajaConfiguration } from "@/lib/payments/daraja";
 import { orderItems, canDownloadMaterial } from "./order-rules";
+import { automaticDelivery } from "./shipping";
 
 export const createGuestOrder = createServerFn({ method: "POST" }).inputValidator((input: unknown) => guestCheckoutSchema.parse(input)).handler(async ({ data }) => {
   const environment = requireShopPaymentMode(process.env["DARAJA_ENV"]);
   const hash = await guestSession(true);
   const priced = priceCart(data.items);
   if (priced.needsShipping && !data.shipping) throw new Error("Delivery address is required.");
+  const delivery = automaticDelivery(priced.items, data.shipping);
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const previous = await supabaseAdmin.from("guest_shop_orders").select("id").eq("request_key", data.request_key).eq("guest_session_hash", hash).maybeSingle();
   if (previous.error) throw new Error("Could not check your order.");
   if (previous.data) return previous.data;
   const recent = await supabaseAdmin.from("guest_shop_orders").select("id", { count: "exact", head: true }).eq("guest_session_hash", hash).gte("created_at", new Date(Date.now() - 3600000).toISOString());
   if (recent.error || (recent.count ?? 0) >= 10) throw new Error("Please wait before placing more orders, or contact CCAK.");
-  const result = await supabaseAdmin.from("guest_shop_orders").insert({ payment_environment: environment, guest_session_hash: hash, request_key: data.request_key, customer_name: data.customer_name, customer_email: data.customer_email, items: priced.items, subtotal_kes: priced.subtotal, shipping_address: data.shipping ?? null, shipping_kes: priced.needsShipping ? null : 0, amount_kes: priced.needsShipping ? null : priced.subtotal, status: priced.needsShipping ? "awaiting_quote" : "ready" }).select("id").single();
+  const result = await supabaseAdmin.from("guest_shop_orders").insert({ payment_environment: environment, guest_session_hash: hash, request_key: data.request_key, customer_name: data.customer_name, customer_email: data.customer_email, items: priced.items, subtotal_kes: priced.subtotal, shipping_address: data.shipping ?? null, shipping_kes: delivery.fee, shipping_quote_reference: delivery.reference, amount_kes: delivery.fee === null ? null : priced.subtotal + delivery.fee, status: delivery.fee === null ? "awaiting_quote" : "ready" }).select("id").single();
   if (result.error || !result.data) throw new Error("Order was not saved. Please try again.");
   return result.data;
 });

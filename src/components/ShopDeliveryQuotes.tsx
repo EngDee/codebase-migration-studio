@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { getShopQuoteRequests, saveShopQuote, saveStandardShipping } from "@/lib/shop/shop.functions";
 import { kes } from "@/lib/shop/catalog";
-import { STANDARD_PARCEL_FEE_KES } from "@/lib/shop/shipping";
+import { COUNTIES } from "@/lib/members";
 import { cn } from "@/lib/utils";
 import { RefreshCw } from "lucide-react";
 import { ShopFulfilment } from "./ShopFulfilment";
@@ -28,8 +28,9 @@ export const ShopDeliveryQuotes = forwardRef<HTMLElement, ShopDeliveryQuotesProp
   };
   const standard = async (event: FormEvent<HTMLFormElement>, orderId: string, kind: "member" | "guest") => {
     event.preventDefault(); setBusy(true);
-    const weight = Number(new FormData(event.currentTarget).get("weight"));
-    try { await saveStandard({ data: { order_id: orderId, kind, weight_kg: weight } }); setMessage("Standard delivery fee saved: KES 350. The customer can now pay the confirmed total."); await load(); }
+    const values = new FormData(event.currentTarget);
+    const weight = Number(values.get("weight"));
+    try { const result = await saveStandard({ data: { order_id: orderId, kind, weight_kg: weight, county: String(values.get("county")) } }); setMessage(`Delivery fee saved: ${kes(result.fee_kes)}. The customer can now pay the confirmed total.`); await load(); }
     catch (error) { setMessage(error instanceof Error ? error.message : "Delivery fee was not saved."); }
     finally { setBusy(false); }
   };
@@ -37,7 +38,7 @@ export const ShopDeliveryQuotes = forwardRef<HTMLElement, ShopDeliveryQuotesProp
     <h3>Order {order.id.slice(0, 8).toUpperCase()} · {kes(order.subtotal_kes)}</h3>
     <p>{order.shipping_address && typeof order.shipping_address === "object" ? Object.values(order.shipping_address).filter(Boolean).join(" · ") : "No address"}</p>
     <p>{order.kind === "guest" ? "Guest order" : "Member order"}</p>
-    <form className="portal-form" onSubmit={(event) => standard(event, order.id, order.kind)}><label>Verified packed parcel weight (kg)<input name="weight" type="number" min="0.001" max="4.999" step="0.001" required /></label><Button type="submit" className="btn btn-forest" disabled={busy}>Apply standard fee · {kes(STANDARD_PARCEL_FEE_KES)}</Button></form>
+    <form className="portal-form" onSubmit={(event) => standard(event, order.id, order.kind)}><label>Verified packed parcel weight (kg)<input name="weight" type="number" min="0.001" step="0.001" required /></label><label>Kenyan delivery county<select name="county" required defaultValue=""><option value="" disabled>Select county</option>{COUNTIES.map((county) => <option key={county} value={county}>{county}</option>)}</select></label><Button type="submit" className="btn btn-forest" disabled={busy}>Apply Kenyan delivery fee</Button></form>
     <form className="portal-form" onSubmit={(event) => submit(event, order.id, order.kind)}><label>Confirmed Fargo charge for other parcels (KES)<input name="fee" type="number" min="0" max="1000000" step="1" required /></label><label>Fargo quote reference<input name="reference" minLength={3} maxLength={200} required /></label><Button type="submit" className="btn btn-forest" disabled={busy}>Save confirmed quote</Button></form>
   </article>)}<ShopFulfilment /></section>;
 });

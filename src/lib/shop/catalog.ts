@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isKenya } from "./shipping";
 
 export const PRODUCTS = [
   { id: "nyeri-aa", tag: "Nyeri AA", name: "Nyeri AA whole bean, 250g", price: 950, physical: true },
@@ -14,10 +15,11 @@ export const addressSchema = z.object({
   full_name: z.string().trim().min(2).max(120),
   phone: z.string().trim().min(9).max(20),
   country: z.string().trim().min(2).max(80),
+  county: z.string().trim().min(2).max(80).optional(),
   city: z.string().trim().min(2).max(80),
   address: z.string().trim().min(5).max(300),
   postal_code: z.string().trim().max(30),
-});
+}).refine((address) => !isKenya(address.country) || Boolean(address.county), { message: "Select your delivery county.", path: ["county"] });
 export const checkoutSchema = z.object({ items: cartSchema, shipping: addressSchema.optional(), request_key: z.string().uuid() });
 
 export function priceCart(input: unknown) {

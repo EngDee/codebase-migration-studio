@@ -488,7 +488,7 @@
       "name": "ShopDeliveryQuotes",
       "file": "src/components/ShopDeliveryQuotes",
       "import_path": "",
-      "usage": "National administrators confirm packed weight and apply the CCAK standard parcel fee, or save a verified courier quote for other parcels. Handles both guest and member orders using audited database permissions.",
+      "usage": "National administrators resolve legacy or international unpriced orders using verified packed weight and county or a confirmed courier quote. Newly created Kenyan orders with configured product weights receive automatic fees and need no manual approval.",
       "examples": [
         {
           "label": "Administrator delivery workspace",
@@ -497,7 +497,7 @@
       ],
       "antipatterns": [
         "Do not treat shopper-entered or estimated product weights as verified packed weight.",
-        "Do not expose delivery approval actions to customers or use the standard fee for parcels weighing 5 kg or more."
+        "Do not expose legacy delivery approval actions to customers or require manual approval for automatically priced Kenyan orders."
       ]
     },
     {

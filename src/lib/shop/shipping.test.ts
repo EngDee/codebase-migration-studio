@@ -1,25 +1,47 @@
 import { describe, expect, it } from "vitest";
-import { standardParcelFee, standardShippingSchema } from "./shipping";
+import { automaticDelivery, kenyaDeliveryFee, standardParcelFee, standardShippingSchema } from "./shipping";
 
 describe("CCAK standard parcel shipping", () => {
-  it("charges exactly KES 350 for a parcel below 5 kg", () => {
-    expect(standardParcelFee(0.5)).toBe(350);
-    expect(standardParcelFee(4.999)).toBe(350);
+  it("charges KES 350 below 5 kg in Nairobi", () => {
+    expect(kenyaDeliveryFee(4.999, "Nairobi")).toBe(350);
   });
-  it("does not apply the standard fee at exactly 5 kg or above", () => {
-    expect(() => standardParcelFee(5)).toThrow();
-    expect(() => standardParcelFee(5.001)).toThrow();
+  it("charges KES 350 below 5 kg in Kiambu", () => {
+    expect(kenyaDeliveryFee(4.999, "Kiambu")).toBe(350);
+  });
+  it("charges KES 500 below 5 kg in other counties", () => {
+    expect(kenyaDeliveryFee(4.999, "Mombasa")).toBe(500);
+    expect(kenyaDeliveryFee(0.5, "Nyeri")).toBe(500);
+  });
+  it("charges KES 1000 above 5 kg nationwide", () => {
+    for (const county of ["Nairobi", "Kiambu", "Mombasa", "Nyeri"]) expect(kenyaDeliveryFee(5.001, county)).toBe(1000);
+  });
+  it("uses the higher tier at the unspecified exact 5 kg boundary", () => {
+    expect(kenyaDeliveryFee(5, "Nairobi")).toBe(1000);
   });
   it("rejects unknown, invalid or shopper-string weights", () => {
     for (const weight of [undefined, null, 0, -1, NaN, Infinity, "1"]) {
-      expect(() => standardParcelFee(weight)).toThrow();
+      expect(() => standardParcelFee(weight, "Nairobi")).toThrow();
     }
   });
-  it("validates the same strict limit for both guest and member approval", () => {
+  it("supports all weight tiers for legacy guest and member orders", () => {
     for (const kind of ["member", "guest"]) {
-      const input = { order_id: "8a28a497-831f-4d78-a329-7c87fbe45051", kind, weight_kg: 4.99 };
+      const input = { order_id: "8a28a497-831f-4d78-a329-7c87fbe45051", kind, weight_kg: 4.99, county: "Kiambu" };
       expect(standardShippingSchema.parse(input).weight_kg).toBe(4.99);
-      expect(() => standardShippingSchema.parse({ ...input, weight_kg: 5 })).toThrow();
+      expect(standardShippingSchema.parse({ ...input, weight_kg: 5 }).weight_kg).toBe(5);
     }
+  });
+  it("computes quantities from trusted unit weights and excludes digital products", () => {
+    const delivery = automaticDelivery([{ id: "nyeri-aa", quantity: 20, physical: true }, { id: "export-course", quantity: 1, physical: false }], { country: "Kenya", county: "Kiambu" }, { "nyeri-aa": 0.3 });
+    expect(delivery.weightKg).toBe(6);
+    expect(delivery.fee).toBe(1000);
+  });
+  it("does not invent unconfigured product weights", () => {
+    expect(automaticDelivery([{ id: "ccak-tote", quantity: 1, physical: true }], { country: "Kenya", county: "Nairobi" }, {}).reason).toBe("missing_weight");
+  });
+  it("keeps international orders outside the Kenyan fee rules", () => {
+    expect(automaticDelivery([{ id: "nyeri-aa", quantity: 1, physical: true }], { country: "Uganda" }, { "nyeri-aa": 0.3 }).fee).toBeNull();
+  });
+  it("charges no delivery for digital courses", () => {
+    expect(automaticDelivery([{ id: "export-course", quantity: 1, physical: false }]).fee).toBe(0);
   });
 });

@@ -4,7 +4,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { checkoutSchema, priceCart, requireShopPaymentMode } from "./catalog";
 import { initiateStkPush, normaliseMpesaPhone, requireDarajaConfiguration } from "@/lib/payments/daraja";
-import { standardParcelFee, standardShippingSchema } from "./shipping";
+import { automaticDelivery, standardParcelFee, standardShippingSchema } from "./shipping";
 
 export const createShopOrder = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -13,6 +13,7 @@ export const createShopOrder = createServerFn({ method: "POST" })
     const environment = requireShopPaymentMode(process.env["DARAJA_ENV"]);
     const priced = priceCart(data.items);
     if (priced.needsShipping && !data.shipping) throw new Error("Delivery address is required.");
+    const delivery = automaticDelivery(priced.items, data.shipping);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: previous, error: previousError } = await context.supabase.from("shop_orders").select("id").eq("request_key", data.request_key).maybeSingle();
     if (previousError) throw new Error("Could not check your order. Try again.");
@@ -20,9 +21,10 @@ export const createShopOrder = createServerFn({ method: "POST" })
     const { data: order, error } = await supabaseAdmin.from("shop_orders").insert({
       user_id: context.userId, request_key: data.request_key, items: priced.items,
       subtotal_kes: priced.subtotal, shipping_address: data.shipping ?? null,
-      shipping_kes: priced.needsShipping ? null : 0,
-      amount_kes: priced.needsShipping ? null : priced.subtotal,
-      status: priced.needsShipping ? "awaiting_quote" : "ready",
+      shipping_kes: delivery.fee,
+      shipping_quote_reference: delivery.reference,
+      amount_kes: delivery.fee === null ? null : priced.subtotal + delivery.fee,
+      status: delivery.fee === null ? "awaiting_quote" : "ready",
       payment_environment: environment,
     }).select("id").single();
     if (error || !order) throw new Error("Order was not saved. Please try again.");
@@ -91,10 +93,10 @@ export const saveStandardShipping = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => standardShippingSchema.parse(data))
   .handler(async ({ data, context }) => {
-    const fee = standardParcelFee(data.weight_kg);
+    const fee = standardParcelFee(data.weight_kg, data.county);
     const { error } = await context.supabase.rpc(data.kind === "guest" ? "quote_guest_shop_delivery" : "quote_shop_delivery", {
       order_id: data.order_id, fee_kes: fee,
-      quote_reference: `CCAK standard parcel fee; packed weight ${data.weight_kg} kg`,
+      quote_reference: `CCAK delivery fee; ${data.county}; packed weight ${data.weight_kg} kg`,
     });
     if (error) throw new Error("Delivery fee was not saved. Check administrator access and order status.");
     return { saved: true, fee_kes: fee };
