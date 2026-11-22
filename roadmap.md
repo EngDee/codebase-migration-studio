@@ -1,5 +1,10 @@
 # CCAK backend activation
 
+## Current request — seven-module website CMS
+- [ ] Add secure notices, leadership, programs, shop products, documents, gallery, and contact/settings storage.
+- [ ] Build all seven editors within the existing admin page and connect the public website and checkout.
+- [ ] Verify permissions, uploads, publication, dynamic product pricing, and desktop/mobile editing.
+
 ## Current request — automatic Kenyan delivery
 - [x] Apply confirmed 250 g coffee / 100 g tote weights and quantity descriptions to listings, order snapshots and delivery. All 59 shop tests pass, including member/guest save tests using real catalog weights; desktop/mobile county totals and quantity changes verified without test orders or charges.
 - [x] Implement shared county-based KES 350/500 fees below 5 kg and KES 1,000 at 5 kg or above in both member and guest creation; configured Kenyan orders save payment-ready without admin approval. No existing orders repriced.
